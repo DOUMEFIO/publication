@@ -50,13 +50,20 @@
                                     <td>{{$tache->vueRecherche}}</td>
                                     <td>{{$tache->tache_libelle}}</td>
                                     <td>{{$tache->description}}</td>
-                                    <td>{{$tache->centre}}</td>
+                                    <td>
+                                        {{$tache->centre}}
+                                    </td>
                                     <td>{{$tache->pays}}
                                         {{$tache->villes}}
-                                        {{$tache->departements}}</td>
-                                    <td>Voir</td>
+                                        {{$tache->departements}}
+                                    </td>
+                                    <td>T{{$tache->nbr}}</td>
                                     <td>
-                                        <a href="#" class="btn btn-success"><i class="fa fa-check"></i>Valider</a>
+                                        <a href="{{route('attribuer.tache', ['id' => $tache->nbr,
+                                        'vues' =>$tache->vueRecherche, 'centre' =>$tache->idcentre,
+                                        'pay' => !empty($tache->idpays) ?  $tache->idpays: 0,
+                                        'dep' => !empty($tache->iddepartements) ? $tache->iddepartements : 0,
+                                        'vil' => !empty($tache->idvilles) ?  $tache->idvilles: 0])}}" class="btn btn-success"><i class="fa fa-check"></i>Valider</a>
                                     </td>
                                 </tr>
                             @endforeach

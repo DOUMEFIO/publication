@@ -5,9 +5,10 @@
         <div class="card shadow">
             <div class="row card-header">
                 <div class="col md-9">
-                    <p class="text-primary m-0 fw-bold">LES TACHES ATTRIBUES</p>
+                    <p class="text-primary m-0 fw-bold">LES TACHES SOUMISES</p>
                 </div>
                 <div class="col md-3" style="padding-left: 600px">
+                    <span class="odd px-0"><a href="#" class="btn btn-primary">AJOUTER UNE TACHE</a></span>
                 </div>
             </div>
             <div class="card-body">
@@ -28,42 +29,44 @@
                     <table class="table my-0" id="dataTable">
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Nom & Prénom</th>
                                 <th>Début & Fin</th>
-                                <th>Les Taches attribuer</th>
-                                <th>Nombre de vues realisée</th>
-                                <th>Capture</th>
-                                <th>Action</th>
+                                <th>Vues Rechercher</th>
+                                <th>Type de fichier</th>
+                                <th>Déscription</th>
+                                <th>Centre</th>
+                                <th>Zone</th>
+                                <th>Média</th>
                             </tr>
                         </thead>
                         <tbody >
                             @foreach ($taches as $tache)
                                 <tr>
-                                    <td>{{$tache->id}}</td>
-                                    <td>{{$tache->travailleur->nom}}
-                                        {{$tache->travailleur->prenom}}
+                                    <td>{{$tache->nom}} {{$tache->prenom}}</</td>
+                                    <td>{{ strftime('%A %e %B %Y', strtotime($tache->debut)) }} à
+                                        {{ strftime('%A %e %B %Y', strtotime($tache->fin)) }}
                                     </td>
-                                    <td>
-                                        {{ strftime('%A %e %B %Y', strtotime($tache->tacheall->debut)) }} à
-                                        {{ strftime('%A %e %B %Y', strtotime($tache->tacheall->fin)) }}
-                                    </td>
-                                    <td>T{{$tache->idTache}}</td>
-                                    <td>0</td>
-                                    <td>Pas encore</td>
-                                    <td>Modifier</td>
+                                    <td>{{$tache->vueRecherche}}</td>
+                                    <td>{{$tache->tache_libelle}}</td>
+                                    <td>{{$tache->description}}</td>
+                                    <td>{{$tache->centre}}</td>
+                                    <td>{{$tache->pays}}
+                                        {{$tache->villes}}
+                                        {{$tache->departements}}</td>
+                                    <td>Voir</td>
                                 </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td><strong>#</strong></td></th>
-                                <td><strong>Nom & Prénom</strong></td></th>
-                                <td><strong>Début & Fin</strong></td></th>
-                                <td><strong>Les Taches attribuer</strong></td></th>
-                                <td><strong>Nombre de vues realisée</strong></td></th>
-                                <td><strong>Capture</strong></td></th>
-                                <td><strong>Action</strong></td></th>
+                                <td><strong>Nom & Prénom</strong></td>
+                                <td><strong>Début & Fin</strong></td>
+                                <td><strong>Vues Recherchées</strong></td>
+                                <td><strong>Type de fichier</strong></td>
+                                <td><strong>Déscription</strong></td>
+                                <td><strong>Centre</strong></td>
+                                <td><strong>Zone</strong></td>
+                                <td><strong>Média</strong></td>
                             </tr>
                         </tfoot>
                     </table>

@@ -226,4 +226,5 @@ class InfluenceurController extends Controller
                 générer : '.$total.' vues </strong></p>';
         return $totalvues;
     }
+
 }

@@ -4,12 +4,15 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function (){
-    
+
     Route::get('admin.index', [AdminController::class, 'index'])
         ->name('admin.index');
 
     Route::get('admin.tache', [AdminController::class, 'tache'])
         ->name('admin.tache');
+
+    Route::get('admin.tachevalide', [AdminController::class, 'tachevalide'])
+        ->name('admin.tachevalide');
 
     Route::get('centre.create', [AdminController::class, 'createCentre'])
         ->name('centre.create');
@@ -17,7 +20,10 @@ Route::middleware('auth')->group(function (){
     Route::post('centre.store', [AdminController::class, 'centreStore'])
         ->name('centre.store');
 
-    Route::get('tache.attribut', [AdminController::class, 'tacheAttribut'])
-        ->name('tache.attribut');
+    Route::get('attribuer.tache/{id}/{vues}/{centre}/{pay}/{dep}/{vil}', [AdminController::class, 'tacheAttribut'])
+        ->name('attribuer.tache');
+
+    Route::get('tache.partager', [AdminController::class, 'distribuer'])
+        ->name('tache.partager');
 });
 

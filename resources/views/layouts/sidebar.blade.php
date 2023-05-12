@@ -19,6 +19,16 @@
                 <li class="nav-item"><a class="nav-link active" href="{{route("admin.tache")}}"><i class="fas fa-tachometer-alt"></i><span>Tâches</span></a></li>
             @endif
         </ul>
+        <ul class="navbar-nav text-light" id="accordionSidebar">
+            @if (Auth::User()->idProfil == 1)
+                <li class="nav-item"><a class="nav-link active" href="{{route("admin.tachevalide")}}"><i class="fas fa-tachometer-alt"></i><span>Tâches Validés</span></a></li>
+            @endif
+        </ul>
+        <ul class="navbar-nav text-light" id="accordionSidebar">
+            @if (Auth::User()->idProfil == 1)
+                <li class="nav-item"><a class="nav-link active" href="{{route("tache.partager")}}"><i class="fas fa-tachometer-alt"></i><span>Tâches Attribuées</span></a></li>
+            @endif
+        </ul>
         <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
     </div>
 </nav>

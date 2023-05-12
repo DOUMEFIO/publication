@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('idtravailleur')->constrained('users');
             $table->foreignId('idTache')->constrained('tache');
-            $table->integer('totalVues');
-            $table->string('capture');
-            $table->date('dateValidation');
+            $table->integer('totalVues')->nullable();
+            $table->string('capture')->nullable();
             $table->timestamps();
         });
     }
