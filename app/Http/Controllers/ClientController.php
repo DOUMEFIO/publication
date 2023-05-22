@@ -133,7 +133,7 @@ class ClientController extends Controller
                     DB::table('tache_zone')->insert($data);
                 }
             return redirect()->route('/dashboard');
-        } elseif ($request->hasFile('avatar') && $request->typetache != 1) {
+        } elseif ($request->file('avatar') && $request->typetache != 1) {
                 $fichier = $request->file('avatar');
                 // Vérification de l'extension du fichier
                 if ($request->typetache == '4' && !in_array($fichier->getClientOriginalExtension(), ['jpg', 'jpeg', 'png', 'gif'])) {

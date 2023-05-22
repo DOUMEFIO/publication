@@ -43,7 +43,7 @@ class ActionController extends Controller
         $description = $request->input('description');
         $typetache = $request->input('typetache');
 
-        if ($request->hasFile('avatar')) {
+        if ($request->file('avatar')) {
             $fichier = $request->file('avatar');
             // Vérification de l'extension du fichier
             if ($typetache == '4' && !in_array($fichier->getClientOriginalExtension(), ['jpg', 'jpeg', 'png', 'gif'])) {
