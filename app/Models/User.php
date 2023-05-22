@@ -56,4 +56,8 @@ class User extends Authenticatable
         event(new UserRegistered($user));
     });
 }
+public function profil()
+        {
+            return $this->belongsTo(Profil::class,'idProfil');
+        }
 }

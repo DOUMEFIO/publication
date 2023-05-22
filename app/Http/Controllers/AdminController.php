@@ -7,6 +7,7 @@ use App\Models\Tache;
 use App\Models\TravailleCentre;
 use App\Models\TravailleurTache;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
@@ -57,13 +58,13 @@ class AdminController extends Controller
                 ->leftJoin('centre_interet', 'tache_centre.idCentre', '=', 'centre_interet.id')
                 ->leftJoin('type_tache', 'tache.typetache', '=', 'type_tache.id')
                 ->select('tache.idStatus','type_tache.libelle as tache_libelle','users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
-                        'tache.typetache','tache.vueRecherche','status.libelle as status_libelle','tache.id','users.prenom','users.id','users.idProfil',
+                        'tache.typetache','tache.vueRecherche','status.libelle as status_libelle','tache.id as tacheid','users.prenom','users.id','users.idProfil',
                     DB::raw('GROUP_CONCAT(DISTINCT centre_interet.libelle) as centre'),
                     DB::raw('GROUP_CONCAT(DISTINCT pays.name) as pays'),
                     DB::raw('GROUP_CONCAT(DISTINCT departements.name) as departements'),
                     DB::raw('GROUP_CONCAT(DISTINCT villes.name) as villes'))
                 ->groupBy('users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
-                'tache.typetache','tache_libelle','tache.idStatus','tache.vueRecherche','status_libelle','tache.id','users.prenom','users.id','users.idProfil')
+                'tache.typetache','tache_libelle','tache.idStatus','tache.vueRecherche','status_libelle','tacheid','users.prenom','users.id','users.idProfil')
                 ->where('users.idProfil',3)
                 ->where('tache.idStatus',2)
                 ->get();
@@ -193,16 +194,14 @@ if($vue<$total){
         TravailleurTache::create([
             'idtravailleur'=>$selectedInformation["users"],
             'idTache'=>$id,
-            'totalVues'=>$id,
-            'capture'=>$id,
+            'idAdmin'=>Auth::user()->id
         ]);
     } elseif ($closestGreaterElement !== null) {
         $selectedInformation = $closestGreaterElement;
         TravailleurTache::create([
             'idtravailleur'=>$selectedInformation["users"],
             'idTache'=>$id,
-            'totalVues'=>$id,
-            'capture'=>$id,
+            'idAdmin'=>Auth::user()->id
         ]);
     } elseif ($closestLowerElement !== null) {
         $selectedInformation = $closestLowerElement;
@@ -239,8 +238,7 @@ if($vue<$total){
             TravailleurTache::create([
                 'idtravailleur'=>$isset["users"],
                 'idTache'=>$id,
-                'totalVues'=>$id,
-                'capture'=>$id,
+                'idAdmin'=>Auth::user()->id
             ]);
         }
     } else{

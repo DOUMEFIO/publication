@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('travailleur_tache', function (Blueprint $table) {
             $table->id();
             $table->foreignId('idtravailleur')->constrained('users');
+            $table->foreignId('idAdmin')->constrained('users');
             $table->foreignId('idTache')->constrained('tache');
             $table->integer('totalVues')->nullable();
             $table->string('capture')->nullable();

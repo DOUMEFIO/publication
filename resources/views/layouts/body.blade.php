@@ -40,7 +40,7 @@
 
             $("#country").change(function(){
                  let country_id=this.value;
-                 $.get("/publication/public/get_states?country="+country_id, function(data){
+                 $.get("./get_states?country="+country_id, function(data){
                     $('#dep').attr('style','')
                     $('#vil').attr('style','display:none;')
                     $("#state").html(data);
@@ -49,7 +49,7 @@
 
                $("#state").change(function(){
                 let states_id=this.value;
-                $.get("/publication/public/get_cities?states="+states_id, function(data){
+                $.get("./get_cities?states="+states_id, function(data){
                     $('#dep').attr('style','')
                     $('#vil').attr('style','')
                     $("#citie").html(data);
@@ -59,7 +59,7 @@
                $("#countrylist").change(function(event){
                  let country_id=Array.from(event.target.selectedOptions).map(option => option.value);
                  let countryId = country_id.join("_");
-                    $.get("/publication/public/get_liste_states?country="+countryId , function(data){
+                    $.get("./get_liste_states?country="+countryId , function(data){
                     $('#listdep').attr('style','')
                     $('#listvil').attr('style','display:none;')
                     $("#stateliste").html(data);
@@ -69,7 +69,7 @@
                 $("#stateliste").change(function(event){
                  let states_id=Array.from(event.target.selectedOptions).map(option => option.value);
                  let statesId = states_id.join("_");
-                $.get("/publication/public/get_liste_city?state="+statesId , function(data){
+                $.get("./get_liste_city?state="+statesId , function(data){
                     $('#listvil').attr('style','')
                     $('#listvil').attr('style','')
                     $("#citielist").html(data);
@@ -82,7 +82,7 @@
                     let depId = $("#stateliste").val();
                     let vilId = $("#citielist").val();
                     let totalId = centreId + "_" + payId + "_" + depId + "_" + vilId;
-                $.get("/publication/public/get_total_vues?total="+totalId ,function(data){
+                $.get("./get_total_vues?total="+totalId ,function(data){
                     console.log(data);
                     $('#total').attr('style','')
                     $("#total").html(data);

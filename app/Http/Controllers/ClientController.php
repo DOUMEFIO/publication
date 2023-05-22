@@ -198,7 +198,9 @@ class ClientController extends Controller
                     DB::table('tache_zone')->insert($data);
                 }
                     return redirect()->route('/dashboard');
-                } elseif($request->typetache == '2'){
+                }
+
+                if($request->typetache == '2'){
                    $tache= Tache::create([
                         'idClient'=> $user,
                         'vueRecherche'=> $request->vueRecherche,
@@ -209,6 +211,7 @@ class ClientController extends Controller
                         'typetache'=>$request->typetache,
                         'idStatus'=>1
                     ]);
+                    dd($tache);
                     $tache->save();
             $id = $tache->id;
             $pay=$request->pays;

@@ -51,7 +51,7 @@ class ActionController extends Controller
             } elseif ($typetache == '3' && !in_array($fichier->getClientOriginalExtension(), ['mp4', 'mov', 'avi', 'wmv'])) {
                 return redirect()->back()->with('error', 'Le fichier doit être une vidéo.');
             } elseif ($typetache == '2' && !in_array($fichier->getClientOriginalExtension(), ['mp3','wav','aiff','wma','aac','flac','ogg','m4a'])) {
-                return redirect()->back()->with('error', 'Le fichier doit être une vidéo.');
+                return redirect()->back()->with('error', 'Le fichier doit être une audio.');
             }
 
             $path = $fichier->store('public/fichiers');

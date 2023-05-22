@@ -9,7 +9,7 @@ class TravailleurTache extends Model
 {
     use HasFactory;
     protected $table="travailleur_tache";
-    protected $fillable=['idtravailleur','idTache','totalVues','capture','dateValidation'];
+    protected $fillable=['idtravailleur','idTache','totalVues','capture','dateValidation','idAdmin'];
 
     public function tacheall()
         {

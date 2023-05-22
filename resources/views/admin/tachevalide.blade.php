@@ -48,7 +48,7 @@
                                     </td>
                                     <td>{{$tache->vueRecherche}}</td>
                                     <td>{{$tache->tache_libelle}}</td>
-                                    <td>{{$tache->description}}</td>
+                                    <td>T{{$tache->tacheid}}</td>
                                     <td>{{$tache->centre}}</td>
                                     <td>{{$tache->pays}}
                                         {{$tache->villes}}

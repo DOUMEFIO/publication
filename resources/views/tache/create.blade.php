@@ -56,7 +56,7 @@
                             </div>
                             <div class="mb-3" id="descriptionGroup" style="display:none;">
                                 <label class="form-label" for="date"><strong>Description</strong></label>
-                                 <input type="text" class="form-control"  name="description" id="date" placeholder="Description" required>
+                                 <input type="text" class="form-control"  name="description" id="date" placeholder="Description">
                             </div>
 
                             <div class="mb-3" id="fileGroup" style="display:none;">
