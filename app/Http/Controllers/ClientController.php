@@ -43,7 +43,7 @@ class ClientController extends Controller
                     $result[$key] = $value ?: 0;
                 }
                $libelles = CentreInteret::whereIn('id', $result)->pluck('libelle');
-               $libelles = implode(",", $libelles->all());
+               #$libelles = implode(",", $libelles->all());
         return view('influenceur.index', compact("users","centreInteret","libelles"));
      }
 
