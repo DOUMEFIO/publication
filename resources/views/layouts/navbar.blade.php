@@ -98,7 +98,7 @@
                         </div>
                         <a class="dropdown-item" href="" onclick="event.preventDefault();
                         this.closest('form').submit();">
-                        <form method="get" action="{{route('logout')}}">
+                        <form method="get" action="{{ route('logout') }}">
                             <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>{{ __('Déconnecté') }}</a>
                         </form>
                     </div>

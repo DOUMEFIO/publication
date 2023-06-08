@@ -1,30 +1,42 @@
 <x-app-layout>
     @section("contenue")
-
-    <div class="container py-2 col-6" style="font-size:20px;">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <p class="text-primary m-0 fw-bold" style="text-align: center; font-size:20px"><strong>Completez vos informations</strong></p>
-                </div>
-                <div class="card-body">
+    <div class="container justify-content-center w-50" style="font-size:20px;">
+        <div class="card shadow-lg o-hidden border-0 my-5">
+            <div class="card-body p-0">
+                <div class="col-lg-12">
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h4 class="text-black mb-4">Complétez vos informations</h4>
+                        </div>
+                        @if (session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                        @if($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                     <form method="post" action="{{route('store.influenceur')}}" enctype="multipart/form-data">
                         @csrf
-                        <div class="row">
-                            <div class="col">
-                                <div class="mb-3">
-                                    <label class="form-label"><strong>Numéro WhatsApp</strong></label>
-                                    <input type="tel" name="tel" id="phone" class="form-control" required>
-                                </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <input type="tel" name="tel" id="phone" class="form-control form-control-user" placeholder="Numéro WhatsApp" required>
                             </div>
-                            <div class="col">
+                            <div class="col-sm-6">
                                 <div class="mb-3">
-                                    <label class="form-label"><strong>Vues moyennes</strong></label>
+                                    <label class="fw-bolder text-black">Vues moyennes</label>
                                     <input type="number" name="nbr_vue_moyen" class="form-control" required>
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-3 ">
-                            <label class="form-label" ><strong>Vos centres d’intérêts</strong> </label>
+                        <div class="mb-3">
+                            <label class="fw-bolder text-black" >Vos centres d’intérêts</label>
                             <select class="selectpicker form-control" multiple name='id_centre[]' required>
                                 <option value="-1">Selectionner</option>
                                 @foreach ($centres as $centre)
@@ -39,18 +51,18 @@
                                 </div>
                                 <div class="col-4">
                                     <input class="form-check-input" type="radio" name="sexe" id="femaleGender"
-                                      value="Feminin" required/>
+                                           value="Feminin" required/>
                                     <label class="form-check-label" for="femaleGender">Féminin</label>
                                 </div>
                                 <div class="col-4">
                                     <input class="form-check-input" type="radio" name="sexe" id="maleGender"
-                                      value="Masculin" required/>
+                                           value="Masculin" required/>
                                     <label class="form-check-label" for="maleGender">Masculin</label>
                                 </div>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label"><strong>Pays</strong></label>
+                            <label class="fw-bolder text-black">Pays</label>
                             <select class="form-control" id="country" name="pay" required>
                                 <option value="-1">Selectionner</option>
                                 @foreach ($pays as $pay)
@@ -80,6 +92,7 @@
                     </form>
                 </div>
             </div>
+        </div>
     </div>
     @include('layouts.js')
     @endsection

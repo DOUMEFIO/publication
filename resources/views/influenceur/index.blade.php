@@ -113,28 +113,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--<div class="row">
-                                            <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="last_name"><strong>Mot de passe</strong></label>
-                                                    <div class="input-group mb-3">
-                                                        <input type="password" class="form-control" id="password" name="password" placeholder="Mot de passe">
-                                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                                            <i class="fa fa-eye" id="eyeIcon"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="password_confirmation"><strong>Confirmer mot de passe</strong></label>
-                                                    <div class="input-group mb-3">
-                                                        <input type="password" class="form-control" id="password" name="password_confirmation" placeholder="Confirmer Mot de passe">
-                                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                                            <i class="fa fa-eye" id="eyeIcon"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>-->
                                         <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Enregistrer</button></div>
                                     </form>
                                 </div>
