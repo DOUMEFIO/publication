@@ -100,7 +100,7 @@
                         </div>
                         <div class="form-group ">
                             <div class="row my-3">
-                                <button class="btn btn-primary d-block btn-user w-100" type="submit">Enregistrer</button>
+                                <button class="btn btn-primary d-block btn-user w-100" type="submit" value="inscription" name="submit">Enregistrer</button>
                             </div>
                             <div class="row">
                                 <span style="color: rgb(55, 53, 53);text-align:center">Avez-vous un compte? <a href="{{ route('login') }}" type="submit" value="connection">Se connecter</a></span>

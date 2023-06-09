@@ -52,7 +52,8 @@
                                     <div class="custom-control custom-checkbox small">
                                         <div class="form-check"><input class="form-check-input custom-control-input" type="checkbox" id="formCheck-1"><label class="form-check-label custom-control-label" for="formCheck-1">Se souvenir de moi</label></div>
                                     </div>
-                                </div><button class="btn btn-primary d-block btn-user w-100" type="submit">Se connecter</button>
+                                </div>
+                                <button class="btn btn-primary d-block btn-user w-100" type="submit">Se connecter</button>
                                 <hr><a class="btn btn-primary d-block btn-google btn-user w-100 mb-2" role="button"><i class="fab fa-google"></i>&nbsp; Se connecter avec Google</a><a class="btn btn-primary d-block btn-facebook btn-user w-100" role="button"><i class="fab fa-facebook-f"></i>&nbsp; Se connecter avec Facebook</a>
                                 <hr>
                             </form>

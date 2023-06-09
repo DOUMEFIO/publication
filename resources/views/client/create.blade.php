@@ -3,7 +3,7 @@
         <div class="container py-2 col-8" style="font-size:20px;">
             <div class="card card-body ">
                   @if(session()->has('error'))
-			       <div class="alert alert-succes"> {!! session('error') !!}</div>
+			       <div class="alert alert-success"> {!! session('error') !!}</div>
 		          @endif
                 <div class="card shadow">
                     <div class="card-header py-3">

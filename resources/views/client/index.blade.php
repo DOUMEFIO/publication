@@ -1,6 +1,5 @@
 <x-app-layout>
     @section('contenue')
-
     <div class="container-fluid">
         <div class="card shadow">
             <div class="row card-header">
