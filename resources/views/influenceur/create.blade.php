@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="col-4">
                                     <input class="form-check-input" type="radio" name="sexe" id="femaleGender"
-                                      value="Feminin" required/>
+                                      value="Féminin" required/>
                                     <label class="form-check-label" for="femaleGender">Féminin</label>
                                 </div>
                                 <div class="col-4">

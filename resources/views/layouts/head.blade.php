@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{asset("template/assets/css/demo.css")}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset("template/assets/css/intlTelInput.css")}}" rel="stylesheet">
     <!-- Dernier CSS compilé et minifié -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
 </head>
 
 <body id="page-top">

@@ -50,7 +50,7 @@
                                     <span class="text-primary m-0 fw-bold fs-5 text-center">Informations d'Utilisateur</span><a class="btn btn-primary float-end text-light" id="modify">Modifier</a>
                                 </div>
                                 <div class="card-body">
-                                    <form method="POST" action="">
+                                    <form method="POST" action="{{route('infoInfluUpdate')}}">
                                         @csrf
                                         <div class="row">
                                             <div class="col">
@@ -69,15 +69,15 @@
                                             <div class="col">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="email">
-                                                        <strong>Sexe</strong>
+                                                        <strong>Sexe </strong>
                                                     </label>
                                                     <select name="sexe" class="form-control">
-                                                        @if($users[0]->sexe === 'Masculin')
+                                                        @if($users[0]->sexe == 'Masculin')
                                                             <option value="Masculin" selected>Masculin</option>
                                                             <option value="Féminin">Féminin</option>
-                                                        @elseif($users[0]->sexe === 'Masculin')
-                                                            <option value="Féminin">Féminin</option>
-                                                            <option value="Masculin" selected>Masculin</option>
+                                                        @elseif($users[0]->sexe == 'Feminin')
+                                                            <option value="Féminin" selected>Féminin</option>
+                                                            <option value="Masculin">Masculin</option>
                                                         @endif
                                                     </select>
                                                 </div>
@@ -91,7 +91,7 @@
                                                 <div class="mb-3"><label class="form-label" for="last_name"><strong>Nombre moyen de vues</strong></label><input class="form-control" type="number" id="last_name" placeholder="Doe" name="last_name" value="{{$users[0]->nbr_vue_moyen}}"></div>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row" id="noninput">
                                             <div class="col">
                                                 <div class="mb-3"><label class="form-label" for="last_name"><strong>Résidence</strong></label>
                                                     <ul>
@@ -102,13 +102,11 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row" id="noninputs">
                                             <div class="col">
                                                 <div class="mb-3"><label class="form-label" for="last_name"><strong>Centre d'intérets:</strong></label>
                                                     <ul>
-                                                        @foreach($libelles as $libelle)
-                                                            <li>{{ $libelle }}</li>
-                                                        @endforeach
+                                                        <li><strong>{{$libelles}}</li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -135,6 +133,48 @@
                                                 </div>
                                             </div>
                                         </div>-->
+                                        <div class="row" id="input" style="display:none;">
+                                            <div class="col">
+                                                <div class="mb-3 ">
+                                                    <label class="form-label" ><strong>Vos centres d’intérêts</strong> </label>
+                                                    <select class="selectpicker form-control" multiple name='id_centre[]' required>
+                                                        <option value="-1">Selectionner</option>
+                                                        @foreach ($centres as $centre)
+                                                            <option value="{{$centre->id}}">{{$centre->libelle}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="mb-3">
+                                                    <label class="form-label"><strong>Pays</strong></label>
+                                                    <select class="form-control" id="country" name="pay" required>
+                                                        <option value="{{$users[0]->residencepay->id}}">{{$users[0]->residencepay->name}}</option>
+                                                        @foreach ($pays as $pay)
+                                                            <option value="{{$pay->id}}">{{$pay->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="mb-3" id="dep" style="display:none">
+                                                    <label class="form-label"><strong>Département</strong></label>
+                                                    <select id="state" class="form-control" name="departement">
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="mb-3"  id="vil" style="display:none">
+                                                    <label class="form-label"><strong>Ville</strong></label>
+                                                    <select class="form-control" name="ville" id="citie">
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Enregistrer</button></div>
                                     </form>
                                 </div>
@@ -144,6 +184,7 @@
                 </div>
             </div>
         </div>
+        @include('layouts.js')
     @endsection
 </x-app-layout>
 <script>
@@ -196,6 +237,8 @@
     enableButton.addEventListener('click', function() {
         enableAllInputs();
         enableAllOptions();
+        $('#input').attr('style','')
+        $('#noninput').attr('style','display:none')
+        $('#noninputs').attr('style','display:none')
     });
-
 </script>

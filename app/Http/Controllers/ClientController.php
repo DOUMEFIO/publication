@@ -30,6 +30,8 @@ class ClientController extends Controller
 
     public function influenceurconnect(){
         $users=InfoInfluenceur::where('id_User',Auth::user()->id)->get();
+        $centres=CentreInteret::all();
+        $pays=Pays::all();
         $centreInteret = DB::table('travailleur_centre_interet')
                ->leftJoin('users', 'users.id', '=', 'travailleur_centre_interet.id_User')
                ->select(DB::raw('GROUP_CONCAT(id_Centre) as ids'))
@@ -44,12 +46,14 @@ class ClientController extends Controller
                 }
                $libelles = CentreInteret::whereIn('id', $result)->pluck('libelle');
                #$libelles = implode(",", $libelles->all());
-        return view('influenceur.index', compact("users","centreInteret","libelles"));
+        return view('influenceur.index', compact("pays","users","centreInteret","libelles","centres"));
      }
 
     public function redirige(){
         $fichiers=TypeTache::all();
-        return view('client.create',compact('fichiers'));
+        $centres=CentreInteret::all();
+        $pays=Pays::all();
+        return view('client.create',compact('fichiers','centres','pays'));
      }
 
     public function tacheenregistrer(){

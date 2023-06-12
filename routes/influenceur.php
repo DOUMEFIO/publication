@@ -29,4 +29,7 @@ Route::middleware('auth')->group(function (){
 
     Route::get('get_cities', [InfluenceurController::class, 'getCities'])
         ->name('get_cities');
+
+    Route::get('infoInfluUpdate', [InfluenceurController::class, 'infoInfluUpdate'])
+        ->name('infoInfluUpdate');
 });

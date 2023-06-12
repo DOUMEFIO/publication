@@ -35,6 +35,10 @@ class InfluenceurController extends Controller
     }
     public function index()
     {
+        $pays = Pays::all();
+        $departe = Departements::all();
+        $pays = Villes::all();
+        $centres = CentreInteret::all();
         $users = InfoInfluenceur::where('id_User', Auth::user()->id)->get();
         $centreInteret = DB::table('travailleur_centre_interet')
             ->leftJoin('users', 'users.id', '=', 'travailleur_centre_interet.id_User')
@@ -50,7 +54,8 @@ class InfluenceurController extends Controller
         }
         $libelles = CentreInteret::whereIn('id', $result)->pluck('libelle');
         $libelles = implode(",", $libelles->all());
-        return view('influenceur.index', compact("users", "centreInteret", "libelles"));
+        return view('influenceur.index', compact("users", "centreInteret", "libelles",
+                    "pays","centres"));
     }
 
     public function create()
@@ -225,6 +230,15 @@ class InfluenceurController extends Controller
                 $totalvues ='<p class="text-primary m-0 fw-bold" style="text-align:center" ><strong>Nous pouvons vous
                 générer : '.$total.' vues </strong></p>';
         return $totalvues;
+    }
+
+    public function infoInfluUpdate(Request $request){
+        $id=Auth::user()->id;
+        $user = User::find($id);
+        $user->name = $request->nom;
+        $user->surname = $request->prenom;
+        dd($user);
+        $user->save();
     }
 
 }
