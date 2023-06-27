@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tache;
 use App\Models\TypeTache;
+use App\Models\Paiement;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\CentreInteret;
 use App\Models\Departements;
@@ -18,6 +19,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use StephaneAss\Payplus\Pay\PayPlus;
 
 class TacheController extends Controller
 {
@@ -52,15 +54,18 @@ class TacheController extends Controller
                 'password' => Hash::make($request->password),
             ]);
             event(new Registered($user));
+            //RegistrationLinkController::send($user->email);
 
             //user
-            Auth::login($user);
+            //Auth::login($user);
+            //return redirect(RouteServiceProvider::HOME);
+
             $id = DB::select("
                 SELECT * From users
                 WHERE users.email='$request->email'");
 
             if ($request->typetache==1) {
-                $tache = Tache::create([
+                $tache=Tache::create([
                     'idClient'=> $id[0]->id,
                     'vueRecherche'=> $request->vueRecherche,
                     'debut'=> $request->debut,
@@ -68,11 +73,11 @@ class TacheController extends Controller
                     'fichier'=> " ",
                     'description'=> $request->description,
                     'typetache'=> $request->typetache,
-                    'idStatus'=>1
+                    'idStatus'=>1,
+                    'total'=> $request->vueRecherche * 2
                 ]);
-
                 $tache->save();
-                $id = $tache->id;
+                $idtache = $tache->id;
                 $pay=$request->pays;
                 $arraydep=$request->departements;
                 $dep = explode(",", $arraydep);
@@ -83,7 +88,7 @@ class TacheController extends Controller
 
                 foreach ($centre as $value) {
                     $centres[] = [
-                        'idTache' => $id,
+                        'idTache' => $idtache,
                         'idCentre' => $value,
                     ];
                 }
@@ -93,7 +98,7 @@ class TacheController extends Controller
                 if($pay == "pay"){
                     foreach ($dep as $value) {
                         $data[] = [
-                            'idTache' => $id,
+                            'idTache' => $idtache,
                             'idPay' => $value,
                         ];
                     }
@@ -101,7 +106,7 @@ class TacheController extends Controller
                 } elseif ($pay == "dep") {
                     foreach ($dep as $value) {
                         $data[] = [
-                            'idTache' => $id,
+                            'idTache' => $idtache,
                             'idDepartement' => $value
                         ];
                     }
@@ -109,14 +114,45 @@ class TacheController extends Controller
                 } elseif ($pay == "vil") {
                     foreach ($dep as $value) {
                         $data[] = [
-                            'idTache' => $id,
+                            'idTache' => $idtache,
                             'idVille' => $value
                         ];
                     }
                     DB::table('tache_zone')->insert($data);
                 }
 
-                return redirect(RouteServiceProvider::HOME);
+                Paiement::create([
+                    'idUer'=>$id[0]->id,
+                    'idTache'=>$idtache
+                ]);
+
+                $co = (new PayPlus())->init();
+                $co->addItem("$request->email", 3, 150, 450, "Je suis un client");
+
+                $total_amount=$request->vueRecherche*2; // for test
+                $co->setTotalAmount($total_amount);
+                $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
+                $mail=$request->email;
+                $password=$request->password;
+                $co->addCustomData('email', $mail);
+                $co->addCustomData('password', $password);
+                //dd($co);
+
+                // démarrage du processus de paiement
+                // envoi de la requete
+                if($co->create()) {
+
+                    // Requête acceptée, alors on redirige le client vers la page de validation de paiement
+                    return redirect()->to($co->getInvoiceUrl());
+                }else{
+                    // Requête refusée, alors on affiche le motif du rejet
+                    return [
+                        "succes" => false,
+                        "message" => "$co->response_text"
+                    ];
+                }
+
+
             }
             elseif ($request->typetache==2) {
                 $tache=Tache::create([
@@ -237,6 +273,24 @@ class TacheController extends Controller
         }
 
     }
+
+    public function verify($token=null, LoginRequest $req){
+    $token = blank($token) ? $_GET['token'] : trim($token);
+
+    $co = (new PayPlus())->init();
+    $success = auth()->attempt([
+        'email' => "doumefiobignonanne@gmail.com",
+        'password' => 'Anne 1234'
+    ], request()->has('remember'));
+
+    if ($success) {
+        return redirect()->to(RouteServiceProvider::HOME);
+    }else {
+        // Transaction has failed
+        // Perform your failed logique here
+
+    }
+}
 
     public function login(Request $request, LoginRequest $req): RedirectResponse
     {

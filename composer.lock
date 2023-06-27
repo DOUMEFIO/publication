@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aac6f15c2db40f330f3079e490999e8d",
+    "content-hash": "251e21a79f46a4944378e0be765b9c3b",
     "packages": [
         {
             "name": "brick/math",
@@ -3272,6 +3272,73 @@
                 "source": "https://github.com/rinvex/countries"
             },
             "time": "2022-12-29T20:30:43+00:00"
+        },
+        {
+            "name": "stephaneass/payplus",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "git@gitlab.com:StephaneAss/payplus-package-laravel.git",
+                "reference": "cc7a707f0de20f1ffa906470ecb9f06a653bfed7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/StephaneAss%2Fpayplus-package-laravel/repository/archive.zip?sha=cc7a707f0de20f1ffa906470ecb9f06a653bfed7",
+                "reference": "cc7a707f0de20f1ffa906470ecb9f06a653bfed7",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": ">=7.0",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0",
+                "phpunit/phpunit": "^9.3",
+                "spatie/laravel-ray": "^1.9",
+                "vimeo/psalm": "^4.4"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.0-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "StephaneAss\\Payplus\\PayplusServiceProvider"
+                    ],
+                    "aliases": {
+                        "Payplus": "StephaneAss\\Payplus\\PayplusFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "StephaneAss\\Payplus\\": "src",
+                    "StephaneAss\\Payplus\\Database\\Factories\\": "database/factories"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stephane ASSOCLE",
+                    "email": "mensste30@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Payplus is the easier plateform to perform onlign paiement with assurance",
+            "homepage": "https://payplus.africa/",
+            "keywords": [
+                "onlign paiement",
+                "paiement",
+                "pay",
+                "payplus",
+                "plus"
+            ],
+            "time": "2022-11-30T15:16:11+00:00"
         },
         {
             "name": "symfony/console",
@@ -9142,7 +9209,7 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,

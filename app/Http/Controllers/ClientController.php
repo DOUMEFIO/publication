@@ -14,9 +14,34 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Mail\OrderShipped;
+use Illuminate\Support\Facades\Mail;
+use StephaneAss\Payplus\Pay\PayPlus;
 
 class ClientController extends Controller
 {
+    public function sendMail()
+    {
+        Mail::to('john.doe@gmail.com')->send(new OrderShipped());
+    }
+
+    public function direction(Request $request)
+        {
+            $co = (new PayPlus())->init();
+            $response_code=$_POST['response_code'];
+            $data = $co->getCustomData('email');
+            dd($response_code,$data);
+            $token=$_POST['token'];
+            $success = auth()->attempt([
+                'email' => "doumefiobignonanne@gmail.com",
+                'password' => 'Anne 1234'
+            ], request()->has('remember'));
+
+            if($response_code==00){
+                $data = $co->getCustomData('first_key');
+
+            }
+    }
 
     public function create(){
         $fichiers=TypeTache::all();

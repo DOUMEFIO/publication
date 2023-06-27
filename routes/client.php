@@ -22,4 +22,9 @@ Route::middleware('auth')->group(function (){
     Route::post('store.client', [ClientController::class, 'store'])
         ->name('store.client');
 
+    Route::post('direction', [ClientController::class, 'direction'])
+        ->name('direction');
+
+    Route::get('send-mail', 'ClientController@sendMail')->name('send.mail');
+
 });

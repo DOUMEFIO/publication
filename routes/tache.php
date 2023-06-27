@@ -13,4 +13,7 @@ Route::group(['middleware' => 'guest'], function () {
 
     Route::post('connecte', [TacheController::class, 'login'])
         ->name('connecte');
+
+    Route::get('valider', [TacheController::class, 'verify'])
+        ->name('valider');
 });

@@ -15,6 +15,7 @@ use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use App\Mail\NewUserWelcomeMail;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\RegistrationLinkController;
 
 class RegisteredUserController extends Controller
 {
@@ -58,6 +59,7 @@ class RegisteredUserController extends Controller
             ]);
             event(new Registered($user));
             Auth::login($user);
+            RegistrationLinkController::send($user->email);
             return redirect(RouteServiceProvider::TRAVAILLEUR);
         }
 
