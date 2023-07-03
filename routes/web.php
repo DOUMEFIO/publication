@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::HEAD('/', function () {
+Route::get('/', function () {
     return view('welcome');
 });
 

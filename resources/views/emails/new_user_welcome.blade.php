@@ -1,12 +1,16 @@
-@component('mail::message')
-# Bienvenue, {{ $user->name }} !
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Waspay</title>
+</head>
+<body>
+   <p style="text-align: center">Bonjour Mr/Mlle <strong>{{ $user->nom }} {{ $user->prenom }}</strong>vous a ajouté sur notre plateforme <strong>Waspay</strong>.
+    </p>
+    Merci pour votre confiance,<br>
+   <strong>{{ $user->nom }}</strong>
 
-Merci d'avoir rejoint notre communauté. Nous sommes heureux de vous compter parmi nos membres.
-
-@component('mail::button', ['url' => $link_url])
-Visitez notre site web
-@endcomponent
-
-Cordialement,<br>
-L'équipe Example
-@endcomponent
+</body>
+</html>

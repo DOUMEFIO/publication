@@ -25,6 +25,7 @@ class ClientController extends Controller
         Mail::to('john.doe@gmail.com')->send(new OrderShipped());
     }
 
+
     public function direction(Request $request)
         {
             $co = (new PayPlus())->init();

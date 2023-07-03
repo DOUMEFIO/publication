@@ -274,10 +274,13 @@ class TacheController extends Controller
 
     }
 
-    public function verify($token=null, LoginRequest $req){
+    public function verify(Request $request){
+    $token=$request->token;
     $token = blank($token) ? $_GET['token'] : trim($token);
-
+    //$transaction=Transaction::find($request->transaction_id);
+    //dd($token);
     $co = (new PayPlus())->init();
+    dd($co->getCustomData("email"));
     $success = auth()->attempt([
         'email' => "doumefiobignonanne@gmail.com",
         'password' => 'Anne 1234'

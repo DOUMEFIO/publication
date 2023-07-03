@@ -58,13 +58,9 @@ class RegisteredUserController extends Controller
 
             ]);
             event(new Registered($user));
-            Auth::login($user);
             RegistrationLinkController::send($user->email);
+            Auth::login($user);
             return redirect(RouteServiceProvider::TRAVAILLEUR);
         }
-
-/*         Mail::to($user->email)->send(new NewUserWelcomeMail($user));
- */
-
     }
 }

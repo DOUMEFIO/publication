@@ -28,7 +28,7 @@ class NewUserWelcomeMail extends Mailable
     public function build()
     {
         return $this->subject('Modifier mot de passe')->markdown('auth.send-registration-link', [
-            'link_url' => route('password.reset', $this->token),
+            //'link_url' => route('password.reset', $this->token),
             'user' => $this->user
         ]);
     }

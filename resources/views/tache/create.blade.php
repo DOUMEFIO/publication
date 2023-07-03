@@ -83,7 +83,7 @@
 
                         <div class="mb-3">
                             <label class="fw-bolder text-black">Pays</label>
-                            <select class="selectpicker form-control" id="countrylist" multiple name="pays[]" required>
+                            <select class="selectpicker form-control" id="countrylist" multiple name="pays[]">
                                 <option value="-1">Choisissez</option>
                                 @foreach ($pays as $pay)
                                     <option value="{{$pay->id}}">{{$pay->name}}</option>
