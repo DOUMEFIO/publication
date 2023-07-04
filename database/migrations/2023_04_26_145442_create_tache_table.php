@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string("description");
             $table->foreignId('typetache')->constrained('type_tache');
             $table->foreignId('idStatus')->constrained('status')->nullable();
+            $table->string('payement')->nullable();
             $table->timestamps();
         });
     }

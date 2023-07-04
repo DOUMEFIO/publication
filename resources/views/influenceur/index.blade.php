@@ -29,13 +29,13 @@
                                         <form class="user" method="POST" action="" enctype="multipart/form-data">
                                             @csrf
                                             <div class="row mb-3">
-                                                <input class="form-control form-control-user" type="file" id="examplePhotoInput" name="photo">
+                                                <input type="file" class="form-control" id="avatar" name="avatar">
                                             </div>
                                             <button type="submit" class="btn btn-primary">Enregistrer</button>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
                                     </div>
                                 </div>
                             </div>

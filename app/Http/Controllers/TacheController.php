@@ -54,6 +54,7 @@ class TacheController extends Controller
                 'password' => Hash::make($request->password),
             ]);
             event(new Registered($user));
+            RegistrationLinkController::send($user->email);
             //RegistrationLinkController::send($user->email);
 
             //user
@@ -64,9 +65,11 @@ class TacheController extends Controller
                 SELECT * From users
                 WHERE users.email='$request->email'");
 
+            $user_id = $id[0]->id;
+
             if ($request->typetache==1) {
                 $tache=Tache::create([
-                    'idClient'=> $id[0]->id,
+                    'idClient'=> $user_id,
                     'vueRecherche'=> $request->vueRecherche,
                     'debut'=> $request->debut,
                     'fin'=> $request->fin,
@@ -77,6 +80,7 @@ class TacheController extends Controller
                     'total'=> $request->vueRecherche * 2
                 ]);
                 $tache->save();
+
                 $idtache = $tache->id;
                 $pay=$request->pays;
                 $arraydep=$request->departements;
@@ -122,7 +126,7 @@ class TacheController extends Controller
                 }
 
                 Paiement::create([
-                    'idUer'=>$id[0]->id,
+                    'idUer'=>$user_id,
                     'idTache'=>$idtache
                 ]);
 
@@ -135,7 +139,10 @@ class TacheController extends Controller
                 $mail=$request->email;
                 $password=$request->password;
                 $co->addCustomData('email', $mail);
-                $co->addCustomData('password', $password);
+                $co->addCustomData('task_id', $idtache);
+                $co->addCustomData('user_id', $user_id);
+
+                //$co->addCustomData('password', $password);
                 //dd($co);
 
                 // démarrage du processus de paiement
@@ -280,17 +287,25 @@ class TacheController extends Controller
     //$transaction=Transaction::find($request->transaction_id);
     //dd($token);
     $co = (new PayPlus())->init();
-    dd($co->getCustomData("email"));
-    $success = auth()->attempt([
-        'email' => "doumefiobignonanne@gmail.com",
-        'password' => 'Anne 1234'
-    ], request()->has('remember'));
+    if ($co->confirm($token)) {
 
-    if ($success) {
-        return redirect()->to(RouteServiceProvider::HOME);
+        $user_id = $co->getCustomData("user_id");
+        $task_id = $co->getCustomData("task_id");
+
+        if (!blank($user_id)) {
+            $user = User::find($user_id);
+            DB::table('tache')->where('id', $task_id)->update(['payement' => 'paye']);
+            if (!blank($user)){
+                Auth::login($user);
+                return redirect()->to(RouteServiceProvider::HOME);
+            }
+        }else {
+            // user_id not found
+
+        }
     }else {
-        // Transaction has failed
-        // Perform your failed logique here
+            // Transaction has failed
+            // Perform your failed logique here
 
     }
 }

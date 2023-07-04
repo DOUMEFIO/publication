@@ -103,6 +103,7 @@ class ClientController extends Controller
                 ->groupBy('users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
                 'tache.typetache','tache_libelle','tache.vueRecherche','status_libelle','tache.id','users.prenom','users.id','users.idProfil')
                 ->where('users.id',$user)
+                ->where('payement',"paye")
                 ->get();
         return view('client.index', compact('taches'));
     }
