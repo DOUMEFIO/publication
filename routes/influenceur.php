@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\InfluenceurController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 
     Route::get('get_liste_states', [InfluenceurController::class, 'getListeStates'])
@@ -11,6 +12,12 @@ use Illuminate\Support\Facades\Route;
 
     Route::get('get_total_vues', [InfluenceurController::class, 'totalvues'])
         ->name('get_total_vues');
+
+    Route::get('send.mail', [RegisteredUserController::class, 'sendMail'])
+        ->name('send.mail');
+
+    Route::get('confirm/{id}', [RegisteredUserController::class, 'confirm'])
+        ->name('confirm');
 
 Route::middleware('auth')->group(function (){
     Route::get('show.influenceur', [InfluenceurController::class, 'show'])

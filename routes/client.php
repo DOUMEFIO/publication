@@ -13,8 +13,9 @@ Route::middleware('auth')->group(function (){
     Route::get('influenceurconnect', [ClientController::class, 'influenceurconnect'])
         ->name('influenceurconnect');
 
-    Route::get('redirige', [ClientController::class, 'redirige'])
+    Route::get('redirige', [ClientController::class, 'tacheenregistrer'])
         ->name('redirige');
+        //il y a une fonction de redirige il faut changer tacheenregistrer par redirige
 
     Route::get('client.tache', [ClientController::class, 'create'])
         ->name('client.tache');

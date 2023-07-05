@@ -42,6 +42,7 @@ class AdminController extends Controller
                 'tache.typetache','tache_libelle','tache.idStatus','tache.vueRecherche','status_libelle','nbr','users.prenom','users.id','users.idProfil')
                 ->where('users.idProfil',3)
                 ->where('tache.idStatus',1)
+                ->where('payement',"paye")
                 ->get();
         return view('admin.taches', compact("taches"));
     }
@@ -67,6 +68,7 @@ class AdminController extends Controller
                 'tache.typetache','tache_libelle','tache.idStatus','tache.vueRecherche','status_libelle','tacheid','users.prenom','users.id','users.idProfil')
                 ->where('users.idProfil',3)
                 ->where('tache.idStatus',2)
+                ->where('payement',"paye")
                 ->get();
         return view('admin.tachevalide', compact("taches"));
     }
@@ -161,6 +163,7 @@ foreach ($items as $item) {
 
 $totalvues=0;
 $vue = intval($vues);
+//dd($result,$vue ,$total);
 //$vue=100;// Valeur de référence
 $selectedElement = null;
 $tableau=[];
@@ -174,6 +177,7 @@ if($vue<$total){
         if ($element['vue'] === $vue) {
             $selectedElement = $element;
             break;
+            dd($$selectedElement);
         } elseif ($element['vue'] > $vue) {
             $difference = $element['vue'] - $vue;
             if ($difference < $closestGreaterDifference) {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CentreInteret;
 use App\Models\Departements;
+use App\Models\Paiement;
 use App\Models\InfoInfluenceur;
 use App\Models\Pays;
 use App\Models\Tache;
@@ -31,7 +32,6 @@ class ClientController extends Controller
             $co = (new PayPlus())->init();
             $response_code=$_POST['response_code'];
             $data = $co->getCustomData('email');
-            dd($response_code,$data);
             $token=$_POST['token'];
             $success = auth()->attempt([
                 'email' => "doumefiobignonanne@gmail.com",
@@ -109,10 +109,11 @@ class ClientController extends Controller
     }
 
     public function store(Request $request){
-        $user = Auth::user()->id;
+        $user_id = Auth::user()->id;
+        $user_email = Auth::user()->email;
         if ($request->typetache==1) {
            $tache= Tache::create([
-                'idClient'=> $user,
+                'idClient'=> $user_id,
                 'vueRecherche'=> $request->vueRecherche,
                 'debut'=> $request->debut,
                 'fin'=> $request->fin,
@@ -122,7 +123,7 @@ class ClientController extends Controller
                 'idStatus'=>1
             ]);
             $tache->save();
-            $id = $tache->id;
+            $idtache = $tache->id;
             $pay=$request->pays;
             $dep= $request->departements;
             $vil= $request->villes;
@@ -131,7 +132,7 @@ class ClientController extends Controller
 
                 foreach ($centre as $value) {
                     $centres[] = [
-                        'idTache' => $id,
+                        'idTache' => $idtache,
                         'idCentre' => $value,
                     ];
                 }
@@ -141,7 +142,7 @@ class ClientController extends Controller
                 if(isset($pay) && isset($dep) && isset($vil)) {
                     foreach ($vil as $value) {
                         $data[] = [
-                            'idTache' => $id,
+                            'idTache' => $idtache,
                             'idVille' => $value,
                         ];
                     }
@@ -149,7 +150,7 @@ class ClientController extends Controller
                 } elseif(isset($pay) && isset($dep)) {
                     foreach ($dep as $value) {
                         $data[] = [
-                            'idTache' => $id,
+                            'idTache' => $idtache,
                             'idDepartement' => $value,
                         ];
                     }
@@ -157,14 +158,44 @@ class ClientController extends Controller
                 } elseif(isset($pay)) {
                     foreach ($pay as $value) {
                         $data[] = [
-                            'idTache' => $id,
+                            'idTache' => $idtache,
                             'idPay' => $value,
                         ];
                     }
                     DB::table('tache_zone')->insert($data);
                 }
-            return redirect()->route('/dashboard');
-        } elseif ($request->file('avatar') && $request->typetache != 1) {
+                Paiement::create([
+                    'idUer'=>$user_id,
+                    'idTache'=>$idtache
+                ]);
+
+                $co = (new PayPlus())->init();
+                $co->addItem("$user_email", 3, 150, 450, "Je suis un client");
+
+                $total_amount=$request->vueRecherche*2; // for test
+                $co->setTotalAmount($total_amount);
+                $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
+                $mail=$user_email;
+                $password=$request->password;
+                $co->addCustomData('email', $mail);
+                $co->addCustomData('task_id', $idtache);
+                $co->addCustomData('user_id', $user_id);
+
+                // démarrage du processus de paiement
+                // envoi de la requete
+                if($co->create()) {
+
+                    // Requête acceptée, alors on redirige le client vers la page de validation de paiement
+                    return redirect()->to($co->getInvoiceUrl());
+                }else{
+                    // Requête refusée, alors on affiche le motif du rejet
+                    return [
+                        "succes" => false,
+                        "message" => "$co->response_text"
+                    ];
+                }
+        } 
+        elseif ($request->file('avatar') && $request->typetache != 1) {
                 $fichier = $request->file('avatar');
                 // Vérification de l'extension du fichier
                 if ($request->typetache == '4' && !in_array($fichier->getClientOriginalExtension(), ['jpg', 'jpeg', 'png', 'gif'])) {
@@ -177,7 +208,7 @@ class ClientController extends Controller
                 $path = $fichier->store('public/fichiers');
                 if($request->typetache != '2'){
                    $tache= Tache::create([
-                        'idClient'=> $user,
+                        'idClient'=> $user_id,
                         'vueRecherche'=> $request->vueRecherche,
                         'debut'=> $request->debut,
                         'fin'=> $request->fin,
@@ -187,53 +218,82 @@ class ClientController extends Controller
                         'idStatus'=>1
                     ]);
                     $tache->save();
-            $id = $tache->id;
-            $pay=$request->pays;
-            $dep= $request->departements;
-            $vil= $request->villes;
-            $centre = $request->centre;
-            $centres=[];
+                    $idtache = $tache->id;
+                    $pay=$request->pays;
+                    $dep= $request->departements;
+                    $vil= $request->villes;
+                    $centre = $request->centre;
+                    $centres=[];
 
-                foreach ($centre as $value) {
-                    $centres[] = [
-                        'idTache' => $id,
-                        'idCentre' => $value,
-                    ];
-                }
-                DB::table('tache_centre')->insert($centres);
-                //enregistrement de tache
-                $data = [];
-                if(isset($pay) && isset($dep) && isset($vil)) {
-                    foreach ($vil as $value) {
-                        $data[] = [
-                            'idTache' => $id,
-                            'idVille' => $value,
+                    foreach ($centre as $value) {
+                        $centres[] = [
+                            'idTache' => $idtache,
+                            'idCentre' => $value,
                         ];
                     }
-                    DB::table('tache_zone')->insert($data);
+                    DB::table('tache_centre')->insert($centres);
+                    //enregistrement de tache
+                    $data = [];
+                    if(isset($pay) && isset($dep) && isset($vil)) {
+                        foreach ($vil as $value) {
+                            $data[] = [
+                                'idTache' => $idtache,
+                                'idVille' => $value,
+                            ];
+                        }
+                        DB::table('tache_zone')->insert($data);
                 } elseif(isset($pay) && isset($dep)) {
                     foreach ($dep as $value) {
                         $data[] = [
-                            'idTache' => $id,
+                            'idTache' => $idtache,
                             'idDepartement' => $value,
                         ];
                     }
                     DB::table('tache_zone')->insert($data);
-                } elseif(isset($pay)) {
-                    foreach ($pay as $value) {
-                        $data[] = [
-                            'idTache' => $id,
-                            'idPay' => $value,
+                    } elseif(isset($pay)) {
+                        foreach ($pay as $value) {
+                            $data[] = [
+                                'idTache' => $idtache,
+                                'idPay' => $value,
+                            ];
+                        }
+                        DB::table('tache_zone')->insert($data);
+                    }
+                    Paiement::create([
+                        'idUer'=>$user_id,
+                        'idTache'=>$idtache
+                    ]);
+    
+                    $co = (new PayPlus())->init();
+                    $co->addItem("$user_email", 3, 150, 450, "Je suis un client");
+    
+                    $total_amount=$request->vueRecherche*2; // for test
+                    $co->setTotalAmount($total_amount);
+                    $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
+                    $mail=$user_email;
+                    $password=$request->password;
+                    $co->addCustomData('email', $mail);
+                    $co->addCustomData('task_id', $idtache);
+                    $co->addCustomData('user_id', $user_id);
+    
+                    // démarrage du processus de paiement
+                    // envoi de la requete
+                    if($co->create()) {
+    
+                        // Requête acceptée, alors on redirige le client vers la page de validation de paiement
+                        return redirect()->to($co->getInvoiceUrl());
+                    }else{
+                        // Requête refusée, alors on affiche le motif du rejet
+                        return [
+                            "succes" => false,
+                            "message" => "$co->response_text"
                         ];
                     }
-                    DB::table('tache_zone')->insert($data);
-                }
-                    return redirect()->route('/dashboard');
                 }
 
                 if($request->typetache == '2'){
                    $tache= Tache::create([
-                        'idClient'=> $user,
+                        'idClient'=> $user_id,
                         'vueRecherche'=> $request->vueRecherche,
                         'debut'=> $request->debut,
                         'fin'=> $request->fin,
@@ -242,50 +302,78 @@ class ClientController extends Controller
                         'typetache'=>$request->typetache,
                         'idStatus'=>1
                     ]);
-                    dd($tache);
                     $tache->save();
-            $id = $tache->id;
-            $pay=$request->pays;
-            $dep= $request->departements;
-            $vil= $request->villes;
-            $centre = $request->centre;
-            $centres=[];
+                    $idtache = $tache->id;
+                    $pay=$request->pays;
+                    $dep= $request->departements;
+                    $vil= $request->villes;
+                    $centre = $request->centre;
+                    $centres=[];
 
-                foreach ($centre as $value) {
-                    $centres[] = [
-                        'idTache' => $id,
-                        'idCentre' => $value,
-                    ];
-                }
-                DB::table('tache_centre')->insert($centres);
-                //enregistrement de tache
-                $data = [];
-                if(isset($pay) && isset($dep) && isset($vil)) {
-                    foreach ($vil as $value) {
-                        $data[] = [
-                            'idTache' => $id,
-                            'idVille' => $value,
+                    foreach ($centre as $value) {
+                        $centres[] = [
+                            'idTache' => $idtache,
+                            'idCentre' => $value,
                         ];
                     }
-                    DB::table('tache_zone')->insert($data);
-                } elseif(isset($pay) && isset($dep)) {
-                    foreach ($dep as $value) {
-                        $data[] = [
-                            'idTache' => $id,
-                            'idDepartement' => $value,
+                    DB::table('tache_centre')->insert($centres);
+                    //enregistrement de tache
+                    $data = [];
+                    if(isset($pay) && isset($dep) && isset($vil)) {
+                        foreach ($vil as $value) {
+                            $data[] = [
+                                'idTache' => $idtache,
+                                'idVille' => $value,
+                            ];
+                        }
+                        DB::table('tache_zone')->insert($data);
+                    } elseif(isset($pay) && isset($dep)) {
+                        foreach ($dep as $value) {
+                            $data[] = [
+                                'idTache' => $idtache,
+                                'idDepartement' => $value,
+                            ];
+                        }
+                        DB::table('tache_zone')->insert($data);
+                    } elseif(isset($pay)) {
+                        foreach ($pay as $value) {
+                            $data[] = [
+                                'idTache' => $idtache,
+                                'idPay' => $value,
+                            ];
+                        }
+                        DB::table('tache_zone')->insert($data);
+                    }
+                    Paiement::create([
+                        'idUer'=>$user_id,
+                        'idTache'=>$idtache
+                    ]);
+    
+                    $co = (new PayPlus())->init();
+                    $co->addItem("$user_email", 3, 150, 450, "Je suis un client");
+    
+                    $total_amount=$request->vueRecherche*2; // for test
+                    $co->setTotalAmount($total_amount);
+                    $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
+                    $mail=$user_email;
+                    $password=$request->password;
+                    $co->addCustomData('email', $mail);
+                    $co->addCustomData('task_id', $idtache);
+                    $co->addCustomData('user_id', $user_id);
+    
+                    // démarrage du processus de paiement
+                    // envoi de la requete
+                    if($co->create()) {
+    
+                        // Requête acceptée, alors on redirige le client vers la page de validation de paiement
+                        return redirect()->to($co->getInvoiceUrl());
+                    }else{
+                        // Requête refusée, alors on affiche le motif du rejet
+                        return [
+                            "succes" => false,
+                            "message" => "$co->response_text"
                         ];
                     }
-                    DB::table('tache_zone')->insert($data);
-                } elseif(isset($pay)) {
-                    foreach ($pay as $value) {
-                        $data[] = [
-                            'idTache' => $id,
-                            'idPay' => $value,
-                        ];
-                    }
-                    DB::table('tache_zone')->insert($data);
-                }
-                    return redirect()->route('/dashboard');
                 }
         }
     }

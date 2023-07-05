@@ -23,6 +23,11 @@
             <div class="row">
               <div class=" row d-flex align-items-center justify-content-center h-100">
                 <div class="card col-md-12 col-lg-5 col-xl-5 offset-xl-1 py-3">
+                    @if (session('info'))
+                        <div class="alert alert-success">
+                            {{ session('info') }}
+                        </div>
+                    @endif
                     <h3 style="text-align: center; color:blue">CONNECTEZ-VOUS</h3>
                 <form method="POST" action="{{route('connecte')}}">
                     @csrf

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 use App\Models\Profil;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -59,8 +60,17 @@ class RegisteredUserController extends Controller
             ]);
             event(new Registered($user));
             RegistrationLinkController::send($user->email);
-            Auth::login($user);
-            return redirect(RouteServiceProvider::TRAVAILLEUR);
+            return redirect()->route("send.mail");
         }
+    }
+
+    public function sendMail(){
+        return view("confirm");
+    }
+
+    public function confirm($id){
+        $user = User::find($id);
+        Auth::login($user);
+        return redirect(RouteServiceProvider::TRAVAILLEUR);
     }
 }
