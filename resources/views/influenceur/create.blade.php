@@ -26,7 +26,7 @@
                         <div class="mb-3 ">
                             <label class="form-label" ><strong>Vos centres d’intérêts</strong> </label>
                             <select class="selectpicker form-control" multiple name='id_centre[]' required>
-                                <option value="-1">Selectionner</option>
+                                
                                 @foreach ($centres as $centre)
                                     <option value="{{$centre->id}}">{{$centre->libelle}}</option>
                                 @endforeach
@@ -52,7 +52,7 @@
                         <div class="mb-3">
                             <label class="form-label"><strong>Pays</strong></label>
                             <select class="form-control" id="country" name="pay" required>
-                                <option value="-1">Selectionner</option>
+                                
                                 @foreach ($pays as $pay)
                                     <option value="{{$pay->id}}">{{$pay->name}}</option>
                                 @endforeach
