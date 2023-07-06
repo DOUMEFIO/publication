@@ -75,7 +75,7 @@
                                                         @if($users[0]->sexe == 'Masculin')
                                                             <option value="Masculin" selected>Masculin</option>
                                                             <option value="Féminin">Féminin</option>
-                                                        @elseif($users[0]->sexe == 'Feminin')
+                                                        @elseif($users[0]->sexe == 'Féminin')
                                                             <option value="Féminin" selected>Féminin</option>
                                                             <option value="Masculin">Masculin</option>
                                                         @endif

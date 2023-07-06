@@ -623,7 +623,6 @@ class TacheController extends Controller
         //dd($token);
         $co = (new PayPlus())->init();
         if ($co->confirm($token)) {
-            
             $user_id = $co->getCustomData("user_id");
             $task_id = $co->getCustomData("task_id");
             if (!blank($user_id)) {
