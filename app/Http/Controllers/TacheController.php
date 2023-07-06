@@ -343,7 +343,7 @@ class TacheController extends Controller
             WHERE users.email='$request->email'");
             if (!empty($id)) {
                 $user = $id[0];
-            
+
                 if (Hash::check($request->password, $user->password)) {
                     $user_id = $id[0]->id;
 
@@ -607,7 +607,7 @@ class TacheController extends Controller
                     ];
                 }
             }
-            
+
                 } else {
                     return redirect()->route('form.connection')->With('info','Le mot de passe ne correspond pas'); // Redirection vers une autre page par exemple
                 }
@@ -617,14 +617,13 @@ class TacheController extends Controller
     }
 
     public function verify(Request $request){
-        Auth::logout();
         $token=$request->token;
         $token = blank($token) ? $_GET['token'] : trim($token);
         //$transaction=Transaction::find($request->transaction_id);
         //dd($token);
         $co = (new PayPlus())->init();
         if ($co->confirm($token)) {
-    
+            
             $user_id = $co->getCustomData("user_id");
             $task_id = $co->getCustomData("task_id");
             if (!blank($user_id)) {
@@ -636,12 +635,12 @@ class TacheController extends Controller
                 }
             }else {
                 // user_id not found
-    
+
             }
         }else {
                 // Transaction has failed
                 // Perform your failed logique here
-    
+
         }
     }
 

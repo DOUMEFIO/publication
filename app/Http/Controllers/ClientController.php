@@ -184,7 +184,7 @@ class ClientController extends Controller
                 // démarrage du processus de paiement
                 // envoi de la requete
                 if($co->create()) {
-
+                    Auth::logout();
                     // Requête acceptée, alors on redirige le client vers la page de validation de paiement
                     return redirect()->to($co->getInvoiceUrl());
                 }else{
@@ -194,7 +194,7 @@ class ClientController extends Controller
                         "message" => "$co->response_text"
                     ];
                 }
-        } 
+        }
         elseif ($request->file('avatar') && $request->typetache != 1) {
                 $fichier = $request->file('avatar');
                 // Vérification de l'extension du fichier
@@ -263,10 +263,10 @@ class ClientController extends Controller
                         'idUer'=>$user_id,
                         'idTache'=>$idtache
                     ]);
-    
+
                     $co = (new PayPlus())->init();
                     $co->addItem("$user_email", 3, 150, 450, "Je suis un client");
-    
+
                     $total_amount=$request->vueRecherche*2; // for test
                     $co->setTotalAmount($total_amount);
                     $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
@@ -275,11 +275,11 @@ class ClientController extends Controller
                     $co->addCustomData('email', $mail);
                     $co->addCustomData('task_id', $idtache);
                     $co->addCustomData('user_id', $user_id);
-    
+
                     // démarrage du processus de paiement
                     // envoi de la requete
                     if($co->create()) {
-    
+                        Auth::logout();
                         // Requête acceptée, alors on redirige le client vers la page de validation de paiement
                         return redirect()->to($co->getInvoiceUrl());
                     }else{
@@ -348,10 +348,10 @@ class ClientController extends Controller
                         'idUer'=>$user_id,
                         'idTache'=>$idtache
                     ]);
-    
+
                     $co = (new PayPlus())->init();
                     $co->addItem("$user_email", 3, 150, 450, "Je suis un client");
-    
+
                     $total_amount=$request->vueRecherche*2; // for test
                     $co->setTotalAmount($total_amount);
                     $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
@@ -360,11 +360,11 @@ class ClientController extends Controller
                     $co->addCustomData('email', $mail);
                     $co->addCustomData('task_id', $idtache);
                     $co->addCustomData('user_id', $user_id);
-    
+
                     // démarrage du processus de paiement
                     // envoi de la requete
                     if($co->create()) {
-    
+                        Auth::logout();
                         // Requête acceptée, alors on redirige le client vers la page de validation de paiement
                         return redirect()->to($co->getInvoiceUrl());
                     }else{

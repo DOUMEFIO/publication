@@ -49,7 +49,6 @@
                             <div class="mb-3">
                                 <label class="form-label" for="selection" ><strong>Type de fichier</strong></label>
                                 <select class="form-control" name="typetache" id="typetache" required>
-                                        <option value="-1">Choisissez</option>
                                         @foreach ($fichiers as $fichier)
                                             <option value="{{$fichier->id}}">{{$fichier->libelle}}</option>
                                         @endforeach
@@ -87,6 +86,7 @@
                             </div>
                             <div class="col md-5" style="text-align: center">
                                 <button class="btn btn-primary btn-sm" type="submit">Soumettre</button>
+                                <button class="btn btn-primary btn-sm" type="submit">Annuler</button>
                             </div>
                         </form>
                     </div>

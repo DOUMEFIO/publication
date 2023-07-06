@@ -26,6 +26,6 @@ Route::middleware('auth')->group(function (){
     Route::post('direction', [ClientController::class, 'direction'])
         ->name('direction');
 
-    Route::get('send-mail', 'ClientController@sendMail')->name('send.mail');
+    Route::get('send-mail', 'ClientController@sendMail')->name('send-mail');
 
 });
