@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class TravailleCentre extends Model
 {
@@ -15,4 +16,15 @@ class TravailleCentre extends Model
         {
             return $this->belongsTo(CentreInteret::class,'id_Centre');
         }
+
+    public static function userCentre($user_id, $centre){
+        $centres=[];
+        foreach ($centre as $value) {
+            $centres[] = [
+                'id_User' => $user_id,
+                'id_Centre' => $value,
+            ];
+        }
+        DB::table('travailleur_centre_interet')->insert($centres);
+    }
 }

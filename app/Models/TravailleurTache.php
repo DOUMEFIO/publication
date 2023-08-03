@@ -15,9 +15,4 @@ class TravailleurTache extends Model
         {
             return $this->belongsTo(Tache::class,'idTache');
         }
-
-    public function travailleur()
-        {
-            return $this->belongsTo(User::class,'idtravailleur');
-        }
 }

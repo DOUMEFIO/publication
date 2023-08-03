@@ -29,7 +29,7 @@ class TacheController extends Controller
         $pays=Pays::all();
         $departements=Departements::all();
         $villes=Villes::all();
-       return view('tache.create', compact('fichiers','centres','pays','departements','villes'));
+        return view('tache.create', compact('fichiers','centres','pays','departements','villes'));
     }
 
     public function store(Request $request){
@@ -44,8 +44,10 @@ class TacheController extends Controller
         $specialChars = preg_match('@[^\w]@', $password);
 
         if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
-        return redirect()->back()->with('error', 'Le mot de passe doit comporter au moins une majuscule, une minuscule, un chiffre et un caractère spécial et doit être d\'au moins 8 caractères.');
-        }else{
+            return redirect()->back()->with('error', 'Le mot de passe doit comporter au moins une majuscule, une minuscule, un chiffre et un caractère spécial et doit être d\'au moins 8 caractères.');
+        }
+        else{
+            // $user = User::createUserClient($request);
             $user = User::create([
                 'nom' => $request->name,
                 'prenom' => $request->prenom,
@@ -55,31 +57,13 @@ class TacheController extends Controller
             ]);
             event(new Registered($user));
             RegistrationLinkController::send($user->email);
-            //RegistrationLinkController::send($user->email);
 
-            //user
-            //Auth::login($user);
-            //return redirect(RouteServiceProvider::HOME);
-
-            $id = DB::select("
-                SELECT * From users
-                WHERE users.email='$request->email'");
+            $id = User::where('email',$request->email);
 
             $user_id = $id[0]->id;
 
             if ($request->typetache==1) {
-                $tache=Tache::create([
-                    'idClient'=> $user_id,
-                    'vueRecherche'=> $request->vueRecherche,
-                    'debut'=> $request->debut,
-                    'fin'=> $request->fin,
-                    'fichier'=> " ",
-                    'description'=> $request->description,
-                    'typetache'=> $request->typetache,
-                    'idStatus'=>1,
-                    'total'=> $request->vueRecherche * 2
-                ]);
-                $tache->save();
+                $tache = Tache::createTache($request, $user_id);
 
                 $idtache = $tache->id;
                 $pay=$request->pays;
@@ -107,7 +91,8 @@ class TacheController extends Controller
                         ];
                     }
                     DB::table('tache_zone')->insert($data);
-                } elseif ($pay == "dep") {
+                }
+                elseif ($pay == "dep") {
                     foreach ($dep as $value) {
                         $data[] = [
                             'idTache' => $idtache,
@@ -115,7 +100,8 @@ class TacheController extends Controller
                         ];
                     }
                     DB::table('tache_zone')->insert($data);
-                } elseif ($pay == "vil") {
+                }
+                elseif ($pay == "vil") {
                     foreach ($dep as $value) {
                         $data[] = [
                             'idTache' => $idtache,
@@ -126,48 +112,16 @@ class TacheController extends Controller
                 }
 
                 Paiement::create([
-                    'idUer'=>$user_id,
-                    'idTache'=>$idtache
+                    'idUer' => $user_id,
+                    'idTache' => $idtache,
+                    'montant' => 1000
                 ]);
 
-                $co = (new PayPlus())->init();
-                $co->addItem("$request->email", 3, 150, 450, "Je suis un client");
-
-                $total_amount=$request->vueRecherche*2; // for test
-                $co->setTotalAmount($total_amount);
-                $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
-                $mail=$request->email;
-                $password=$request->password;
-                $co->addCustomData('email', $mail);
-                $co->addCustomData('task_id', $idtache);
-                $co->addCustomData('user_id', $user_id);
-
-                // démarrage du processus de paiement
-                // envoi de la requete
-                if($co->create()) {
-
-                    // Requête acceptée, alors on redirige le client vers la page de validation de paiement
-                    return redirect()->to($co->getInvoiceUrl());
-                }else{
-                    // Requête refusée, alors on affiche le motif du rejet
-                    return [
-                        "succes" => false,
-                        "message" => "$co->response_text"
-                    ];
-                }
-
+                User::paiement($request, $tache->id , $user_id);
             }
             elseif ($request->typetache==2) {
-                $tache=Tache::create([
-                    'idClient'=> $id[0]->id,
-                    'vueRecherche'=> $request->vueRecherche,
-                    'debut'=> $request->debut,
-                    'fichier'=> $request->url,
-                    'fin'=> $request->fin,
-                    'description'=> " ",
-                    'typetache'=> $request->typetache,
-                    'idStatus'=>1
-                ]);
+                $tache= Tache::createTacheUrl($request, $id[0]->id);
+
                 $tache->save();
                 $idtache = $tache->id;
                 $pay=$request->pays;
@@ -217,44 +171,10 @@ class TacheController extends Controller
                     'idTache'=>$idtache
                 ]);
 
-                $co = (new PayPlus())->init();
-                $co->addItem("$request->email", 3, 150, 450, "Je suis un client");
-
-                $total_amount=$request->vueRecherche*2; // for test
-                $co->setTotalAmount($total_amount);
-                $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
-                $mail=$request->email;
-                $password=$request->password;
-                $co->addCustomData('email', $mail);
-                $co->addCustomData('task_id', $idtache);
-                $co->addCustomData('user_id', $user_id);
-
-                // démarrage du processus de paiement
-                // envoi de la requete
-                if($co->create()) {
-
-                    // Requête acceptée, alors on redirige le client vers la page de validation de paiement
-                    return redirect()->to($co->getInvoiceUrl());
-                }else{
-                    // Requête refusée, alors on affiche le motif du rejet
-                    return [
-                        "succes" => false,
-                        "message" => "$co->response_text"
-                    ];
-                }
+                User::paiement($request, $tache->id , $user_id);
             }
-
             elseif ($request->typetache==3 || $request->typetache==4) {
-                $tache= Tache::create([
-                    'idClient'=> $id[0]->id,
-                    'vueRecherche'=> $request->vueRecherche,
-                    'debut'=> $request->debut,
-                    'fin'=> $request->fin,
-                    'fichier'=>$request->url,
-                    'description'=> $request->description,
-                    'typetache'=> $request->typetache,
-                    'idStatus'=>1
-                ]);
+                $tache= Tache::createTacheUrl($request, $id[0]->id);
 
                 $tache->save();
                 $idtache = $tache->id;
@@ -304,316 +224,194 @@ class TacheController extends Controller
                     'idUer'=>$user_id,
                     'idTache'=>$idtache
                 ]);
-
-                $co = (new PayPlus())->init();
-                $co->addItem("$request->email", 3, 150, 450, "Je suis un client");
-
-                $total_amount=$request->vueRecherche*2; // for test
-                $co->setTotalAmount($total_amount);
-                $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
-                $mail=$request->email;
-                $password=$request->password;
-                $co->addCustomData('email', $mail);
-                $co->addCustomData('task_id', $idtache);
-                $co->addCustomData('user_id', $user_id);
-
-                // démarrage du processus de paiement
-                // envoi de la requete
-                if($co->create()) {
-
-                    // Requête acceptée, alors on redirige le client vers la page de validation de paiement
-                    return redirect()->to($co->getInvoiceUrl());
-                }else{
-                    // Requête refusée, alors on affiche le motif du rejet
-                    return [
-                        "succes" => false,
-                        "message" => "$co->response_text"
-                    ];
-                }
+                User::paiement($request, $tache->id , $user_id);
             }
-        }
 
+        }
     }
 
-    public function login(Request $request, LoginRequest $req): RedirectResponse
-    {
+    public function login(Request $request, LoginRequest $req): RedirectResponse{
+        $id = User::where('email',$request->email);
+        if (!empty($id)) {
+            $user = $id[0];
+            if (Hash::check($request->password, $user->password)) {
+                $user_id = $id[0]->id;
 
-        $id = DB::select("
-            SELECT * From users
-            WHERE users.email='$request->email'");
-            if (!empty($id)) {
-                $user = $id[0];
+                if ($request->typetache==1) {
+                    $tache = Tache::createTache($request, $user_id);
 
-                if (Hash::check($request->password, $user->password)) {
-                    $user_id = $id[0]->id;
+                    $tache->save();
+                    $idtache = $tache->id;
+                    $pay=$request->pays;
+                    $arraydep=$request->departements;
+                    $dep = explode(",", $arraydep);
+                    $arraycentre=$request->centre;
+                    $centre = explode(",", $arraycentre);
+                    //enregistrement de centre
+                    $centres=[];
 
-        if ($request->typetache==1) {
-            $tache=Tache::create([
-                'idClient'=> $user_id,
-                'vueRecherche'=> $request->vueRecherche,
-                'debut'=> $request->debut,
-                'fin'=> $request->fin,
-                'fichier'=> " ",
-                'description'=> $request->description,
-                'typetache'=> $request->typetache,
-                'idStatus'=>1
-            ]);
-            $tache->save();
-                $idtache = $tache->id;
-                $pay=$request->pays;
-                $arraydep=$request->departements;
-                $dep = explode(",", $arraydep);
-                $arraycentre=$request->centre;
-                $centre = explode(",", $arraycentre);
-                //enregistrement de centre
-                $centres=[];
-
-                foreach ($centre as $value) {
-                    $centres[] = [
-                        'idTache' => $idtache,
-                        'idCentre' => $value,
-                    ];
+                    foreach ($centre as $value) {
+                        $centres[] = [
+                            'idTache' => $idtache,
+                            'idCentre' => $value,
+                        ];
+                    }
+                    DB::table('tache_centre')->insert($centres);
+                    //enregistrement de tache
+                    $data = [];
+                    if($pay == "pay"){
+                        foreach ($dep as $value) {
+                            $data[] = [
+                                'idTache' => $idtache,
+                                'idPay' => $value,
+                            ];
+                        }
+                            DB::table('tache_zone')->insert($data);
+                    }
+                    elseif ($pay == "dep") {
+                        foreach ($dep as $value) {
+                            $data[] = [
+                                'idTache' => $idtache,
+                                'idDepartement' => $value
+                            ];
+                        }
+                        DB::table('tache_zone')->insert($data);
+                    }
+                    elseif ($pay == "vil") {
+                        foreach ($dep as $value) {
+                            $data[] = [
+                                'idTache' => $idtache,
+                                'idVille' => $value
+                            ];
+                        }
+                        DB::table('tache_zone')->insert($data);
+                    }
+                    Paiement::create([
+                        'idUer'=>$user_id,
+                        'idTache'=>$idtache
+                    ]);
+                    User::paiement($request, $tache->id , $user_id);
                 }
-                DB::table('tache_centre')->insert($centres);
-                //enregistrement de tache
-                $data = [];
-                if($pay == "pay"){
-                    foreach ($dep as $value) {
-                        $data[] = [
+                elseif ($request->typetache==2) {
+                    $tache= Tache::createTachedescription($request, $id[0]->id);
+
+                    $tache->save();
+                    $idtache = $tache->id;
+                    $pay=$request->pays;
+                    $arraydep=$request->departements;
+                    $dep = explode(",", $arraydep);
+                    $arraycentre=$request->centre;
+                    $centre = explode(",", $arraycentre);
+                    //enregistrement de centre
+                    $centres=[];
+
+                    foreach ($centre as $value) {
+                        $centres[] = [
                             'idTache' => $idtache,
-                            'idPay' => $value,
+                            'idCentre' => $value,
                         ];
                     }
-                    DB::table('tache_zone')->insert($data);
-                } elseif ($pay == "dep") {
-                    foreach ($dep as $value) {
-                        $data[] = [
-                            'idTache' => $idtache,
-                            'idDepartement' => $value
-                        ];
+                    DB::table('tache_centre')->insert($centres);
+                    //enregistrement de tache
+                    $data = [];
+                    if($pay == "pay"){
+                        foreach ($dep as $value) {
+                            $data[] = [
+                                'idTache' => $idtache,
+                                'idPay' => $value,
+                            ];
+                        }
+                        DB::table('tache_zone')->insert($data);
                     }
-                    DB::table('tache_zone')->insert($data);
-                } elseif ($pay == "vil") {
-                    foreach ($dep as $value) {
-                        $data[] = [
-                            'idTache' => $idtache,
-                            'idVille' => $value
-                        ];
+                    elseif ($pay == "dep") {
+                        foreach ($dep as $value) {
+                            $data[] = [
+                                'idTache' => $idtache,
+                                'idDepartement' => $value
+                            ];
+                        }
+                        DB::table('tache_zone')->insert($data);
                     }
-                    DB::table('tache_zone')->insert($data);
+                    elseif ($pay == "vil") {
+                        foreach ($dep as $value) {
+                            $data[] = [
+                                'idTache' => $idtache,
+                                'idVille' => $value
+                            ];
+                        }
+                        DB::table('tache_zone')->insert($data);
+                    }
+                    Paiement::create([
+                        'idUer'=>$user_id,
+                        'idTache'=>$idtache
+                    ]);
+
+                    User::paiement($request, $tache->id , $user_id);
                 }
-                Paiement::create([
-                    'idUer'=>$user_id,
-                    'idTache'=>$idtache
-                ]);
+                elseif ($request->typetache==3 || $request->typetache==4) {
+                    $tache= Tache::createTacheUrl($request, $id[0]->id);
 
-                $co = (new PayPlus())->init();
-                $co->addItem("$request->email", 3, 150, 450, "Je suis un client");
+                    $tache->save();
+                    $idtache = $tache->id;
+                    $pay=$request->pays;
+                    $arraydep=$request->departements;
+                    $dep = explode(",", $arraydep);
+                    $arraycentre=$request->centre;
+                    $centre = explode(",", $arraycentre);
+                    //enregistrement de centre
+                    $centres=[];
 
-                $total_amount=$request->vueRecherche*2; // for test
-                $co->setTotalAmount($total_amount);
-                $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
-                $mail=$request->email;
-                $password=$request->password;
-                $co->addCustomData('email', $mail);
-                $co->addCustomData('task_id', $idtache);
-                $co->addCustomData('user_id', $user_id);
-
-                // démarrage du processus de paiement
-                // envoi de la requete
-                if($co->create()) {
-
-                    // Requête acceptée, alors on redirige le client vers la page de validation de paiement
-                    return redirect()->to($co->getInvoiceUrl());
-                }else{
-                    // Requête refusée, alors on affiche le motif du rejet
-                    return [
-                        "succes" => false,
-                        "message" => "$co->response_text"
-                    ];
-                }
-        }
-
-        elseif ($request->typetache==2) {
-            $tache=Tache::create([
-                'idClient'=> $id[0]->id,
-                'vueRecherche'=> $request->vueRecherche,
-                'debut'=> $request->debut,
-                'fichier'=> $request->url,
-                'fin'=> $request->fin,
-                'description'=> " ",
-                'typetache'=> $request->typetache,
-                'idStatus'=>1
-            ]);
-            $tache->save();
-                $idtache = $tache->id;
-                $pay=$request->pays;
-                $arraydep=$request->departements;
-                $dep = explode(",", $arraydep);
-                $arraycentre=$request->centre;
-                $centre = explode(",", $arraycentre);
-                //enregistrement de centre
-                $centres=[];
-
-                foreach ($centre as $value) {
-                    $centres[] = [
-                        'idTache' => $idtache,
-                        'idCentre' => $value,
-                    ];
-                }
-                DB::table('tache_centre')->insert($centres);
-                //enregistrement de tache
-                $data = [];
-                if($pay == "pay"){
-                    foreach ($dep as $value) {
-                        $data[] = [
+                    foreach ($centre as $value) {
+                        $centres[] = [
                             'idTache' => $idtache,
-                            'idPay' => $value,
+                            'idCentre' => $value,
                         ];
                     }
-                    DB::table('tache_zone')->insert($data);
-                } elseif ($pay == "dep") {
-                    foreach ($dep as $value) {
-                        $data[] = [
-                            'idTache' => $idtache,
-                            'idDepartement' => $value
-                        ];
+                    DB::table('tache_centre')->insert($centres);
+                    //enregistrement de tache
+                    $data = [];
+                    if($pay == "pay"){
+                        foreach ($dep as $value) {
+                            $data[] = [
+                                'idTache' => $idtache,
+                                'idPay' => $value,
+                            ];
+                        }
+                        DB::table('tache_zone')->insert($data);
                     }
-                    DB::table('tache_zone')->insert($data);
-                } elseif ($pay == "vil") {
-                    foreach ($dep as $value) {
-                        $data[] = [
-                            'idTache' => $idtache,
-                            'idVille' => $value
-                        ];
+                    elseif ($pay == "dep") {
+                        foreach ($dep as $value) {
+                            $data[] = [
+                                'idTache' => $idtache,
+                                'idDepartement' => $value
+                            ];
+                        }
+                        DB::table('tache_zone')->insert($data);
                     }
-                    DB::table('tache_zone')->insert($data);
-                }
-                Paiement::create([
-                    'idUer'=>$user_id,
-                    'idTache'=>$idtache
-                ]);
-
-                $co = (new PayPlus())->init();
-                $co->addItem("$request->email", 3, 150, 450, "Je suis un client");
-
-                $total_amount=$request->vueRecherche*2; // for test
-                $co->setTotalAmount($total_amount);
-                $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
-                $mail=$request->email;
-                $password=$request->password;
-                $co->addCustomData('email', $mail);
-                $co->addCustomData('task_id', $idtache);
-                $co->addCustomData('user_id', $user_id);
-
-                // démarrage du processus de paiement
-                // envoi de la requete
-                if($co->create()) {
-
-                    // Requête acceptée, alors on redirige le client vers la page de validation de paiement
-                    return redirect()->to($co->getInvoiceUrl());
-                }else{
-                    // Requête refusée, alors on affiche le motif du rejet
-                    return [
-                        "succes" => false,
-                        "message" => "$co->response_text"
-                    ];
-                }
-        }
-
-        elseif ($request->typetache==3 || $request->typetache==4) {
-           $tache= Tache::create([
-                'idClient'=> $id[0]->id,
-                'vueRecherche'=> $request->vueRecherche,
-                'debut'=> $request->debut,
-                'fin'=> $request->fin,
-                'fichier'=>$request->url,
-                'description'=> $request->description,
-                'typetache'=> $request->typetache,
-                'idStatus'=>1
-            ]);
-            $tache->save();
-                $idtache = $tache->id;
-                $pay=$request->pays;
-                $arraydep=$request->departements;
-                $dep = explode(",", $arraydep);
-                $arraycentre=$request->centre;
-                $centre = explode(",", $arraycentre);
-                //enregistrement de centre
-                $centres=[];
-
-                foreach ($centre as $value) {
-                    $centres[] = [
-                        'idTache' => $idtache,
-                        'idCentre' => $value,
-                    ];
-                }
-                DB::table('tache_centre')->insert($centres);
-                //enregistrement de tache
-                $data = [];
-                if($pay == "pay"){
-                    foreach ($dep as $value) {
-                        $data[] = [
-                            'idTache' => $idtache,
-                            'idPay' => $value,
-                        ];
+                    elseif ($pay == "vil") {
+                        foreach ($dep as $value) {
+                            $data[] = [
+                                'idTache' => $idtache,
+                                'idVille' => $value
+                            ];
+                        }
+                        DB::table('tache_zone')->insert($data);
                     }
-                    DB::table('tache_zone')->insert($data);
-                } elseif ($pay == "dep") {
-                    foreach ($dep as $value) {
-                        $data[] = [
-                            'idTache' => $idtache,
-                            'idDepartement' => $value
-                        ];
-                    }
-                    DB::table('tache_zone')->insert($data);
-                } elseif ($pay == "vil") {
-                    foreach ($dep as $value) {
-                        $data[] = [
-                            'idTache' => $idtache,
-                            'idVille' => $value
-                        ];
-                    }
-                    DB::table('tache_zone')->insert($data);
-                }
-                Paiement::create([
-                    'idUer'=>$user_id,
-                    'idTache'=>$idtache
-                ]);
+                    Paiement::create([
+                        'idUer'=>$user_id,
+                        'idTache'=>$idtache
+                    ]);
 
-                $co = (new PayPlus())->init();
-                $co->addItem("$request->email", 3, 150, 450, "Je suis un client");
-
-                $total_amount=$request->vueRecherche*2; // for test
-                $co->setTotalAmount($total_amount);
-                $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
-                $mail=$request->email;
-                $password=$request->password;
-                $co->addCustomData('email', $mail);
-                $co->addCustomData('task_id', $idtache);
-                $co->addCustomData('user_id', $user_id);
-
-                // démarrage du processus de paiement
-                // envoi de la requete
-                if($co->create()) {
-
-                    // Requête acceptée, alors on redirige le client vers la page de validation de paiement
-                    return redirect()->to($co->getInvoiceUrl());
-                }else{
-                    // Requête refusée, alors on affiche le motif du rejet
-                    return [
-                        "succes" => false,
-                        "message" => "$co->response_text"
-                    ];
+                    User::paiement($request, $tache->id , $user_id);
                 }
             }
-
-                } else {
-                    return redirect()->route('form.connection')->With('info','Le mot de passe ne correspond pas'); // Redirection vers une autre page par exemple
-                }
-            } else {
-                return redirect()->route('form.connection')->With('info',"L'utilisateur n'a pas été trouvé"); // Redirection vers une autre page par exemple
+            else {
+                return redirect()->route('form.connection')->With('info','Le mot de passe ne correspond pas'); // Redirection vers une autre page par exemple
             }
+        }
+        else {
+            return redirect()->route('form.connection')->With('info',"L'utilisateur n'a pas été trouvé"); // Redirection vers une autre page par exemple
+        }
     }
 
     public function verify(Request $request){
@@ -632,14 +430,14 @@ class TacheController extends Controller
                     Auth::login($user);
                     return redirect()->to(RouteServiceProvider::HOME);
                 }
-            }else {
-                // user_id not found
-
             }
-        }else {
+            else {
+                // user_id not found
+            }
+        }
+        else {
                 // Transaction has failed
                 // Perform your failed logique here
-
         }
     }
 

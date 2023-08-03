@@ -1,4 +1,5 @@
 <x-app-layout>
+
     @section('contenue')
 
     <div class="container-fluid">
@@ -28,42 +29,41 @@
                     <table class="table my-0" id="dataTable">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Nom & Prénom</th>
+                                <th>Taches</th>
+                                <th>Attribuer a</th>
+                                <th>Créer par</th>
                                 <th>Début & Fin</th>
-                                <th>Les Taches attribuer</th>
-                                <th>Nombre de vues realisée</th>
-                                <th>Capture</th>
-                                <th>Action</th>
+                                <th>Type Tâche</th>
                             </tr>
                         </thead>
                         <tbody >
-                            @foreach ($taches as $tache)
+                            @foreach ($clients as $client)
                                 <tr>
-                                    <td>{{$tache->id}}</td>
-                                    <td>{{$tache->travailleur->nom}}
-                                        {{$tache->travailleur->prenom}}
+                                    <td>T{{$client['idTache']}}</td>
+                                    <td>
+                                        <ul>
+                                            @foreach ($client['travailleurs'] as $travailleur)
+                                                <li>{{ $travailleur['nom'] }} {{ $travailleur['prenom'] }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </td>
+                                    <td>{{$client['nomClient'] }} {{$client['prenomClient']}}
                                     </td>
                                     <td>
-                                        {{ strftime('%A %e %B %Y', strtotime($tache->tacheall->debut)) }} à
-                                        {{ strftime('%A %e %B %Y', strtotime($tache->tacheall->fin)) }}
+                                        {{ strftime('%A %e %B %Y', strtotime($client['debut'])) }} à
+                                        {{ strftime('%A %e %B %Y', strtotime($client['fin'])) }}
                                     </td>
-                                    <td>T{{$tache->idTache}}</td>
-                                    <td>0</td>
-                                    <td>Pas encore</td>
-                                    <td>Modifier</td>
+                                    <td>{{$client['libelle']}}</td>
                                 </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td><strong>#</strong></td></th>
-                                <td><strong>Nom & Prénom</strong></td></th>
+                                <td><strong>Taches</strong></td></th>
+                                <td><strong>Attribuer a</strong></td></th>
+                                <td><strong>Créer par</strong></td></th>
                                 <td><strong>Début & Fin</strong></td></th>
-                                <td><strong>Les Taches attribuer</strong></td></th>
-                                <td><strong>Nombre de vues realisée</strong></td></th>
-                                <td><strong>Capture</strong></td></th>
-                                <td><strong>Action</strong></td></th>
+                                <td><strong>Type Tâche</strong></td></th>
                             </tr>
                         </tfoot>
                     </table>

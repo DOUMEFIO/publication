@@ -14,6 +14,5 @@ class CentreInteret extends Model
     public function travaille()
     {
         return $this->hasMany(TravailleCentre::class);
-
     }
 }

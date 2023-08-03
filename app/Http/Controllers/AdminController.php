@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
-use App\Models\CentreInteret;
-use App\Models\InfoInfluenceur;
-use App\Models\Tache;
-use App\Models\TravailleCentre;
-use App\Models\TravailleurTache;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+    namespace App\Http\Controllers;
+    use App\Models\CentreInteret;
+    use App\Models\InfoInfluenceur;
+    use App\Models\Tache;
+    use App\Models\TravailleCentre;
+    use App\Models\TravailleurTache;
+use App\Models\TypeTache;
+use App\Models\User;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -258,7 +260,38 @@ if($vue<$total){
     }
 
     public function distribuer(){
-        $taches=TravailleurTache::all();
-        return view("admin.attribuerTache", compact("taches"));
+        $taches = Tache::has('travailleurs')
+        ->with('travailleurs')
+        ->get();
+
+        $clients = $taches->map(function ($tache) {
+        $travailleurs = $tache->travailleurs->map(function ($travailleur) {
+            return [
+                'nom' => $travailleur->nom,
+                'prenom' => $travailleur->prenom,
+            ];
+        })->toArray();
+        $infouser = User::where('id', $tache->idClient)->get(['nom', 'prenom'])->first();
+        $libelle = TypeTache::where('id', $tache->typetache)->get('libelle')->first();
+        return [
+            'idTache' => $tache->id,
+            'nomClient' => $infouser->nom,
+            'prenomClient' => $infouser->prenom,
+            'travailleurs' => $travailleurs,
+            'debut' => $tache->dedut,
+            'fin' => $tache->fin,
+            'libelle' => $libelle->libelle
+        ];
+    })->toArray();
+
+        return view("admin.attribuerTache", compact("clients"));
+    }
+
+    public function executez(){
+        return view("admin.tacheexecute");
+    }
+
+    public function preuve(){
+        return view("admin.preuve");
     }
 }

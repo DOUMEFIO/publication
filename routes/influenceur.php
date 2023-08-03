@@ -37,6 +37,18 @@ Route::middleware('auth')->group(function (){
     Route::get('get_cities', [InfluenceurController::class, 'getCities'])
         ->name('get_cities');
 
-    Route::get('infoInfluUpdate', [InfluenceurController::class, 'infoInfluUpdate'])
-        ->name('infoInfluUpdate');
+    Route::post('infopictureUpdate', [InfluenceurController::class, 'pictureUpdate'])
+        ->name('infopictureUpdate');
+
+    Route::get('influenceurconnect', [InfluenceurController::class, 'influenceurconnect'])
+        ->name('influenceurconnect');
+
+    Route::post('info.influupdate', [InfluenceurController::class, 'pictureUpdatee'])
+        ->name('info.influupdate');
+
+    Route::get('infl.tachencour', [InfluenceurController::class, 'influtachencour'])
+        ->name('infl.tachencour');
+
+    Route::post('vuesrealise', [InfluenceurController::class, 'influtachencour'])
+        ->name('vuesrealise');
 });

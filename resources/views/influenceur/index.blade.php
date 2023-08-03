@@ -14,7 +14,7 @@
                 @endif
                 <div class="col-lg-4">
                     <div class="card mb-3">
-                        <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="{{asset('template/assets/img/dogs/image2.jpeg')}}" width="160" height="160">
+                        <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="{{asset('storage'.$profil[0]->profil)}}" width="160" height="160">
                             <div class="mb-3"><button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Modifier la photo</button></div>
                         </div>
                         <!-- Modal -->
@@ -26,7 +26,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form class="user" method="POST" action="" enctype="multipart/form-data">
+                                        <form class="user" method="POST" action="{{route('infopictureUpdate')}}" enctype="multipart/form-data">
                                             @csrf
                                             <div class="row mb-3">
                                                 <input type="file" class="form-control" id="avatar" name="avatar">
@@ -50,19 +50,25 @@
                                     <span class="text-primary m-0 fw-bold fs-5 text-center">Informations d'Utilisateur</span><a class="btn btn-primary float-end text-light" id="modify">Modifier</a>
                                 </div>
                                 <div class="card-body">
-                                    <form method="POST" action="{{route('infoInfluUpdate')}}">
+                                    <form class="user" method="POST" action="{{route('info.influupdate')}}">
                                         @csrf
                                         <div class="row">
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="email"><strong>Adresse e-mail</strong></label><input class="form-control" type="email" id="email" placeholder="user@example.com" name="email" value="{{Auth::user()->email}}" disabled></div>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="email"><strong>Adresse e-mail</strong></label>
+                                                    <input class="form-control" type="email" id="email" placeholder="user@example.com" name="email" value="{{Auth::user()->email}}" disabled></div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="first_name"><strong>Prénoms</strong></label><input class="form-control" type="text" id="first_name" placeholder="John" name="first_name" value="{{Auth::user()->prenom}}" ></div>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="first_name"><strong>Nom</strong></label>
+                                                    <input class="form-control" type="text" id="first_name" placeholder="John" name="first_name" value="{{Auth::user()->nom}}" ></div>
                                             </div>
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="last_name"><strong>Nom</strong></label><input class="form-control" type="text" id="last_name" placeholder="Doe" name="last_name" value="{{Auth::user()->nom}}"></div>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="last_name"><strong>Prénoms</strong></label>
+                                                    <input class="form-control" type="text" id="last_name" placeholder="Doe" name="last_name" value="{{Auth::user()->prenom}}"></div>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -85,10 +91,14 @@
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="first_name"><strong>Téléphone</strong></label><input class="form-control" type="text" id="first_name" placeholder="John" name="first_name" value="{{$users[0]->tel}}"></div>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="first_name"><strong>Téléphone</strong></label>
+                                                    <input class="form-control" type="text" id="first_name" placeholder="John" name="tel" value="{{$users[0]->tel}}"></div>
                                             </div>
                                             <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="last_name"><strong>Nombre moyen de vues</strong></label><input class="form-control" type="number" id="last_name" placeholder="Doe" name="last_name" value="{{$users[0]->nbr_vue_moyen}}"></div>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="last_name"><strong>Nombre moyen de vues</strong></label>
+                                                    <input class="form-control" type="number" id="tel" placeholder="Doe" name="vuesmoyen" value="{{$users[0]->nbr_vue_moyen}}"></div>
                                             </div>
                                         </div>
                                         <div class="row" id="noninput">
@@ -111,34 +121,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--<div class="row">
-                                            <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="last_name"><strong>Mot de passe</strong></label>
-                                                    <div class="input-group mb-3">
-                                                        <input type="password" class="form-control" id="password" name="password" placeholder="Mot de passe">
-                                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                                            <i class="fa fa-eye" id="eyeIcon"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="mb-3"><label class="form-label" for="password_confirmation"><strong>Confirmer mot de passe</strong></label>
-                                                    <div class="input-group mb-3">
-                                                        <input type="password" class="form-control" id="password" name="password_confirmation" placeholder="Confirmer Mot de passe">
-                                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                                            <i class="fa fa-eye" id="eyeIcon"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>-->
+
                                         <div class="row" id="input" style="display:none;">
                                             <div class="col">
                                                 <div class="mb-3 ">
                                                     <label class="form-label" ><strong>Vos centres d’intérêts</strong> </label>
                                                     <select class="selectpicker form-control" multiple name='id_centre[]' required>
-                                                        <option value="-1">Selectionner</option>
+                                                    
                                                         @foreach ($centres as $centre)
                                                             <option value="{{$centre->id}}">{{$centre->libelle}}</option>
                                                         @endforeach
@@ -190,7 +179,7 @@
 <script>
     // Désactive tous les éléments input
     var inputs = document.getElementsByTagName('input');
-    for (var i = 0; i < inputs.length; i++) {
+    for (var i = 6; i < inputs.length; i++) {
         inputs[i].disabled = true;
     }
 
@@ -198,14 +187,6 @@
     var options = document.getElementsByTagName('option');
     for (var i = 0; i < options.length; i++) {
         options[i].disabled = true;
-    }
-
-    // Désactive tous les éléments input
-    function disableAllInputs() {
-        var inputs = document.getElementsByTagName('input');
-        for (var i = 0; i < inputs.length; i++) {
-            inputs[i].disabled = true;
-        }
     }
 
     // Désactive tous les éléments option
@@ -219,7 +200,7 @@
     // Réactive tous les éléments input
     function enableAllInputs() {
         var inputs = document.getElementsByTagName('input');
-        for (var i = 0; i < inputs.length; i++) {
+        for (var i = 1; i < inputs.length; i++) {
             inputs[i].disabled = false;
         }
     }

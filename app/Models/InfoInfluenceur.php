@@ -31,4 +31,51 @@ class InfoInfluenceur extends Model
         {
             return $this->belongsTo(Villes::class,'id_ville');
         }
+
+    public static function updateInfluenceur($data, $user){
+        if (is_null($data->departement) && is_null($data->ville)) {
+            $info = ([
+                'sexe' => $data->sexe,
+                'tel' => $data->tel,
+                'nbr_vue_moyen' => $data->vuesmoyen,
+                'id_pay' => $data->pay
+            ]);
+            self::where("id_user", $user)->update($info);
+        } elseif (is_null($data->ville)) {
+            $info = ([
+                'sexe' => $data->sexe,
+                'tel' => $data->tel,
+                'nbr_vue_moyen' => $data->vuesmoyen,
+                'id_pay' => $data->pay,
+                'id_departement' => $data->departement
+            ]);
+            self::where("id_user", $user)->update($info);
+        }
+        else {
+            $info = ([
+                'sexe' => $data->sexe,
+                'tel' => $data->tel,
+                'nbr_vue_moyen' => $data->vuesmoyen,
+                'id_pay' => $data->pay,
+                'id_departement' => $data->departement,
+                'id_ville' => $data->ville
+            ]);
+            self::where("id_user", $user)->update($info);
+        }
+    }
+
+    public static function createInfoInfluenceur($data, $user){
+        $data->validate([
+            'tel' => ['required', 'unique:'.self::class],
+        ]);
+        self::create([
+            'id_User' => $user,
+            'tel' => $data->tel,
+            'nbr_vue_moyen' => $data->nbr_vue_moyen,
+            'sexe' => $data->sexe,
+            'id_pay' => $data->pay,
+            'id_departement' => $data->departement,
+            'id_ville' => $data->ville
+        ]);
+    }
 }

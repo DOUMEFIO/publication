@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\InfluenceurController;
 use App\Models\TypeTache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;

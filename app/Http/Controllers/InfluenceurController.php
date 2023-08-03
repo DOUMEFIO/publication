@@ -8,6 +8,8 @@ use App\Models\InfoInfluenceur;
 use App\Models\Pays;
 use App\Models\TravailleCentre;
 use App\Models\TypeTache;
+use App\Models\Tache;
+use App\Models\TravailleurTache;
 use App\Models\User;
 use App\Models\Villes;
 use Illuminate\Http\Request;
@@ -33,30 +35,28 @@ class InfluenceurController extends Controller
                 ->get();
         return view('influenceur.show', compact('users','alls'));
     }
-    public function index()
-    {
-        $pays = Pays::all();
-        $departe = Departements::all();
-        $pays = Villes::all();
-        $centres = CentreInteret::all();
-        $users = InfoInfluenceur::where('id_User', Auth::user()->id)->get();
+
+    public function influenceurconnect(){
+        $profil=InfoInfluenceur::where('id_User',Auth::user()->id)->get('profil');
+        $users=InfoInfluenceur::where('id_User',Auth::user()->id)->get();
+        $centres=CentreInteret::all();
+        $pays=Pays::all();
         $centreInteret = DB::table('travailleur_centre_interet')
-            ->leftJoin('users', 'users.id', '=', 'travailleur_centre_interet.id_User')
-            ->select(DB::raw('GROUP_CONCAT(id_Centre) as ids'))
-            ->where('id_user', '=', Auth::user()->id)
-            ->groupBy('id_user')
-            ->get();
-        $string = $centreInteret[0]->ids;
-        $array = explode(",", $string);
-        $result = array();
-        foreach ($array as $key => $value) {
-            $result[$key] = $value ?: 0;
-        }
-        $libelles = CentreInteret::whereIn('id', $result)->pluck('libelle');
-        $libelles = implode(",", $libelles->all());
-        return view('influenceur.index', compact("users", "centreInteret", "libelles",
-                    "pays","centres"));
-    }
+               ->leftJoin('users', 'users.id', '=', 'travailleur_centre_interet.id_User')
+               ->select(DB::raw('GROUP_CONCAT(id_Centre) as ids'))
+               ->where('id_user', '=', Auth::user()->id)
+               ->groupBy('id_user')
+               ->get();
+                $string = $centreInteret[0]->ids;
+                $array = explode(",", $string);
+                $result = array();
+                foreach($array as $key => $value) {
+                    $result[$key] = $value ?: 0;
+                }
+               $libelles = CentreInteret::whereIn('id', $result)->pluck('libelle');
+               #$libelles = implode(",", $libelles->all());
+        return view('influenceur.index', compact("pays","users","centreInteret","libelles","centres","profil"));
+     }
 
     public function create()
     {
@@ -69,24 +69,11 @@ class InfluenceurController extends Controller
 
     public function store(Request $request)
     {
-        $user = Auth::user()->id;
-        InfoInfluenceur::create([
-            'id_User' => $user,
-            'tel' => $request->tel,
-            'nbr_vue_moyen' => $request->nbr_vue_moyen,
-            'sexe' => $request->sexe,
-            'id_pay' => $request->pay,
-            'id_departement' => $request->departement,
-            'id_ville' => $request->ville
-        ]);
-        foreach ($request->input('id_centre') as $centreId) {
-            $toto = CentreInteret::find($centreId);
-            $tata = new TravailleCentre();
-            $tata->id_User = $user;
-            $tata->id_centre = $toto->id;
-            $tata->save();
-        }
-        return redirect()->route('index.influenceur');
+        InfoInfluenceur::createInfoInfluenceur($request, Auth::user()->id);
+
+        TravailleCentre::userCentre(Auth::user()->id, $request->input('id_centre'));
+
+        return redirect()->route('influenceurconnect');
     }
 
     public function getStates()
@@ -232,13 +219,29 @@ class InfluenceurController extends Controller
         return $totalvues;
     }
 
-    public function infoInfluUpdate(Request $request){
-        $id=Auth::user()->id;
-        $user = User::find($id);
-        $user->name = $request->nom;
-        $user->surname = $request->prenom;
-        dd($user);
-        $user->save();
+    public function pictureUpdate(Request $request){
+        $avatar = $request->file('avatar');
+        $path = $avatar->store('public/fichiers');
+        $img = substr($path, 6);
+        DB::table('info_influenceur')->where('id_User', Auth::user()->id)->update(['profil' => $img]);
+        return redirect()->route("influenceurconnect");
     }
 
+    public function pictureUpdatee(Request $request){
+
+        TravailleCentre::where("id_User", Auth::user()->id)->delete();
+
+        InfoInfluenceur::updateInfluenceur($request, Auth::user()->id);
+
+        User::updateUser($request, Auth::user()->id);
+
+        TravailleCentre::userCentre(Auth::user()->id, $request->id_centre);
+
+        return redirect()->route("influenceurconnect");
+    }
+
+    public function influtachencour(){
+        $taches = TravailleurTache::with('tacheall.type')->where('idtravailleur',11)->get();
+        return view('influenceur.tacheattribuer', compact('taches'));
+    }
 }

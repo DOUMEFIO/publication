@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\InfluenceurController;
 use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
 
@@ -9,9 +9,6 @@ Route::middleware('auth')->group(function (){
 
     Route::get('/dashboard', [ClientController::class, 'tacheenregistrer'])
         ->name('/dashboard');
-
-    Route::get('influenceurconnect', [ClientController::class, 'influenceurconnect'])
-        ->name('influenceurconnect');
 
     Route::get('redirige', [ClientController::class, 'tacheenregistrer'])
         ->name('redirige');
@@ -27,5 +24,7 @@ Route::middleware('auth')->group(function (){
         ->name('direction');
 
     Route::get('send-mail', 'ClientController@sendMail')->name('send-mail');
+
+
 
 });

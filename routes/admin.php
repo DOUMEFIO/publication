@@ -25,5 +25,11 @@ Route::middleware('auth')->group(function (){
 
     Route::get('tache.partager', [AdminController::class, 'distribuer'])
         ->name('tache.partager');
+
+    Route::get('tache.executez', [AdminController::class, 'executez'])
+        ->name('tache.executez');
+
+    Route::get('preuve', [AdminController::class, 'preuve'])
+        ->name('preuve');
 });
 
