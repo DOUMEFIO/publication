@@ -25,6 +25,10 @@ Route::middleware('auth')->group(function (){
 
     Route::get('send-mail', 'ClientController@sendMail')->name('send-mail');
 
+    Route::get('clienttacheencours', [ClientController::class, 'clienttacheencours'])
+    ->name('clienttacheencours');
 
+    Route::get('clienttacheexecutez', [ClientController::class, 'clienttacheexecutez'])
+    ->name('clienttacheexecutez');
 
 });

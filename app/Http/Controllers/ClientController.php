@@ -358,4 +358,12 @@ class ClientController extends Controller
                 }
         }
     }
+
+    public function clienttacheencours(){
+        return view("client.encours");
+    }
+
+    public function clienttacheexecutez(){
+        return view("client.executez");
+    }
 }

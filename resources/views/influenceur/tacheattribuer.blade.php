@@ -9,21 +9,7 @@
                         <h5 class="modal-title" id="exampleModalLabel">Modifier la photo de profil</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <form class="user" method="POST" action="{{route('vuesrealise')}}" enctype="multipart/form-data">
-                            @csrf
-                            <input type="hidden" id="tacheIdInput" readonly name="id">
-                            <div class="mb-3">
-                                <label class="form-label"><strong>Nombres vues Realisée</strong></label>
-                                <input type="number" name="nbr_vue_moyen" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label"><strong>Capture</strong></label>
-                                <input type="file" class="form-control" id="avatar" name="avatar">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>
-                        </form>
-                    </div>
+                    
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
                     </div>
@@ -66,14 +52,14 @@
                         <tbody >
                             @foreach ($taches as $tache)
                                 <tr>
-                                    <td>T{{$tache->idTache}}</td>
+                                    <td>T</td>
                                     <td>{{ strftime('%A %e %B %Y', strtotime($tache->tacheall->debut)) }} <br> à
                                         {{ strftime('%A %e %B %Y', strtotime($tache->tacheall->fin)) }}
                                     </td>
                                     <td>{{$tache->tacheall->type->libelle}}</td>
-                                    <td>{{$tache->tacheall->description}}</td>
+                                    <td>{{$tache->tacheall->description}}</td>{{$tache->idTache}}
                                     <td>url</td>
-                                    <td><button data-tacheid="{{$tache->id}}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary btn-sm">Nbrs Vues Réalisée</button></td>
+                                    <td><a class="btn btn-primary btn-sm" href="{{ route('vuesrealise', ['id' => $tache->id]) }}">Nbrs Vues Réalisée</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -110,10 +96,3 @@
     </div>
     @endsection
 </x-app-layout>
-
-<script>
-    $(document).on('click', '.btn', function () {
-            var tacheId = $(this).data('tacheid');
-            document.getElementById('tacheIdInput').value = tacheId;
-        });
-</script>

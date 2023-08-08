@@ -58,22 +58,19 @@ class TacheController extends Controller
             event(new Registered($user));
             RegistrationLinkController::send($user->email);
 
-            $id = User::where('email',$request->email);
+            $id = User::where('email',$request->email)->get();
 
             $user_id = $id[0]->id;
-
             if ($request->typetache==1) {
                 $tache = Tache::createTache($request, $user_id);
-
                 $idtache = $tache->id;
-                $pay=$request->pays;
-                $arraydep=$request->departements;
-                $dep = explode(",", $arraydep);
+                $pay = explode("," , $request->pays);
+                $arraydep = explode("," ,$request->departements);
+                $arrayvil = explode("," ,$request->ville);
                 $arraycentre=$request->centre;
                 $centre = explode(",", $arraycentre);
                 //enregistrement de centre
                 $centres=[];
-
                 foreach ($centre as $value) {
                     $centres[] = [
                         'idTache' => $idtache,
@@ -82,33 +79,36 @@ class TacheController extends Controller
                 }
                 DB::table('tache_centre')->insert($centres);
                 //enregistrement de tache
-                $data = [];
-                if($pay == "pay"){
-                    foreach ($dep as $value) {
-                        $data[] = [
+                $datapay = [];
+                $datadep = [];
+                $datavil = [];
+                if(!empty($pay)){
+                    foreach ($pay as $value) {
+                        $datapay[] = [
                             'idTache' => $idtache,
                             'idPay' => $value,
                         ];
                     }
-                    DB::table('tache_zone')->insert($data);
+                    DB::table('tache_zone')->insert($datapay);
                 }
-                elseif ($pay == "dep") {
-                    foreach ($dep as $value) {
-                        $data[] = [
+                if(!empty($arraydep)){
+                    foreach ($arraydep as $value) {
+                        $datadep[] = [
                             'idTache' => $idtache,
-                            'idDepartement' => $value
+                            'idDepartement' => $value,
                         ];
                     }
-                    DB::table('tache_zone')->insert($data);
+                    DB::table('tache_zone')->insert($datadep);
                 }
-                elseif ($pay == "vil") {
-                    foreach ($dep as $value) {
-                        $data[] = [
+
+                if(!empty($arrayvil)){
+                    foreach ($arrayvil as $value) {
+                        $datavil[] = [
                             'idTache' => $idtache,
-                            'idVille' => $value
+                            'idVille' => $value,
                         ];
                     }
-                    DB::table('tache_zone')->insert($data);
+                    DB::table('tache_zone')->insert($datavil);
                 }
 
                 Paiement::create([
@@ -117,7 +117,32 @@ class TacheController extends Controller
                     'montant' => 1000
                 ]);
 
-                User::paiement($request, $tache->id , $user_id);
+                //User::paiement($request, $tache->id , $user_id);
+                $co = (new PayPlus())->init();
+            $co->addItem("$request->email", 3, 150, 450, "Je suis un client");
+
+            $total_amount=$request->vueRecherche*2; // for test
+            $co->setTotalAmount($total_amount);
+            $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
+            $mail=$request->email;
+            $password=$request->password;
+            $co->addCustomData('email', $mail);
+            $co->addCustomData('task_id', $idtache);
+            $co->addCustomData('user_id', $user_id);
+
+            // démarrage du processus de paiement
+            // envoi de la requete
+            if($co->create()) {
+                Auth::logout();
+                // Requête acceptée, alors on redirige le client vers la page de validation de paiement
+                return redirect()->to($co->getInvoiceUrl());
+            }else{
+                // Requête refusée, alors on affiche le motif du rejet
+                return [
+                    "succes" => false,
+                    "message" => "$co->response_text"
+                ];
+            }
             }
             elseif ($request->typetache==2) {
                 $tache= Tache::createTacheUrl($request, $id[0]->id);
@@ -171,7 +196,32 @@ class TacheController extends Controller
                     'idTache'=>$idtache
                 ]);
 
-                User::paiement($request, $tache->id , $user_id);
+                //User::paiement($request, $tache->id , $user_id);
+                $co = (new PayPlus())->init();
+            $co->addItem("$request->email", 3, 150, 450, "Je suis un client");
+
+            $total_amount=$request->vueRecherche*2; // for test
+            $co->setTotalAmount($total_amount);
+            $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
+            $mail=$request->email;
+            $password=$request->password;
+            $co->addCustomData('email', $mail);
+            $co->addCustomData('task_id', $idtache);
+            $co->addCustomData('user_id', $user_id);
+
+            // démarrage du processus de paiement
+            // envoi de la requete
+            if($co->create()) {
+                Auth::logout();
+                // Requête acceptée, alors on redirige le client vers la page de validation de paiement
+                return redirect()->to($co->getInvoiceUrl());
+            }else{
+                // Requête refusée, alors on affiche le motif du rejet
+                return [
+                    "succes" => false,
+                    "message" => "$co->response_text"
+                ];
+            }
             }
             elseif ($request->typetache==3 || $request->typetache==4) {
                 $tache= Tache::createTacheUrl($request, $id[0]->id);

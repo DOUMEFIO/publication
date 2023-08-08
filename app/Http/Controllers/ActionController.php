@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Departements;
+use App\Models\Villes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,29 +17,73 @@ class ActionController extends Controller
         $arrayvil = $request->input('villes');
         $arraycentre = $request->input('centre');
         $centre= implode(',', $arraycentre);
-
-        if (isset($arraypay)) {
-            if (isset($arraydep)) {
-              if (isset($arrayvil)) {
-                $vert= implode(',', $arrayvil);
-                $zone="vil";
-                $resultat= $vert;
-              } else {
-                $vert= implode(',', $arraydep);
-                $zone="dep";
-                $resultat=$vert;
-              }
-            } else {
-                $vert= implode(',', $arraypay);
-                $zone="pay";
-                $resultat= $vert;
+        //dd($arraypay, $arrayvil, $arraydep);
+        if(!empty($arrayvil)){
+            $zone1 = "vil";
+            //les villes
+            $villelist = implode(',', $arrayvil);
+            $ids = explode(",", $villelist);
+            $deletdep = Villes::whereIn('id', $ids)->pluck('state_id')->implode(",");
+            $departementlist= implode(',', $arraydep);
+            $departementArray = explode(",", $departementlist);
+            $villeRemoveArray = explode(",", $deletdep);
+            $resultArray = array_diff($departementArray, $villeRemoveArray);
+            $resultData = implode(",", $resultArray);
+            //dd($villelist, $departementlist, $deletdep, $resultData);
+            if(!empty($resultData)){
+                //les departements
+                $departementlist = $resultArray;
+                $deletpay = Departements::whereIn('id', $departementlist)->pluck('country_id')->implode(",");
+                $listpay= implode(',', $arraypay);
+                $paysArray = explode(",", $listpay);
+                $payRemoveArray = explode(",", $deletpay);
+                $resultArraypay = array_diff($paysArray, $payRemoveArray);
+                $departementlist = implode(",", $departementlist);
+                //les pays
+                $resultDatapay = implode(",", $resultArraypay);
+                //dd($listpay, $deletpay,$resultDatapay);
+            }else{
+                //les departements
+                $ids = explode(",", $departementlist);
+                //dd($departementlists);
+                $deletpay = Departements::whereIn('id', $ids)->pluck('country_id')->implode(",");
+                //dd($deletpay);
+                $listpay= implode(',', $arraypay);
+                $paysArray = explode(",", $listpay);
+                $payRemoveArray = explode(",", $deletpay);
+                $resultArraypay = array_diff($paysArray, $payRemoveArray);
+                //les pays
+                $resultDatapay = implode(",", $resultArraypay);
+                $departementlist = "";
+                //dd($listpay, $deletpay,$resultDatapay);
             }
-          } else {
-            $resultat= "vide";
-          }
+            //dd($villelist, $departementlist, $resultDatapay);
+        } elseif(!empty($arraydep)  && empty($arrayvil)){
+            $villelist = "";
+            //les departements
+            $departementlist = $arraydep;
+            $payslist = $arraypay;
+            $paysArraylist = implode(",", $payslist);
+            $deletpay = Departements::whereIn('id', $departementlist)->pluck('country_id')->implode(",");
+            $departementArraylist = implode(",", $payslist);
+            $departementArray = explode(",", $departementArraylist);
+            $villeRemoveArray = explode(",", $deletpay);
+            $resultArraypay = array_diff($departementArray, $villeRemoveArray);
+            $resultDatapay = implode(",", $resultArraypay);
+            $departementlist = implode(",", $arraydep);
+            //dd($villelist, $departementlist, $resultDatapay);
+        }elseif(!empty($arraypay)  && empty($arraydep) && empty($arrayvil)){
+            $villelist = "";
+            $departementlist = "";
+            $resultDatapay = implode(",", $arraypay);
+            //dd($villelist, $departementlist, $resultDatapay);
+        }
+        //dd($villelist, $departementlist, $resultDatapay);
 
-        $pay = $zone;
-        $dep = $resultat;
+        //dd($villelist);
+        $pay = $resultDatapay;
+        $dep = $departementlist;
+        $vil = $villelist;
         $debut = $request->input('debut');
         $fin = $request->input('fin');
         $description = $request->input('description');
@@ -54,9 +100,10 @@ class ActionController extends Controller
                 return redirect()->back()->with('error', 'Le fichier doit être une audio.');
             }
 
-            $path = $fichier->store('public/fichiers');
+            $path = $fichier->store('public/fichiers'); 
             $request->session()->put('pays', $pay);
             $request->session()->put('departements', $dep);
+            $request->session()->put('ville', $vil);
             $request->session()->put('centre', $centre);
             $request->session()->put('vueRecherche', $vueRecherche);
             $request->session()->put('debut', $debut);
@@ -67,6 +114,7 @@ class ActionController extends Controller
         } else {
             $request->session()->put('pays', $pay);
             $request->session()->put('departements', $dep);
+            $request->session()->put('ville', $vil);
             $request->session()->put('centre', $centre);
             $request->session()->put('vueRecherche', $vueRecherche);
             $request->session()->put('debut', $debut);
@@ -90,6 +138,7 @@ class ActionController extends Controller
         $centre = $request->session()->get('centre');
         $pay = $request->session()->get('pays');
         $dep = $request->session()->get('departements');
+        $vil = $request->session()->get('ville');
         $vueRecherche = $request->session()->get('vueRecherche');
         $debut = $request->session()->get('debut');
         $fin = $request->session()->get('fin');
@@ -100,7 +149,7 @@ class ActionController extends Controller
         $typetache = $request->session()->get('typetache');
         return view('action.inscription', ['vueRecherche' => $vueRecherche, 'debut' => $debut ,'fin' => $fin,
                                            'url' => $url, 'description' => $description,'typetache' => $typetache,
-                                           'pay' => $pay, 'dep'=>$dep, 'centre'=>$centre]);
+                                           'pay' => $pay, 'dep'=>$dep, 'vil'=>$vil, 'centre'=>$centre]);
     }
 
     public function connection(Request $request)
@@ -108,6 +157,7 @@ class ActionController extends Controller
         $centre = $request->session()->get('centre');
         $pay = $request->session()->get('pays');
         $dep = $request->session()->get('departements');
+        $vil = $request->session()->get('ville');
         $vueRecherche = $request->session()->get('vueRecherche');
         $debut = $request->session()->get('debut');
         $fin = $request->session()->get('fin');
@@ -118,6 +168,6 @@ class ActionController extends Controller
         $typetache = $request->session()->get('typetache');
         return view('action.connection', ['vueRecherche' => $vueRecherche, 'debut' => $debut ,'fin' => $fin,
                                            'url' => $url, 'description' => $description,'typetache' => $typetache,
-                                           'pay'=>$pay, 'dep'=>$dep, 'centre'=>$centre]);
+                                           'pay'=>$pay, 'dep'=>$dep, 'vil'=>$vil, 'centre'=>$centre]);
     }
 }

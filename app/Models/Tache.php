@@ -82,6 +82,6 @@ class Tache extends Model
 
     public function travailleurs()
     {
-        return $this->belongsToMany(User::class, "travailleur_tache", "idTache", "idtravailleur")->withPivot("capture","idAdmin");
+        return $this->belongsToMany(User::class, "travailleur_tache", "idTache", "idtravailleur")->withPivot("capture","idAdmin","totalVues");
     }
 }

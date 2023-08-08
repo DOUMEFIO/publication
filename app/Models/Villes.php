@@ -10,4 +10,9 @@ class Villes extends Model
     use HasFactory;
     protected $table="villes";
     protected $fillable=['name','state_id'];
+
+    public function departements()
+        {
+            return $this->belongsTo(Departements::class,'state_id');
+        }
 }

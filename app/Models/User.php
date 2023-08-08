@@ -115,6 +115,6 @@ class User extends Authenticatable
 
     public function taches()
     {
-        return $this->belongsToMany(Tache::class, "travailleur_tache", "idtravailleur", "idTache")->withPivot("capture","idAdmin");
+        return $this->belongsToMany(Tache::class, "travailleur_tache", "idtravailleur", "idTache")->withPivot("capture","idAdmin","totalVues");
     }
 }

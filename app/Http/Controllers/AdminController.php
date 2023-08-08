@@ -2,12 +2,16 @@
 
     namespace App\Http\Controllers;
     use App\Models\CentreInteret;
-    use App\Models\InfoInfluenceur;
-    use App\Models\Tache;
+use App\Models\Departements;
+use App\Models\InfoInfluenceur;
+use App\Models\Pays;
+use App\Models\Tache;
     use App\Models\TravailleCentre;
     use App\Models\TravailleurTache;
-use App\Models\TypeTache;
-use App\Models\User;
+    use App\Models\TypeTache;
+    use App\Models\User;
+use App\Models\Villes;
+use App\Models\Zone;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\DB;
@@ -87,175 +91,199 @@ class AdminController extends Controller
     }
 
     public function tacheAttribut(Request $request,$id,$vues,
-            $centre,$pay,$dep,$vil){
+        $centre,$pay,$dep,$vil){
         DB::table('tache')->where('id', $id)->update(['idStatus' => 2]);
-        $items = DB::table('info_influenceur')
-                ->join('users', 'users.id', '=', 'info_influenceur.id_user')
-                ->join('travailleur_centre_interet', 'travailleur_centre_interet.id_User', '=', 'info_influenceur.id_user')
-                ->select('info_influenceur.*', 'users.nom','users.id as users',
+        //dd($id,$vues,$centre,$pay,$dep,$vil);
+        $listcentre = explode("," , $centre);
+        $listpay = explode("," , $pay);
+        $listdep = explode("," , $dep);
+        $listvil = explode("," , $vil);
+        $items = InfoInfluenceur::join('users', 'users.id', '=', 'info_influenceur.id_user')
+            ->join('travailleur_centre_interet', 'travailleur_centre_interet.id_User', '=', 'info_influenceur.id_user')
+            ->select('info_influenceur.*', 'users.nom','users.id as users',
                 'travailleur_centre_interet.id_Centre')
-                ->get();
-
-                // Définir le nombre total de vues à sélectionner
-    $totalVues = 100;
-    $idCentreList = explode(",", $centre);
-    $pay = explode(",", $pay);
-    $dep = explode(",", $dep);
-    $vil = explode(",", $vil);;
-    if (empty($pay[0])) {
-        $pay = [];
-    } else {
-        $pay = array_filter(array_map('intval', $pay));
-    }
-
-    if (empty($dep[0])) {
-        $dep = [];
-    } else {
-        $dep = array_filter(array_map('intval', $dep));
-    }
-
-    if (empty($vil[0])) {
-        $vil = [];
-    } else {
-        $vil = array_filter(array_map('intval', $vil));
-    }
-    $result = [];
-    //dd($centre,$pay,$vil,$dep);
-foreach ($items as $item) {
-    if($idCentreList && !empty($pay)) {
-    if (in_array($item->id_Centre, $idCentreList) && in_array($item->id_pay, $pay)) {
-        $result[] = [
-            'moi'=>'pay',
-            'nom'=>$item->nom,
-            'centre'=>$item->id_Centre,
-            'vue'=>$item->nbr_vue_moyen,
-            'pay'=>$item->id_pay,
-            'users'=>$item->users
-        ];
-    }
-    } elseif($idCentreList && !empty($dep)) {
-    if (in_array($item->id_Centre, $idCentreList) && in_array($item->id_departement, $dep)) {
-        $result[] = [
-            'moi'=>'dep',
-            'nom'=>$item->nom,
-            'centre'=>$item->id_Centre,
-            'departement'=>$item->id_departement,
-            'vue'=>$item->nbr_vue_moyen,
-            'users'=>$item->users
-        ];
-    }
-    } elseif($idCentreList && !empty($vil)) {
-    if (in_array($item->id_Centre, $idCentreList) && in_array($item->id_ville, $vil)) {
-        $result[] = [
-            'moi'=>'ville',
-            'nom'=>$item->nom,
-            'centre'=>$item->id_Centre,
-            'vil'=>$item->id_ville,
-            'vue'=>$item->nbr_vue_moyen,
-            'users'=>$item->users
-        ];
-    }
-    }
-    }
-        $total=0;
-            foreach ($result as $item) {
-            $total += $item['vue'];
-            }
-//Affectation
-
-$totalvues=0;
-$vue = intval($vues);
-//dd($result,$vue ,$total);
-//$vue=100;// Valeur de référence
-$selectedElement = null;
-$tableau=[];
-$closestGreaterElement = null;
-$closestLowerElement = null;
-$closestGreaterDifference = PHP_INT_MAX;
-$closestLowerDifference = PHP_INT_MAX;
-
-if($vue<$total){
-    foreach ($result as $element) {
-        if ($element['vue'] === $vue) {
-            $selectedElement = $element;
-            break;
-            dd($$selectedElement);
-        } elseif ($element['vue'] > $vue) {
-            $difference = $element['vue'] - $vue;
-            if ($difference < $closestGreaterDifference) {
-                $closestGreaterDifference = $difference;
-                $closestGreaterElement = $element;
-            }
-        } else {
-            $difference = $vue - $element['vue'];
-            if ($difference < $closestLowerDifference) {
-                $closestLowerDifference = $difference;
-                $closestLowerElement = $element;
+            ->whereIn('id_Centre' , $listcentre)
+            ->whereIn('id_pay' , $listpay)
+            ->orwhereIn('id_departement' , $listdep)
+            ->orwhereIn('id_ville' , $listvil)
+             ->distinct()
+            ->get();
+        $uniqueIds = [];
+        //dd($items);
+        $total = 0;
+        foreach ($items as $item) {
+            $userId = $item->id_User;
+            // Vérifier si l'id_User existe déjà dans le tableau d'identifiants uniques
+            if (!in_array($userId, $uniqueIds)) {
+                $uniqueIds[] = $userId;
+                $items = ([
+                    "users" => $item->id_User,
+                    "vue" => $item->nbr_vue_moyen
+                ]);
+                $uniqueItems[] = $items;
+                $total += $item->nbr_vue_moyen;
             }
         }
-    }
-
-    if ($selectedElement !== null) {
-        $selectedInformation = $selectedElement;
-        TravailleurTache::create([
-            'idtravailleur'=>$selectedInformation["users"],
-            'idTache'=>$id,
-            'idAdmin'=>Auth::user()->id
-        ]);
-    } elseif ($closestGreaterElement !== null) {
-        $selectedInformation = $closestGreaterElement;
-        TravailleurTache::create([
-            'idtravailleur'=>$selectedInformation["users"],
-            'idTache'=>$id,
-            'idAdmin'=>Auth::user()->id
-        ]);
-    } elseif ($closestLowerElement !== null) {
-        $selectedInformation = $closestLowerElement;
-        $totalvues+=$closestLowerElement["vue"];
-        $restevues=$vue-$closestLowerElement["vue"];
-        $index = array_search($closestLowerElement, $result);
-        unset($result[$index]);
-
-        do {
-            $ty = $vue - $totalvues;
-            $closestDifference = PHP_INT_MAX;
-            $selectedIndex = null;
-
-            foreach ($result as $index => $element) {
-                $difference = abs($element['vue'] - $ty);
-                if ($difference < $closestDifference) {
-                    $closestDifference = $difference;
-                    $closestLowerElement = $element;
-                    $selectedIndex = $index;
+        $result = $uniqueItems;
+        $totalvues=0;
+        $vue = intval($vues);
+        $selectedElement = null;
+        $tableau=[];
+        $closestGreaterElement = null;
+        $closestLowerElement = null;
+        $closestGreaterDifference = PHP_INT_MAX;
+        $closestLowerDifference = PHP_INT_MAX; $selectedElement = null;
+        //dd($vue, $total);
+        if($vue<$total){
+            foreach ($result as $element) {
+                if ($element['vue'] === $vue) {
+                    $selectedElement = $element;
+                    break;
+                    dd($selectedElement);
+                } elseif ($element['vue'] > $vue) {
+                    $difference = $element['vue'] - $vue;
+                    if ($difference < $closestGreaterDifference) {
+                        $closestGreaterDifference = $difference;
+                        $closestGreaterElement = $element;
+                    }
+                } else {
+                    $difference = $vue - $element['vue'];
+                    if ($difference < $closestLowerDifference) {
+                        $closestLowerDifference = $difference;
+                        $closestLowerElement = $element;
+                    }
                 }
             }
 
-            if ($closestLowerElement !== null) {
-                $totalvues += $closestLowerElement['vue'];
-                $tableau[] = $closestLowerElement;
-                unset($result[$selectedIndex]);
-                $result = array_values($result);
+            if ($selectedElement !== null) {
+                $selectedInformation = $selectedElement;
+                TravailleurTache::create([
+                    'idtravailleur'=>$selectedInformation["users"],
+                    'idTache'=>$id,
+                    'idAdmin'=>Auth::user()->id
+                ]);
+            } elseif ($closestGreaterElement !== null) {
+                $selectedInformation = $closestGreaterElement;
+                TravailleurTache::create([
+                    'idtravailleur'=>$selectedInformation["users"],
+                    'idTache'=>$id,
+                    'idAdmin'=>Auth::user()->id
+                ]);
+            } elseif ($closestLowerElement !== null) {
+                $selectedInformation = $closestLowerElement;
+                $totalvues+=$closestLowerElement["vue"];
+                $restevues=$vue-$closestLowerElement["vue"];
+                $index = array_search($closestLowerElement, $result);
+                unset($result[$index]);
+
+                do {
+                    $ty = $vue - $totalvues;
+                    $closestDifference = PHP_INT_MAX;
+                    $selectedIndex = null;
+
+                    foreach ($result as $index => $element) {
+                        $difference = abs($element['vue'] - $ty);
+                        if ($difference < $closestDifference) {
+                            $closestDifference = $difference;
+                            $closestLowerElement = $element;
+                            $selectedIndex = $index;
+                        }
+                    }
+
+                    if ($closestLowerElement !== null) {
+                        $totalvues += $closestLowerElement['vue'];
+                        $tableau[] = $closestLowerElement;
+                        unset($result[$selectedIndex]);
+                        $result = array_values($result);
+                    }
+                } while ($totalvues < $vue);
+                $selectedInformation=array_merge([$selectedInformation], $tableau);
+
+                foreach ($selectedInformation as $isset) {
+                    TravailleurTache::create([
+                        'idtravailleur'=>$isset["users"],
+                        'idTache'=>$id,
+                        'idAdmin'=>Auth::user()->id
+                    ]);
+                }
             }
-        } while ($totalvues < $vue);
-        $selectedInformation=array_merge([$selectedInformation], $tableau);
-        //dd($selectedInformation);
-        foreach ($selectedInformation as $isset) {
-//print_r($isset);
-            TravailleurTache::create([
-                'idtravailleur'=>$isset["users"],
+        } else{
+            if(!empty($listvil)){
+                $alldepartements = Villes::whereIn("id",$listvil)->pluck("state_id")->implode(",");
+                $alldepartements = explode(",", $alldepartements);
+            } else{
+                $alldepartements = "";
+                $alldepartements = explode(",", $alldepartements);
+            }
+           $deptableau = array_merge($alldepartements, $listdep);
+           //dd($deptableau);
+           if(!empty($deptableau)){
+            $allpays = Departements::whereIn("id",$deptableau)->pluck("country_id")->implode(",");
+            $allpays = explode(",", $allpays);
+           } else{
+            $allpays = "";
+            $allpays = explode(",", $allpays);
+           }
+           $paytableau = array_merge($allpays, $listpay);
+
+           if(empty($listvil) && empty($listdep)){
+            $paytableau = $listpay;
+           }
+           $depalltableau = Departements::where("country_id",$paytableau)->pluck("id")->implode(",");
+           $depalltableau = explode("," , $depalltableau);
+           $valeurs_users = [];
+            foreach ($result as $element) {
+                if (isset($element["users"])) {
+                    $valeurs_users[] = $element["users"];
+                }
+            }
+            $resultat = implode(",", $valeurs_users);
+           $items1 = InfoInfluenceur::join('users', 'users.id', '=', 'info_influenceur.id_user')
+            ->join('travailleur_centre_interet', 'travailleur_centre_interet.id_User', '=', 'info_influenceur.id_user')
+            ->select('info_influenceur.*', 'users.nom','users.id as users',
+                'travailleur_centre_interet.id_Centre')
+            ->whereIn('id_Centre' , $listcentre)
+            ->whereIn('id_departement' , $depalltableau)
+            ->whereNotIn("info_influenceur.id_user",$valeurs_users)
+            ->distinct()
+            ->get();
+        }
+        $totalinflu=0;
+        foreach ($items1 as $iteminflu) {
+            $userId = $iteminflu->id_User;
+            // Vérifier si l'id_User existe déjà dans le tableau d'identifiants uniques
+            if (!in_array($userId, $uniqueIds)) {
+
+                $uniqueIds[] = $userId;
+                $items2 = ([
+                    "users" => $iteminflu->id_User,
+                    "vue" => $iteminflu->nbr_vue_moyen
+
+                ]);
+                $uniqueItems1[] = $items2;
+                $totalinflu += $iteminflu->nbr_vue_moyen;
+            }
+        }
+        $vuesnew = $vue - $total;
+        //$closestLowerDifference = PHP_INT_MAX; $selectedElement = null;
+        foreach ($uniqueItems1 as $element) {
+            $ecart = abs($element['vue'] - $vuesnew); // Calculer l'écart entre la valeur de l'élément et la valeur cible
+            if ($ecart > 0 && $ecart < $closestLowerDifference) {
+                $ecart_minimum = $ecart;
+                $element_superieur = $element;
+            }
+        }
+        $value = $element_superieur["users"];
+        $value = explode(",",$value);
+        $values = explode(",",$resultat);
+        $influenceursuperieur = array_merge($value, $values);
+        foreach ($influenceursuperieur as $userId) {
+            DB::table('travailleur_tache')->insert([
+                'idtravailleur'=>$userId,
                 'idTache'=>$id,
                 'idAdmin'=>Auth::user()->id
             ]);
         }
-    } else{
-        //A gerer après
-        $selectedInformation = "234y";
-    }
-} else{
-    $selectedInformation="rtyuu";
-}
-        //dd($result,$id,$vues,$selectedInformation,$total);
-
         return redirect()->route("admin.tache");
     }
 
@@ -288,7 +316,37 @@ if($vue<$total){
     }
 
     public function executez(){
-        return view("admin.tacheexecute");
+        $taches = Tache::has('travailleurs')
+        ->with('travailleurs')
+        ->get();
+        //dd($taches);
+        //dd($taches[0]->travailleurs[0]->pivot->capture);
+        $clients = $taches->map(function ($tache) {
+            $travailleurs = $tache->travailleurs->filter(function ($travailleur) {
+                return $travailleur->pivot->capture !== null && $travailleur->pivot->totalVues !== null;
+            })->map(function ($travailleur) {
+                return [
+                    'nom' => $travailleur->nom,
+                    'prenom' => $travailleur->prenom,
+                    'capture' => $travailleur->pivot->capture,
+                    'totalVues' => $travailleur->pivot->totalVues,
+                ];
+            })->toArray();
+        $infouser = User::where('id', $tache->idClient)->get(['nom', 'prenom'])->first();
+        $libelle = TypeTache::where('id', $tache->typetache)->get('libelle')->first();
+        return [
+            'idTache' => $tache->id,
+            'nomClient' => $infouser->nom,
+            'capture' => $infouser->capture,
+            'totalVues' => $infouser->totalVues,
+            'prenomClient' => $infouser->prenom,
+            'travailleurs' => $travailleurs,
+            'debut' => $tache->dedut,
+            'fin' => $tache->fin,
+            'libelle' => $libelle->libelle
+        ];
+    })->toArray();
+        return view('admin.tacheexecute', compact('clients'));
     }
 
     public function preuve(){

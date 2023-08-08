@@ -50,7 +50,7 @@
                                     <td>{{$client['nomClient'] }} {{$client['prenomClient']}}
                                     </td>
                                     <td>
-                                        {{ strftime('%A %e %B %Y', strtotime($client['debut'])) }} à
+                                        {{ strftime('%A %e %B %Y', strtotime($client['debut'])) }} à</br>
                                         {{ strftime('%A %e %B %Y', strtotime($client['fin'])) }}
                                     </td>
                                     <td>{{$client['libelle']}}</td>

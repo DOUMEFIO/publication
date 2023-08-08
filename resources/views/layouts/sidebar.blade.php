@@ -37,12 +37,6 @@
         </ul>
 
         <ul class="navbar-nav text-light" id="accordionSidebar">
-            @if (Auth::User()->idProfil == 1)
-                <li class="nav-item"><a class="nav-link active" href="{{route("tache.partager")}}"><i class="fas fa-tachometer-alt"></i><span>Preuve</span></a></li>
-            @endif
-        </ul>
-
-        <ul class="navbar-nav text-light" id="accordionSidebar">
             @if (Auth::User()->idProfil == 2)
                 <li class="nav-item"><a class="nav-link active" href="{{route("influenceurconnect")}}"><i class="fas fa-tachometer-alt"></i><span>Profil</span></a></li>
             @endif
@@ -50,13 +44,37 @@
 
         <ul class="navbar-nav text-light" id="accordionSidebar">
             @if (Auth::User()->idProfil == 2)
-                <li class="nav-item"><a class="nav-link active" href="{{route("infl.tachencour")}}"><i class="fas fa-tachometer-alt"></i><span>Tache En cours</span></a></li>
+                <li class="nav-item"><a class="nav-link active" href="{{route("infl.tachencour")}}"><i class="fas fa-tachometer-alt"></i><span>Tâche En cours</span></a></li>
             @endif
         </ul>
 
         <ul class="navbar-nav text-light" id="accordionSidebar">
             @if (Auth::User()->idProfil == 2)
-                <li class="nav-item"><a class="nav-link active" href="{{route("tache.partager")}}"><i class="fas fa-tachometer-alt"></i><span>Tache Exécutez</span></a></li>
+                <li class="nav-item"><a class="nav-link active" href="{{route("tachedo")}}"><i class="fas fa-tachometer-alt"></i><span>Tâche Exécutez</span></a></li>
+            @endif
+        </ul>
+
+        <ul class="navbar-nav text-light" id="accordionSidebar">
+            @if (Auth::User()->idProfil == 3)
+                <li class="nav-item"><a class="nav-link active" href="{{route("/dashboard")}}"><i class="fas fa-tachometer-alt"></i><span>Tâche</span></a></li>
+            @endif
+        </ul>
+
+        <ul class="navbar-nav text-light" id="accordionSidebar">
+            @if (Auth::User()->idProfil == 3)
+                <li class="nav-item"><a class="nav-link active" href="{{route("clienttacheencours")}}"><i class="fas fa-tachometer-alt"></i><span>Tâche En cours</span></a></li>
+            @endif
+        </ul>
+
+        <ul class="navbar-nav text-light" id="accordionSidebar">
+            @if (Auth::User()->idProfil == 3)
+                <li class="nav-item"><a class="nav-link active" href="{{route("clienttacheexecutez")}}"><i class="fas fa-tachometer-alt"></i><span>Tâche Exécutez</span></a></li>
+            @endif
+        </ul>
+
+        <ul class="navbar-nav text-light" id="accordionSidebar">
+            @if (Auth::User()->idProfil == 1 || Auth::User()->idProfil == 3)
+                <li class="nav-item"><a class="nav-link active" href="{{route("preuve")}}"><i class="fas fa-tachometer-alt"></i><span>Preuve</span></a></li>
             @endif
         </ul>
         <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>

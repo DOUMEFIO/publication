@@ -66,7 +66,7 @@
                         <div class="mb-3">
                             <label class="fw-bolder text-black" for="selection">Type de fichier</label>
                             <select class="form-control" name="typetache" id="typetache" required>
-                                
+
                                 @foreach ($fichiers as $fichier)
                                     <option value="{{$fichier->id}}">{{$fichier->libelle}}</option>
                                 @endforeach
@@ -84,12 +84,12 @@
                         <div class="mb-3">
                             <label class="fw-bolder text-black">Pays</label>
                             <select class="selectpicker form-control" id="countrylist" multiple name="pays[]">
-                                
                                 @foreach ($pays as $pay)
                                     <option value="{{$pay->id}}">{{$pay->name}}</option>
                                 @endforeach
                             </select>
                         </div>
+
                         <div class="mb-3" id="listdep" style="display:none;">
                             <label class="fw-bolder text-black">Département:</label>
                             <select id="stateliste" class="form-control" multiple name="departements[]" >

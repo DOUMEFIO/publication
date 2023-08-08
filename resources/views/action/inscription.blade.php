@@ -78,6 +78,7 @@
                                         <input type="hidden" value="{{$pay}}" name="pays">
                                         <input type="hidden" value="{{$centre}}" name="centre">
                                         <input type="hidden" value="{{$dep}}" name="departements">
+                                        <input type="hidden" value="{{$vil}}" name="ville">
                                         <input type="hidden" value="{{$vueRecherche}}" name="vueRecherche">
                                         <input type="hidden" value="{{$debut}}" name="debut">
                                         <input type="hidden" value="{{$fin}}" name="fin">
@@ -87,6 +88,7 @@
                                         <input type="hidden" value="{{$pay}}" name="pays">
                                         <input type="hidden" value="{{$centre}}" name="centre">
                                         <input type="hidden" value="{{$dep}}" name="departement">
+                                        <input type="text" value="{{$vil}}" name="ville">
                                         <input type="hidden" value="{{$vueRecherche}}" name="vueRecherche">
                                         <input type="hidden" value="{{$debut}}" name="debut">
                                         <input type="hidden" value="{{$fin}}" name="fin">

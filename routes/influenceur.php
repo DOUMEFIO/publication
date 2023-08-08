@@ -49,6 +49,12 @@ Route::middleware('auth')->group(function (){
     Route::get('infl.tachencour', [InfluenceurController::class, 'influtachencour'])
         ->name('infl.tachencour');
 
-    Route::post('vuesrealise', [InfluenceurController::class, 'influtachencour'])
+    Route::get('vuesrealise/{id}', [InfluenceurController::class, 'vuesrealisee'])
         ->name('vuesrealise');
+    
+    Route::post('updatevues', [InfluenceurController::class, 'updatevues'])
+        ->name('updatevues');
+
+    Route::get('tachedo', [InfluenceurController::class, 'tachedo'])
+        ->name('tachedo');
 });

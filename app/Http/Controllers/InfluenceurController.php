@@ -241,7 +241,38 @@ class InfluenceurController extends Controller
     }
 
     public function influtachencour(){
-        $taches = TravailleurTache::with('tacheall.type')->where('idtravailleur',11)->get();
+        $taches = TravailleurTache::with('tacheall.type')
+         ->where('idtravailleur', Auth::user()->id)
+         ->whereNull('totalVues')
+         ->get();
         return view('influenceur.tacheattribuer', compact('taches'));
+    }
+
+    public function vuesrealisee($id){
+        return view('influenceur.update', compact('id'));
+    }
+
+    public function updatevues(Request $request){
+        $avatar = $request->file('avatar');
+        $path = $avatar->store('public/fichiers');
+        $img = substr($path, 6);
+        $info = ([
+            'totalVues' => $request->nbr_vue_moyen,
+            'capture' => $img ,
+        ]);
+        DB::table('travailleur_tache')->where("id", $request->id)->update($info);
+        $taches = TravailleurTache::where('idtravailleur', Auth::user()->id)
+        ->whereNotNull('capture')
+        ->where('idtravailleur', Auth::user()->id)
+        ->get();
+        return view('influenceur.tacheexecute', compact('taches'));
+    }
+
+    public function tachedo(){
+        $taches = TravailleurTache::where('idtravailleur', Auth::user()->id)
+        ->whereNotNull('capture')
+        ->where('idtravailleur', Auth::user()->id)
+        ->get();
+        return view('influenceur.tacheexecute', compact('taches'));
     }
 }
