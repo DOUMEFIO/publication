@@ -247,7 +247,7 @@ class AdminController extends Controller
             ->whereNotIn("info_influenceur.id_user",$valeurs_users)
             ->distinct()
             ->get();
-        }
+        
         $totalinflu=0;
         foreach ($items1 as $iteminflu) {
             $userId = $iteminflu->id_User;
@@ -284,6 +284,7 @@ class AdminController extends Controller
                 'idAdmin'=>Auth::user()->id
             ]);
         }
+    }
         return redirect()->route("admin.tache");
     }
 
