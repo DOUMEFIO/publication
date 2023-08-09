@@ -110,7 +110,7 @@ class AdminController extends Controller
             ->orwhereIn('id_ville' , $listvil)
              ->distinct()
             ->get();
-            dd($items);
+        //dd($items);
         $uniqueIds = [];
         $total = 0;
         foreach ($items as $item) {
@@ -125,10 +125,10 @@ class AdminController extends Controller
                 $uniqueItems[] = $items;
                 $total += $item->nbr_vue_moyen;
             }
-            dd( $uniqueItems);
+            
         }
         $result = $uniqueItems;
-        
+        //dd( $result);
         $totalvues=0;
         $vue = intval($vues);
         $selectedElement = null;
@@ -265,13 +265,13 @@ class AdminController extends Controller
                     "vue" => $iteminflu->nbr_vue_moyen
 
                 ]);
-                $uniqueItems1[] = $items2;
+                $uniqueItems[] = $items2;
                 $totalinflu += $iteminflu->nbr_vue_moyen;
             }
         }
         $vuesnew = $vue - $total;
         //$closestLowerDifference = PHP_INT_MAX; $selectedElement = null;
-        foreach ($uniqueItems1 as $element) {
+        foreach ($uniqueItems as $element) {
             $ecart = abs($element['vue'] - $vuesnew); // Calculer l'écart entre la valeur de l'élément et la valeur cible
             if ($ecart > 0 && $ecart < $closestLowerDifference) {
                 $ecart_minimum = $ecart;
@@ -281,8 +281,16 @@ class AdminController extends Controller
         $value = $element_superieur["users"];
         $value = explode(",",$value);
         $values = explode(",",$resultat);
-        $influenceursuperieur = array_merge($value, $values);
+        $influenceursuperieur = array_diff($value, $values);
         foreach ($influenceursuperieur as $userId) {
+            DB::table('travailleur_tache')->insert([
+                'idtravailleur'=>$userId,
+                'idTache'=>$id,
+                'idAdmin'=>Auth::user()->id
+            ]);
+        }
+
+        foreach ($values  as $userId) {
             DB::table('travailleur_tache')->insert([
                 'idtravailleur'=>$userId,
                 'idTache'=>$id,
