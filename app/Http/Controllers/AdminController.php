@@ -2,16 +2,16 @@
 
     namespace App\Http\Controllers;
     use App\Models\CentreInteret;
-use App\Models\Departements;
-use App\Models\InfoInfluenceur;
-use App\Models\Pays;
-use App\Models\Tache;
+    use App\Models\Departements;
+    use App\Models\InfoInfluenceur;
+    use App\Models\Pays;
+    use App\Models\Tache;
     use App\Models\TravailleCentre;
     use App\Models\TravailleurTache;
     use App\Models\TypeTache;
     use App\Models\User;
-use App\Models\Villes;
-use App\Models\Zone;
+    use App\Models\Villes;
+    use App\Models\Zone;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\DB;
@@ -50,6 +50,7 @@ class AdminController extends Controller
                 ->where('tache.idStatus',1)
                 ->where('payement',"paye")
                 ->get();
+                //dd($taches);
         return view('admin.taches', compact("taches"));
     }
 
@@ -100,16 +101,17 @@ class AdminController extends Controller
         $listvil = explode("," , $vil);
         $items = InfoInfluenceur::join('users', 'users.id', '=', 'info_influenceur.id_user')
             ->join('travailleur_centre_interet', 'travailleur_centre_interet.id_User', '=', 'info_influenceur.id_user')
-            ->select('info_influenceur.*', 'users.nom','users.id as users',
+            ->select('info_influenceur.*', 'users.nom','users.id as users','users.idprofil',
                 'travailleur_centre_interet.id_Centre')
+            ->where('users.idprofil' , 2)
             ->whereIn('id_Centre' , $listcentre)
             ->whereIn('id_pay' , $listpay)
             ->orwhereIn('id_departement' , $listdep)
             ->orwhereIn('id_ville' , $listvil)
              ->distinct()
             ->get();
+            dd($items);
         $uniqueIds = [];
-        //dd($items);
         $total = 0;
         foreach ($items as $item) {
             $userId = $item->id_User;
@@ -123,8 +125,10 @@ class AdminController extends Controller
                 $uniqueItems[] = $items;
                 $total += $item->nbr_vue_moyen;
             }
+            dd( $uniqueItems);
         }
         $result = $uniqueItems;
+        
         $totalvues=0;
         $vue = intval($vues);
         $selectedElement = null;
@@ -240,14 +244,15 @@ class AdminController extends Controller
             $resultat = implode(",", $valeurs_users);
            $items1 = InfoInfluenceur::join('users', 'users.id', '=', 'info_influenceur.id_user')
             ->join('travailleur_centre_interet', 'travailleur_centre_interet.id_User', '=', 'info_influenceur.id_user')
-            ->select('info_influenceur.*', 'users.nom','users.id as users',
+            ->select('info_influenceur.*', 'users.nom','users.id as users','users.idprofil',
                 'travailleur_centre_interet.id_Centre')
+            ->where('users.idprofil' , 2)
             ->whereIn('id_Centre' , $listcentre)
             ->whereIn('id_departement' , $depalltableau)
             ->whereNotIn("info_influenceur.id_user",$valeurs_users)
             ->distinct()
             ->get();
-        
+
         $totalinflu=0;
         foreach ($items1 as $iteminflu) {
             $userId = $iteminflu->id_User;

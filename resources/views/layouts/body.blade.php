@@ -89,7 +89,7 @@
                  })
                });
 
-               var input = document.querySelector("#phone");
+    var input = document.querySelector("#phone");
     var iti = window.intlTelInput(input, {});
 
     // Événement "countrychange" en utilisant l'option "utilsScript"

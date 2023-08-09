@@ -84,7 +84,7 @@
                     <div class="col-4">
                         <a class="btn btn-primary btn-lg btn-block" style="background-color: #55acee" href="#!"
                         role="button">
-                        <i class="fab fa-twitter me-2"></i> Ggoogle</a>
+                        <i class="fab fa-twitter me-2"></i> Google</a>
                     </div>
                 </div>
 

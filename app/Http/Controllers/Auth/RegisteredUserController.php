@@ -65,7 +65,8 @@ class RegisteredUserController extends Controller
     }
 
     public function sendMail(){
-        return view("confirm");
+        return redirect()->route('login')->with('info',"Un mail vous a été envoyé. Acceptez en cliquant sur c'est moi.
+        Ou connectez-vous");
     }
 
     public function confirm($id){

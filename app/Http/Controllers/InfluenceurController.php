@@ -28,9 +28,9 @@ class InfluenceurController extends Controller
                 ->leftJoin('pays', 'info_influenceur.id_pay', '=', 'pays.id')
                 ->leftJoin('departements', 'info_influenceur.id_departement', '=', 'departements.id')
                 ->leftJoin('villes', 'info_influenceur.id_ville', '=', 'villes.id')
-                ->select('users.id','users.idProfil' ,'users.nom', 'users.prenom', 'info_influenceur.tel', 'pays.name as pays', 'departements.name as departement',
+                ->select('info_influenceur.profil','users.id','users.idProfil' ,'users.nom', 'users.prenom', 'info_influenceur.tel', 'pays.name as pays', 'departements.name as departement',
                  'villes.name as ville','info_influenceur.nbr_vue_moyen', DB::raw('GROUP_CONCAT(centre_interet.libelle SEPARATOR \', \') as interests'))
-                ->groupBy('users.id','info_influenceur.nbr_vue_moyen','users.idProfil' ,'users.nom', 'users.prenom', 'info_influenceur.tel', 'pays', 'departement', 'ville')
+                ->groupBy('info_influenceur.profil','users.id','info_influenceur.nbr_vue_moyen','users.idProfil' ,'users.nom', 'users.prenom', 'info_influenceur.tel', 'pays', 'departement', 'ville')
                 ->where('users.idProfil',2)
                 ->get();
         return view('influenceur.show', compact('users','alls'));
@@ -41,22 +41,27 @@ class InfluenceurController extends Controller
         $users=InfoInfluenceur::where('id_User',Auth::user()->id)->get();
         $centres=CentreInteret::all();
         $pays=Pays::all();
-        $centreInteret = DB::table('travailleur_centre_interet')
-               ->leftJoin('users', 'users.id', '=', 'travailleur_centre_interet.id_User')
-               ->select(DB::raw('GROUP_CONCAT(id_Centre) as ids'))
-               ->where('id_user', '=', Auth::user()->id)
-               ->groupBy('id_user')
-               ->get();
-                $string = $centreInteret[0]->ids;
-                $array = explode(",", $string);
-                $result = array();
-                foreach($array as $key => $value) {
-                    $result[$key] = $value ?: 0;
-                }
-               $libelles = CentreInteret::whereIn('id', $result)->pluck('libelle');
-               #$libelles = implode(",", $libelles->all());
-        return view('influenceur.index', compact("pays","users","centreInteret","libelles","centres","profil"));
-     }
+        $influenceur = InfoInfluenceur::where('id_user', '=', Auth::user()->id)->get();
+        if(!$influenceur->isEmpty()){
+            $centreInteret = DB::table('travailleur_centre_interet')
+                ->leftJoin('users', 'users.id', '=', 'travailleur_centre_interet.id_User')
+                ->select(DB::raw('GROUP_CONCAT(id_Centre) as ids'))
+                ->where('id_user', '=', Auth::user()->id)
+                ->groupBy('id_user')
+                ->get();
+                    $string = $centreInteret[0]->ids;
+                    $array = explode(",", $string);
+                    $result = array();
+            foreach($array as $key => $value) {
+                $result[$key] = $value ?: 0;
+            }
+            $libelles = CentreInteret::whereIn('id', $result)->pluck('libelle');
+            return view('influenceur.index', compact("pays","users","centreInteret","libelles","centres","profil"));
+        }else{
+            $url = url("confirm/" . Auth::user()->id);
+            return redirect($url);
+        }
+    }
 
     public function create()
     {

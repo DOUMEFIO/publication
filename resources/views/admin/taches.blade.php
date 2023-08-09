@@ -30,13 +30,12 @@
                         <thead>
                             <tr>
                                 <th>Nom & Prénom</th>
-                                <th>Début & Fin</th>
+                                <th>Période</th>
                                 <th>Vues Rechercher</th>
                                 <th>Type de fichier</th>
-                                <th>Déscription</th>
                                 <th>Centre</th>
                                 <th>Zone</th>
-                                <th>Média</th>
+                                <th>N° Tâche</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -49,7 +48,6 @@
                                     </td>
                                     <td>{{$tache->vueRecherche}}</td>
                                     <td>{{$tache->tache_libelle}}</td>
-                                    <td>{{$tache->description}}</td>
                                     <td>
                                         {{$tache->centre}}
                                     </td>
@@ -59,11 +57,16 @@
                                     </td>
                                     <td>T{{$tache->nbr}}</td>
                                     <td>
-                                        <a href="{{route('attribuer.tache', ['id' => $tache->nbr,
-                                        'vues' =>$tache->vueRecherche, 'centre' =>$tache->idcentre,
-                                        'pay' => !empty($tache->idpays) ?  $tache->idpays: 0,
-                                        'dep' => !empty($tache->iddepartements) ? $tache->iddepartements : 0,
-                                        'vil' => !empty($tache->idvilles) ?  $tache->idvilles: 0])}}" class="btn btn-success"><i class="fa fa-check"></i>Valider</a>
+                                        <div class="py-1">
+                                            <a href="{{route('attribuer.tache', ['id' => $tache->nbr,
+                                                'vues' =>$tache->vueRecherche, 'centre' =>$tache->idcentre,
+                                                'pay' => !empty($tache->idpays) ?  $tache->idpays: 0,
+                                                'dep' => !empty($tache->iddepartements) ? $tache->iddepartements : 0,
+                                                'vil' => !empty($tache->idvilles) ?  $tache->idvilles: 0])}}" class="btn btn-success"><i class="fa fa-check"></i>Valider</a>
+                                        </div>
+                                        <div>
+                                            <a href="{{route('showtache.client', ['id' => $tache->nbr])}}" class="btn btn-warning"><i class="fa fa-check"></i>Voir Plus</a>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -74,10 +77,9 @@
                                 <td><strong>Début & Fin</strong></td>
                                 <td><strong>Vues Recherchées</strong></td>
                                 <td><strong>Type de fichier</strong></td>
-                                <td><strong>Déscription</strong></td>
                                 <td><strong>Centre</strong></td>
                                 <td><strong>Zone</strong></td>
-                                <td><strong>Média</strong></td>
+                                <td><strong>N° Tâche</strong></td>
                                 <td><strong>Action</strong></td>
                             </tr>
                         </tfoot>

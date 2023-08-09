@@ -38,7 +38,7 @@
                             </ul>
                         </div>
                     @endif
-                    <form class="user" method="POST" action="{{ route('form.submit') }}">
+                    <form class="user" method="POST" action="{{ route('form.submit') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="row mb-3">
                             <div class="col-sm-6 mb-3 mb-sm-0"><label for="exampleFirstName" class="fw-bold text-black">Nombre de vues recherchées:</label>
@@ -46,7 +46,8 @@
                             </div>
                             <div class="col-sm-6">
                                 <label for="centre" class="fw-bolder text-black">Vos centres d'intérêts</label>
-                                <select class="selectpicker form-control" id="centre" multiple name='centre[]' required style="border: 2px solid black;">
+                                <select data-none-results-text="No results matched {0}" title="Selctionner vos centre"
+                                 class="selectpicker form-control" id="centre" multiple name='centre[]' required style="border: 2px solid black;">
                                     @foreach ($centres as $centre)
                                         <option value="{{$centre->id}}">{{$centre->libelle}}</option>
                                     @endforeach
@@ -83,7 +84,8 @@
 
                         <div class="mb-3">
                             <label class="fw-bolder text-black">Pays</label>
-                            <select class="selectpicker form-control" id="countrylist" multiple name="pays[]">
+                            <select data-none-results-text="No results matched {0}" title="Selctionner les pays" 
+                            class="selectpicker form-control" id="countrylist" multiple name="pays[]">
                                 @foreach ($pays as $pay)
                                     <option value="{{$pay->id}}">{{$pay->name}}</option>
                                 @endforeach

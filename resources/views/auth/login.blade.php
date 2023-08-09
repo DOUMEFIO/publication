@@ -37,6 +37,12 @@
                                     {{ session('error') }}
                                 </div>
                             @endif
+
+                            @if (session('info'))
+                            <div class="alert alert-danger">
+                                {{ session('info') }}
+                            </div>
+                        @endif
                             <form class="user" method="POST" action="{{ route('login') }}">
                                 @csrf
                                 <div class="mb-3"><input class="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Entrez votre adresse e-mail" name="email"></div>

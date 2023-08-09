@@ -25,8 +25,8 @@
                         </div>
                         <div class="mb-3 ">
                             <label class="form-label" ><strong>Vos centres d’intérêts</strong> </label>
-                            <select class="selectpicker form-control" multiple name='id_centre[]' required>
-                                
+                            <select data-none-results-text="No results matched {0}" title="Selctionner les centres d’intérêts"
+                            class="selectpicker form-control" multiple name='id_centre[]' required>
                                 @foreach ($centres as $centre)
                                     <option value="{{$centre->id}}">{{$centre->libelle}}</option>
                                 @endforeach
@@ -52,7 +52,7 @@
                         <div class="mb-3">
                             <label class="form-label"><strong>Pays</strong></label>
                             <select class="form-control" id="country" name="pay" required>
-                                
+
                                 @foreach ($pays as $pay)
                                     <option value="{{$pay->id}}">{{$pay->name}}</option>
                                 @endforeach

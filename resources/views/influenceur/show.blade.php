@@ -8,7 +8,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6 text-nowrap">
-                        <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label class="form-label">Show&nbsp;<select class="d-inline-block form-select form-select-sm">
+                        <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label class="form-label">Voir<select class="d-inline-block form-select form-select-sm">
                                     <option value="10" selected="">10</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>
@@ -16,7 +16,7 @@
                                 </select>&nbsp;</label></div>
                     </div>
                     <div class="col-md-6">
-                        <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
+                        <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Recherche"></label></div>
                     </div>
                 </div>
                 <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -33,9 +33,15 @@
                         <tbody >
                             @foreach ($users as $user )
                                 <tr>
+                                    @if ($user->profil)
+                                    <td>
+                                        <img class="rounded-circle me-2" src="{{asset('storage'.$user->profil)}}" width="30" height="30">{{$user->nom}} {{$user->prenom}}
+                                    </td>
+                                    @else
                                     <td>
                                         <img class="rounded-circle me-2" src="{{asset('template/assets/img/avatars/avatar1.jpeg')}}" width="30" height="30">{{$user->nom}} {{$user->prenom}}
                                     </td>
+                                    @endif
                                     <td style="text-align:center">{{$user->tel}}</td>
                                     <td>{{$user->pays}},{{$user->departement}}, {{$user->ville}}</td>
                                     <td style="text-align:center">{{$user->interests}}</td>

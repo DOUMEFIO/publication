@@ -29,7 +29,7 @@
                     <table class="table my-0" id="dataTable">
                         <thead>
                             <tr>
-                                <th>Début & Fin</th>
+                                <th>Période</th>
                                 <th>Vues Rechercher</th>
                                 <th>Type de fichier</th>
                                 <th>Déscription</th>
@@ -49,9 +49,10 @@
                                     <td>{{$tache->tache_libelle}}</td>
                                     <td>{{$tache->description}}</td>
                                     <td>{{$tache->centre}}</td>
-                                    <td>{{$tache->pays}}
+                                    <td>{{$tache->pays}},
+                                        {{$tache->departements}},
                                         {{$tache->villes}}
-                                        {{$tache->departements}}</td>
+                                        </td>
                                     <td>Voir</td>
                                     <td>{{$tache->status_libelle}}</td>
                                 </tr>
@@ -59,7 +60,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td><strong>Début & Fin</strong></td>
+                                <td><strong>Période</strong></td>
                                 <td><strong>Vues Recherchées</strong></td>
                                 <td><strong>Type de fichier</strong></td>
                                 <td><strong>Déscription</strong></td>

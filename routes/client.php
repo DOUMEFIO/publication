@@ -1,5 +1,4 @@
 <?php
-use App\Http\Controllers\InfluenceurController;
 use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,5 +29,8 @@ Route::middleware('auth')->group(function (){
 
     Route::get('clienttacheexecutez', [ClientController::class, 'clienttacheexecutez'])
     ->name('clienttacheexecutez');
+
+    Route::get('showtache.client/{id}', [ClientController::class, 'clienttache'])
+       ->name('showtache.client');
 
 });

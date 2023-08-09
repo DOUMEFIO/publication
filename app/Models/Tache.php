@@ -16,47 +16,21 @@ class Tache extends Model
         'typetache', 'idStatus'
     ];
 
-    public static function createTache($data, $user_id)
+    public static function createTache($data, $user_id,$img)
     {
         return self::create([
             'idClient' => $user_id,
             'vueRecherche' => $data->vueRecherche,
             'debut' => $data->debut,
             'fin' => $data->fin,
-            'fichier' => " ",
+            'fichier' => $img,
             'description' => $data->description,
             'typetache' => $data->typetache,
             'idStatus' => 1
         ]);
     }
 
-    public static function createTacheUrl($data, $user_id)
-    {
-        return self::create([
-            'idClient' => $user_id,
-            'vueRecherche' => $data->vueRecherche,
-            'debut' => $data->debut,
-            'fin' => $data->fin,
-            'fichier' => $data->url,
-            'description' => $data->description,
-            'typetache' => $data->typetache,
-            'idStatus' => 1
-        ]);
-    }
-
-    public static function createTachedescription($data, $user_id)
-    {
-        return self::create([
-            'idClient' => $user_id,
-            'vueRecherche' => $data->vueRecherche,
-            'debut' => $data->debut,
-            'fin' => $data->fin,
-            'fichier' => $data->url,
-            'description' => " ",
-            'typetache' => $data->typetache,
-            'idStatus' => 1
-        ]);
-    }
+    
 
     public static function associateCentre($idtache, $centre)
     {
@@ -82,6 +56,6 @@ class Tache extends Model
 
     public function travailleurs()
     {
-        return $this->belongsToMany(User::class, "travailleur_tache", "idTache", "idtravailleur")->withPivot("capture","idAdmin","totalVues");
+        return $this->belongsToMany(User::class, "travailleur_tache", "idTache", "idtravailleur")->withPivot("capture","idAdmin");
     }
 }

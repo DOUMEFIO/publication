@@ -24,24 +24,25 @@ class ActionController extends Controller
             $villelist = implode(',', $arrayvil);
             $ids = explode(",", $villelist);
             $deletdep = Villes::whereIn('id', $ids)->pluck('state_id')->implode(",");
+             
             $departementlist= implode(',', $arraydep);
             $departementArray = explode(",", $departementlist);
             $villeRemoveArray = explode(",", $deletdep);
             $resultArray = array_diff($departementArray, $villeRemoveArray);
-            $resultData = implode(",", $resultArray);
-            //dd($villelist, $departementlist, $deletdep, $resultData);
+            $departementlist= implode(',', $resultArray);
+            //les departement
+            $resultArray = array_push($departementArray, $deletdep);
+            $resultData = implode(",", $departementArray);
+            $resultData = explode(",", $resultData);
             if(!empty($resultData)){
                 //les departements
-                $departementlist = $resultArray;
-                $deletpay = Departements::whereIn('id', $departementlist)->pluck('country_id')->implode(",");
+                $deletpay = Departements::whereIn('id', $resultData)->pluck('country_id')->implode(",");
                 $listpay= implode(',', $arraypay);
                 $paysArray = explode(",", $listpay);
                 $payRemoveArray = explode(",", $deletpay);
                 $resultArraypay = array_diff($paysArray, $payRemoveArray);
-                $departementlist = implode(",", $departementlist);
                 //les pays
                 $resultDatapay = implode(",", $resultArraypay);
-                //dd($listpay, $deletpay,$resultDatapay);
             }else{
                 //les departements
                 $ids = explode(",", $departementlist);
@@ -55,8 +56,9 @@ class ActionController extends Controller
                 //les pays
                 $resultDatapay = implode(",", $resultArraypay);
                 $departementlist = "";
-                //dd($listpay, $deletpay,$resultDatapay);
+                //dd($departementlist,$listpay, $deletpay,$resultDatapay,$paysArray,$payRemoveArray);
             }
+            //dd($ids,$villeRemoveArray,$villelist, $departementlist, $resultDatapay,$paysArray,$payRemoveArray);
             //dd($villelist, $departementlist, $resultDatapay);
         } elseif(!empty($arraydep)  && empty($arrayvil)){
             $villelist = "";
@@ -72,12 +74,12 @@ class ActionController extends Controller
             $resultDatapay = implode(",", $resultArraypay);
             $departementlist = implode(",", $arraydep);
             //dd($villelist, $departementlist, $resultDatapay);
-        }elseif(!empty($arraypay)  && empty($arraydep) && empty($arrayvil)){
+        } elseif(!empty($arraypay)  && empty($arraydep) && empty($arrayvil)){
             $villelist = "";
             $departementlist = "";
             $resultDatapay = implode(",", $arraypay);
             //dd($villelist, $departementlist, $resultDatapay);
-        }
+        } 
         //dd($villelist, $departementlist, $resultDatapay);
 
         //dd($villelist);
@@ -88,7 +90,6 @@ class ActionController extends Controller
         $fin = $request->input('fin');
         $description = $request->input('description');
         $typetache = $request->input('typetache');
-
         if ($request->file('avatar')) {
             $fichier = $request->file('avatar');
             // Vérification de l'extension du fichier
@@ -99,8 +100,9 @@ class ActionController extends Controller
             } elseif ($typetache == '2' && !in_array($fichier->getClientOriginalExtension(), ['mp3','wav','aiff','wma','aac','flac','ogg','m4a'])) {
                 return redirect()->back()->with('error', 'Le fichier doit être une audio.');
             }
-
+            
             $path = $fichier->store('public/fichiers'); 
+            $img = substr($path, 6);
             $request->session()->put('pays', $pay);
             $request->session()->put('departements', $dep);
             $request->session()->put('ville', $vil);
@@ -108,7 +110,7 @@ class ActionController extends Controller
             $request->session()->put('vueRecherche', $vueRecherche);
             $request->session()->put('debut', $debut);
             $request->session()->put('fin', $fin);
-            $request->session()->put('avatar', $path);
+            $request->session()->put('avatar', $img);
             $request->session()->put('description', $description);
             $request->session()->put('typetache', $typetache);
         } else {

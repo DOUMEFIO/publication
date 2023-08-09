@@ -15,8 +15,12 @@
                 <div class="col-lg-4">
                     <div class="card mb-3">
                         <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="{{asset('storage'.$profil[0]->profil)}}" width="160" height="160">
-                            <div class="mb-3"><button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Modifier la photo</button></div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Modifier la photo</button>
+                            </div>
+                                <button class="btn btn-primary btn-sm" type="button">Confirmer votre numéro</button>
                         </div>
+
                         <!-- Modal -->
                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -25,6 +29,7 @@
                                         <h5 class="modal-title" id="exampleModalLabel">Modifier la photo de profil</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
+
                                     <div class="modal-body">
                                         <form class="user" method="POST" action="{{route('infopictureUpdate')}}" enctype="multipart/form-data">
                                             @csrf
@@ -67,7 +72,7 @@
                                             </div>
                                             <div class="col">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="last_name"><strong>Prénoms</strong></label>
+                                                    <label class="form-label" for="last_name"><strong>Prénom</strong></label>
                                                     <input class="form-control" type="text" id="last_name" placeholder="Doe" name="last_name" value="{{Auth::user()->prenom}}"></div>
                                             </div>
                                         </div>
@@ -116,7 +121,9 @@
                                             <div class="col">
                                                 <div class="mb-3"><label class="form-label" for="last_name"><strong>Centre d'intérets:</strong></label>
                                                     <ul>
-                                                        <li><strong>{{$libelles}}</li>
+                                                        @foreach ($libelles as $libelle)
+                                                            <li><strong>{{$libelle}}</strong></li>
+                                                        @endforeach
                                                     </ul>
                                                 </div>
                                             </div>
@@ -127,7 +134,7 @@
                                                 <div class="mb-3 ">
                                                     <label class="form-label" ><strong>Vos centres d’intérêts</strong> </label>
                                                     <select class="selectpicker form-control" multiple name='id_centre[]' required>
-                                                    
+
                                                         @foreach ($centres as $centre)
                                                             <option value="{{$centre->id}}">{{$centre->libelle}}</option>
                                                         @endforeach

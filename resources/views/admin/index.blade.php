@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="card shadow col-xl-6 mx-auto">
             <div class="row card-header">
-                <div class="col md-9">
+                <div class="col">
                     <p class="text-primary m-0 fw-bold">Centre Interet</p>
                 </div>
                 <div class="col md-3" style="padding-left: 100px">
@@ -13,7 +13,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6 text-nowrap">
-                        <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label class="form-label">Show&nbsp;<select class="d-inline-block form-select form-select-sm">
+                        <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label class="form-label">Voir<select class="d-inline-block form-select form-select-sm">
                                     <option value="10" selected="">10</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>
@@ -21,7 +21,11 @@
                                 </select>&nbsp;</label></div>
                     </div>
                     <div class="col-md-6">
-                        <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
+                        <div class="text-md-end dataTables_filter" id="dataTable_filter">
+                            <label class="form-label">
+                                <input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Recherche">
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">

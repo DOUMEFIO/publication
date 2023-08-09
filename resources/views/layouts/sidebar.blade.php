@@ -1,7 +1,7 @@
 <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
     <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-            <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
-            <div class="sidebar-brand-text mx-3"><span>Brand</span></div>
+            <div class="sidebar-brand-icon rotate-n-15"><img src="{{asset("dashbord/images/images/logo.png")}}" width="50px"></div>
+            <div class="sidebar-brand-text mx-3"><span>WasPay</span></div>
         </a>
         <hr class="sidebar-divider my-0">
         <ul class="navbar-nav text-light" id="accordionSidebar">
@@ -21,18 +21,18 @@
         </ul>
         <ul class="navbar-nav text-light" id="accordionSidebar">
             @if (Auth::User()->idProfil == 1)
-                <li class="nav-item"><a class="nav-link active" href="{{route("admin.tachevalide")}}"><i class="fas fa-tachometer-alt"></i><span>Tâches Validés</span></a></li>
+                <li class="nav-item"><a class="nav-link active" href="{{route("admin.tachevalide")}}"><i class="fas fa-tachometer-alt"></i><span>Tâches Valider</span></a></li>
             @endif
         </ul>
         <ul class="navbar-nav text-light" id="accordionSidebar">
             @if (Auth::User()->idProfil == 1)
-                <li class="nav-item"><a class="nav-link active" href="{{route("tache.partager")}}"><i class="fas fa-tachometer-alt"></i><span>Tâches Attribuées</span></a></li>
+                <li class="nav-item"><a class="nav-link active" href="{{route("tache.partager")}}"><i class="fas fa-tachometer-alt"></i><span>Tâche Attribuer</span></a></li>
             @endif
         </ul>
 
         <ul class="navbar-nav text-light" id="accordionSidebar">
             @if (Auth::User()->idProfil == 1)
-                <li class="nav-item"><a class="nav-link active" href="{{route("tache.executez")}}"><i class="fas fa-tachometer-alt"></i><span>Tâches Exécutez</span></a></li>
+                <li class="nav-item"><a class="nav-link active" href="{{route("tache.executez")}}"><i class="fas fa-tachometer-alt"></i><span>Tâches Exécuter</span></a></li>
             @endif
         </ul>
 
@@ -50,7 +50,7 @@
 
         <ul class="navbar-nav text-light" id="accordionSidebar">
             @if (Auth::User()->idProfil == 2)
-                <li class="nav-item"><a class="nav-link active" href="{{route("tachedo")}}"><i class="fas fa-tachometer-alt"></i><span>Tâche Exécutez</span></a></li>
+                <li class="nav-item"><a class="nav-link active" href="{{route("tachedo")}}"><i class="fas fa-tachometer-alt"></i><span>Tâches Exécuter</span></a></li>
             @endif
         </ul>
 
