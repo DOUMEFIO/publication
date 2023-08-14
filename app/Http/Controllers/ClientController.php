@@ -16,6 +16,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Mail\OrderShipped;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use StephaneAss\Payplus\Pay\PayPlus;
 
@@ -266,10 +267,69 @@ class ClientController extends Controller
     }
 
     public function clienttacheencours(){
-        return view("client.encours");
+        $currentDate = Carbon::now()->toDateString();
+        $taches = Tache::has('travailleurs')
+        ->with('travailleurs')
+        ->get();
+        $clients = $taches->where('idClient',Auth::user()->id)
+        ->where('debut', '<=', $currentDate)
+        ->where('fin', '>=', $currentDate)
+        ->map(function ($tache) {
+        $travailleurs = $tache->travailleurs->map(function ($travailleur) {
+            return [
+                'nom' => $travailleur->nom,
+                'prenom' => $travailleur->prenom,
+            ];
+        })->toArray();
+        $infouser = User::where('id', $tache->idClient)
+        ->get(['nom', 'prenom'])->first();
+        $libelle = TypeTache::where('id', $tache->typetache)->get('libelle')->first();
+        return [
+            'idTache' => $tache->id,
+            'nomClient' => $infouser->nom,
+            'prenomClient' => $infouser->prenom,
+            'travailleurs' => $travailleurs,
+            'debut' => $tache->dedut,
+            'fin' => $tache->fin,
+            'libelle' => $libelle->libelle
+        ];
+        })->toArray();
+        return view("client.encours", compact('clients'));
     }
 
     public function clienttacheexecutez(){
-        return view("client.executez");
+        $taches = Tache::has('travailleurtaches')
+        ->with('travailleurtaches')
+        ->with('type')
+        ->with('travailleur')
+        ->get();
+        //dd($taches);
+        //dd($taches[0]->travailleurs[0]->pivot->capture);
+        $clientes = $taches->where('idClient',Auth::user()->id)->map(function ($tache) {
+            $travailleurs = $tache->travailleurtaches->groupBy('id')->map(function ($travailleursGroup) {
+                $totalVues = 0;
+                $travailleursGroup->each(function ($travailleur) use (&$totalVues) {
+                    $totalVues += $travailleur->pivot->totalVues;
+                });
+                $travailleur = $travailleursGroup->first();
+                return [
+                    'nom' => $travailleur->nom,
+                    'prenom' => $travailleur->prenom,
+                    'capture' => $travailleur->pivot->capture,
+                    'totalVues' => $totalVues
+                ];
+            })->toArray();
+
+            return [
+                'idTache' => $tache->id,
+                'debut' => $tache->debut,
+                'fin' => $tache->fin,
+                'libelle' => $tache->type->libelle,
+                'clientnom' => $tache->travailleur->nom,
+                'clientprenom' => $tache->travailleur->prenom,
+                'travailleurs' => $travailleurs,
+            ];
+        });
+        return view("client.executez", compact('clientes'));
     }
 }

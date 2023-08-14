@@ -1,32 +1,20 @@
 <x-app-layout>
+
     @section('contenue')
 
     <div class="container-fluid">
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modifier la photo de profil</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="card shadow">
             <div class="row card-header">
                 <div class="col md-9">
-                    <p class="text-primary m-0 fw-bold">LES TACHES ATTRIBUEE</p>
+                    <p class="text-primary m-0 fw-bold">LES TACHES EXECUTEES</p>
+                </div>
+                <div class="col md-3" style="padding-left: 600px">
                 </div>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6 text-nowrap">
-                        <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label class="form-label">Show&nbsp;<select class="d-inline-block form-select form-select-sm">
+                        <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label class="form-label">Voir&nbsp;<select class="d-inline-block form-select form-select-sm">
                                     <option value="10" selected="">10</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>
@@ -34,50 +22,65 @@
                                 </select>&nbsp;</label></div>
                     </div>
                     <div class="col-md-6">
-                        <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
+                        <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="Recherche..." class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
                     </div>
                 </div>
                 <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
                     <table class="table my-0" id="dataTable">
                         <thead>
                             <tr>
-                                <th>Tâches</th>
-                                <th>Début & Fin</th>
-                                <th>Fichier</th>
-                                <th>Déscription</th>
-                                <th>Vues Réalisées</th>
-                                <th>Média</th>
+                                <th>Taches</th>
+                                <th>Attribuer à</th>
+                                <th>Vues obtenir</th>
+                                <th>Créer par</th>
+                                <th>Période</th>
+                                <th>Type Tâche</th>
                             </tr>
                         </thead>
                         <tbody >
-                            @foreach ($taches as $tache)
+                            @foreach ($clientes as $client)
                                 <tr>
-                                    <td>T</td>
-                                    <td>{{ strftime('%A %e %B %Y', strtotime($tache->tacheall->debut)) }} <br> à
-                                        {{ strftime('%A %e %B %Y', strtotime($tache->tacheall->fin)) }}
+                                    <td>T{{$client['idTache']}}</td>
+                                    <td>
+                                        <ul>
+                                            @foreach ($client['travailleurs'] as $travailleur)
+                                                <li>{{ $travailleur['nom'] }}
+                                                    {{ $travailleur['prenom'] }}
+                                            @endforeach
+                                        </ul>
                                     </td>
-                                    <td>{{$tache->tacheall->type->libelle}}</td>
-                                    <td>{{$tache->tacheall->description}}</td>{{$tache->idTache}}
-                                    <td>{{$tache->totalVues}}</td>
-                                    <td>url</td>
+                                    <td>
+                                        <ul>
+                                            @foreach ($client['travailleurs'] as $travailleur)
+                                                <li>{{ $travailleur['totalVues'] }}
+                                            @endforeach
+                                        </ul>
+                                    </td>
+                                    <td>{{$client['clientnom'] }} {{$client['clientprenom']}}
+                                    </td>
+                                    <td>
+                                        {{ strftime('%A %e %B %Y', strtotime($client['debut'])) }} à</br>
+                                        {{ strftime('%A %e %B %Y', strtotime($client['fin'])) }}
+                                    </td>
+                                    <td>{{$client['libelle']}}</td>
                                 </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td><strong>Tâches</strong></td>
-                                <td><strong>Début & Fin</strong></td>
-                                <td><strong>Fichier</strong></td>
-                                <td><strong>Déscription</strong></td>
-                                <td><strong>Vues Réalisées</strong></td>
-                                <td><strong>Média</strong></td>
+                                <td><strong>Taches</strong></td></th>
+                                <td><strong>Attribuer à</strong></td></th>
+                                <td><strong>Vues obtenir</strong></td></th>
+                                <td><strong>Créer par</strong></td></th>
+                                <td><strong>Période</strong></td></th>
+                                <td><strong>Type Tâche</strong></td></th>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
                 <div class="row">
                     <div class="col-md-6 align-self-center">
-                        <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
+                        <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Trouver 1 to 10 of 27</p>
                     </div>
                     <div class="col-md-6">
                         <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">

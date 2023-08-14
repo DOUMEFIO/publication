@@ -4,12 +4,17 @@
     <div class="container py-2 col-6" style="font-size:20px;">
             <div class="card shadow">
                 <div class="card-header py-3">
+                    @if (session('info'))
+                        <div class="alert alert-success">
+                            {{ session('info') }}
+                        </div>
+                    @endif
                     <p class="text-primary m-0 fw-bold" style="text-align: center; font-size:20px"><strong>Completez vos informations</strong></p>
                 </div>
                 <div class="card-body">
                     <form class="user" method="POST" action="{{route('updatevues')}}" enctype="multipart/form-data">
                         @csrf
-                        <input type="text" value="{{$id}}" name="id" id="tacheIdInput">
+                        <input type="hidden" value="{{$id}}" name="id" id="tacheIdInput">
                         <div class="mb-3">
                             <label class="form-label"><strong>Nombres vues Realisée</strong></label>
                             <input type="number" value="" name="nbr_vue_moyen" class="form-control" required>

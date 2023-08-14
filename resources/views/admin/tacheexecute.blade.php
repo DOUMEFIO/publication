@@ -22,7 +22,7 @@
                                 </select>&nbsp;</label></div>
                     </div>
                     <div class="col-md-6">
-                        <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
+                        <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="Recherche..." class="form-control form-control-sm" aria-controls="dataTable" placeholder="Reccherche..."></label></div>
                     </div>
                 </div>
                 <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -30,25 +30,33 @@
                         <thead>
                             <tr>
                                 <th>Taches</th>
+                                <th>Attribuer à</th>
                                 <th>Vues obtenir</th>
                                 <th>Créer par</th>
-                                <th>Début & Fin</th>
+                                <th>Période</th>
                                 <th>Type Tâche</th>
                             </tr>
                         </thead>
                         <tbody >
-                            @foreach ($clients as $client)
+                            @foreach ($clientes as $client)
                                 <tr>
                                     <td>T{{$client['idTache']}}</td>
                                     <td>
                                         <ul>
                                             @foreach ($client['travailleurs'] as $travailleur)
-                                                <li>{{ $travailleur['nom'] }} 
-                                                    {{ $travailleur['prenom'] }}, {{ $travailleur['totalVues'] }}Vues</li>
+                                                <li>{{ $travailleur['nom'] }}
+                                                    {{ $travailleur['prenom'] }}
                                             @endforeach
                                         </ul>
                                     </td>
-                                    <td>{{$client['nomClient'] }} {{$client['prenomClient']}}
+                                    <td>
+                                        <ul>
+                                            @foreach ($client['travailleurs'] as $travailleur)
+                                                <li>{{ $travailleur['totalVues'] }}
+                                            @endforeach
+                                        </ul>
+                                    </td>
+                                    <td>{{$client['clientnom'] }} {{$client['clientprenom']}}
                                     </td>
                                     <td>
                                         {{ strftime('%A %e %B %Y', strtotime($client['debut'])) }} à</br>
@@ -61,9 +69,10 @@
                         <tfoot>
                             <tr>
                                 <td><strong>Taches</strong></td></th>
+                                <td><strong>Attribuer à</strong></td></th>
                                 <td><strong>Vues obtenir</strong></td></th>
                                 <td><strong>Créer par</strong></td></th>
-                                <td><strong>Début & Fin</strong></td></th>
+                                <td><strong>Période</strong></td></th>
                                 <td><strong>Type Tâche</strong></td></th>
                             </tr>
                         </tfoot>

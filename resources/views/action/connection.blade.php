@@ -87,28 +87,6 @@
                         <i class="fab fa-twitter me-2"></i> Google</a>
                     </div>
                 </div>
-
-                    @if($typetache == 1)
-                        <input type="hidden" value="{{$pay}}" name="pays">
-                        <input type="hidden" value="{{$centre}}" name="centre">
-                        <input type="hidden" value="{{$dep}}" name="departements">
-                        <input type="hidden" value="{{$vueRecherche}}" name="vueRecherche">
-                        <input type="hidden" value="{{$debut}}" name="debut">
-                        <input type="hidden" value="{{$fin}}" name="fin">
-                        <input type="hidden" value="{{$description}}" name="description">
-                        <input type="hidden" value="{{$typetache}}" name="typetache">
-                    @else
-                        <input type="hidden" value="{{$pay}}" name="pays">
-                        <input type="hidden" value="{{$centre}}" name="centre">
-                        <input type="hidden" value="{{$dep}}" name="departement">
-                        <input type="hidden" value="{{$vueRecherche}}" name="vueRecherche">
-                        <input type="hidden" value="{{$debut}}" name="debut">
-                        <input type="hidden" value="{{$fin}}" name="fin">
-                        <input type="hidden" value="{{$url}}" name="url">
-                        <input type="hidden" value="{{$description}}" name="description">
-                        <input type="hidden" value="{{$typetache}}" name="typetache">
-                    @endif
-
               </form>
             </div>
           </div>

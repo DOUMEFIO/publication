@@ -9,6 +9,7 @@ use App\Models\Pays;
 use App\Models\TravailleCentre;
 use App\Models\TypeTache;
 use App\Models\Tache;
+use App\Models\TachePreuve;
 use App\Models\TravailleurTache;
 use App\Models\User;
 use App\Models\Villes;
@@ -248,8 +249,8 @@ class InfluenceurController extends Controller
     public function influtachencour(){
         $taches = TravailleurTache::with('tacheall.type')
          ->where('idtravailleur', Auth::user()->id)
-         ->whereNull('totalVues')
          ->get();
+         //dd($taches);
         return view('influenceur.tacheattribuer', compact('taches'));
     }
 
@@ -261,23 +262,56 @@ class InfluenceurController extends Controller
         $avatar = $request->file('avatar');
         $path = $avatar->store('public/fichiers');
         $img = substr($path, 6);
-        $info = ([
-            'totalVues' => $request->nbr_vue_moyen,
-            'capture' => $img ,
-        ]);
-        DB::table('travailleur_tache')->where("id", $request->id)->update($info);
-        $taches = TravailleurTache::where('idtravailleur', Auth::user()->id)
-        ->whereNotNull('capture')
-        ->where('idtravailleur', Auth::user()->id)
-        ->get();
-        return view('influenceur.tacheexecute', compact('taches'));
+        $periode = Tache::select('fin', 'debut')
+               ->where('id', $request->id)
+               ->first();
+        $currentDate = now()->toDateString();
+        if ($currentDate >= $periode->debut && $currentDate <= $periode->fin) {
+            TachePreuve::create([
+                'idtravailleur' => Auth::user()->id,
+                'idTache' => $request->id,
+                'totalVues' => $request->nbr_vue_moyen,
+                'capture' => $img
+            ]);
+            $taches = TachePreuve::with("infotache")->get();
+            return redirect()->route('infl.tachencour')->with('info','Vos preuves ont été soumises.');
+        } else {
+           return redirect()->back()->with('info','Le délai de cette tâche est dépassé.');
+        }
     }
 
     public function tachedo(){
-        $taches = TravailleurTache::where('idtravailleur', Auth::user()->id)
-        ->whereNotNull('capture')
-        ->where('idtravailleur', Auth::user()->id)
+        $taches = Tache::has('travailleurtaches')
+        ->with('travailleurtaches')
+        ->with('type')
+        ->with('travailleur')
         ->get();
-        return view('influenceur.tacheexecute', compact('taches'));
+        $clientes = $taches->map(function ($tache) {
+            $travailleurs = $tache->travailleurtaches->where('id', 6)->groupBy('id')->map(function ($travailleursGroup) {
+                $totalVues = 0;
+                $travailleursGroup->each(function ($travailleur) use (&$totalVues) {
+                    $totalVues += $travailleur->pivot->totalVues;
+                });
+                $travailleur = $travailleursGroup->first();
+                return [
+                    'nom' => $travailleur->nom,
+                    'prenom' => $travailleur->prenom,
+                    'capture' => $travailleur->pivot->capture,
+                    'totalVues' => $totalVues
+                ];
+            })->toArray();
+
+            return [
+                'idTache' => $tache->id,
+                'debut' => $tache->debut,
+                'fin' => $tache->fin,
+                'libelle' => $tache->type->libelle,
+                'clientnom' => $tache->travailleur->nom,
+                'clientprenom' => $tache->travailleur->prenom,
+                'travailleurs' => $travailleurs,
+            ];
+        });
+        //dd($clientes);
+        return view('influenceur.tacheexecute', compact('clientes'));
     }
 }

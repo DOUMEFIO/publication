@@ -19,6 +19,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use StephaneAss\Payplus\Pay\PayPlus;
 
 class TacheController extends Controller
@@ -30,6 +31,23 @@ class TacheController extends Controller
         $departements=Departements::all();
         $villes=Villes::all();
         return view('tache.create', compact('fichiers','centres','pays','departements','villes'));
+    }
+
+    public function getFormDatas(Request $request){
+        $avatar = $request->session()->get('avatar');
+        return [
+            'centre' => $request->session()->get('centre'),
+            'pay' => $request->session()->get('pays'),
+            'dep' => $request->session()->get('departements'),
+            'vil' => $request->session()->get('ville'),
+            'vueRecherche' => $request->session()->get('vueRecherche'),
+            'debut' => $request->session()->get('debut'),
+            'fin' => $request->session()->get('fin'),
+            'url' => Storage::url($avatar),
+            'description' => $request->session()->get('description'),
+            'fin' => $request->session()->get('fin'),
+            'typetache' => $request->session()->get('typetache'),
+        ];
     }
 
     public function store(Request $request){
@@ -58,21 +76,19 @@ class TacheController extends Controller
             event(new Registered($user));
             RegistrationLinkController::send($user->email);
 
-            $id = User::where('email',$request->email)->get();
-
-            $user_id = $id[0]->id;
-            $img = substr($request->url, 9);
-            $tache = Tache::createTache($request, $user_id, $img);
-            $idtache = $tache->id;
-            $pay = !blank($request->pays) ? explode("," , $request->pays) : null;
-            $arraydep = !blank($request->departements) ? explode("," ,$request->departements) : null;
-            $arrayvil = !blank($request->ville) ? explode("," ,$request->ville) : null;
-            $arraycentre=$request->centre;
+            $users = User::where('email',$request->email)->get()->first();
+            $datas = $this->getFormDatas($request);
+            $img = substr($datas["url"], 9);
+            $tache = Tache::createTache($datas, $users->id, $img);
+            $pay = !blank($datas["pay"]) ? explode("," , $datas["pay"]) : null;
+            $arraydep = !blank($datas["dep"]) ? explode("," ,$datas["dep"]) : null;
+            $arrayvil = !blank($datas["vil"] ) ? explode("," ,$datas["vil"] ) : null;
+            $arraycentre = $datas["centre"] ;
             $centre = explode(",", $arraycentre);
             $centres=[];
             foreach ($centre as $value) {
                 $centres[] = [
-                    'idTache' => $idtache,
+                    'idTache' => $tache->id,
                     'idCentre' => $value,
                 ];
             }
@@ -85,7 +101,7 @@ class TacheController extends Controller
             if(!empty($pay)){
                 foreach ($pay as $value) {
                     $datapay[] = [
-                        'idTache' => $idtache,
+                        'idTache' => $tache->id,
                         'idPay' => $value,
                     ];
                 }
@@ -95,7 +111,7 @@ class TacheController extends Controller
             if(!empty($arraydep)){
                 foreach ($arraydep as $value) {
                     $datadep[] = [
-                        'idTache' => $idtache,
+                        'idTache' => $tache->id,
                         'idDepartement' => $value,
                     ];
                 }
@@ -105,7 +121,7 @@ class TacheController extends Controller
             if(!blank($arrayvil)){
                 foreach ($arrayvil as $value) {
                     $datavil[] = [
-                        'idTache' => $idtache,
+                        'idTache' => $tache->id,
                         'idVille' => $value,
                     ];
                 }
@@ -113,83 +129,78 @@ class TacheController extends Controller
             }
 
             Paiement::create([
-                'idUer' => $user_id,
-                'idTache' => $idtache,
+                'idUer' => $user->id,
+                'idTache' => $tache->id,
                 'montant' => 1000
             ]);
-
-            return Paiement::paiement($request, $tache->id , $user_id);
-
+           return Paiement::paiementdo($datas["vueRecherche"],$request, $tache->id , $user->id);
         }
     }
 
     public function login(Request $request, LoginRequest $req): RedirectResponse{
-        $id = User::where('email',$request->email)->get();
-        if (!empty($id)) {
-            $user = $id[0];
-            if (Hash::check($request->password, $user->password)) {
-                $user_id = $id[0]->id;
-                $img = substr($request->url, 9);
-                $tache = Tache::createTache($request, $user_id, $img);
-                $idtache = $tache->id;
-                $pay = !blank($request->pays) ? explode("," , $request->pays) : null;
-                $arraydep = !blank($request->departements) ? explode("," ,$request->departements) : null;
-                $arrayvil = !blank($request->ville) ? explode("," ,$request->ville) : null;
-                $arraycentre=$request->centre;
-                $centre = explode(",", $arraycentre);
-                $centres=[];
-                foreach ($centre as $value) {
-                    $centres[] = [
-                        'idTache' => $idtache,
-                        'idCentre' => $value,
+        $datas = $this->getFormDatas($request);
+        $user = User::where('email',$request->email)->first();
+        if (!blank($user) && Hash::check($request->password, $user->password)) {
+            $img = substr($datas["url"], 9);
+            $tache = Tache::createTache($datas, $user->id, $img);
+            $pay = !blank($datas["pay"]) ? explode("," , $datas["pay"]) : null;
+            $arraydep = !blank($datas["dep"]) ? explode("," ,$datas["dep"]) : null;
+            $arrayvil = !blank($datas["vil"] ) ? explode("," ,$datas["vil"] ) : null;
+            $arraycentre = $datas["centre"] ;
+            $centre = explode(",", $arraycentre);
+            $centres=[];
+            foreach ($centre as $value) {
+                $centres[] = [
+                    'idTache' => $tache->id,
+                    'idCentre' => $value,
+                ];
+            }
+            DB::table('tache_centre')->insert($centres);
+            //enregistrement de tache
+            $datapay = [];
+            $datadep = [];
+            $datavil = [];
+
+            if(!empty($pay)){
+                foreach ($pay as $value) {
+                    $datapay[] = [
+                        'idTache' => $tache->id,
+                        'idPay' => $value,
                     ];
                 }
-                DB::table('tache_centre')->insert($centres);
-                //enregistrement de tache
-                $datapay = [];
-                $datadep = [];
-                $datavil = [];
-
-                if(!empty($pay)){
-                    foreach ($pay as $value) {
-                        $datapay[] = [
-                            'idTache' => $idtache,
-                            'idPay' => $value,
-                        ];
-                    }
-                    DB::table('tache_zone')->insert($datapay);
-                }
-
-                if(!empty($arraydep)){
-                    foreach ($arraydep as $value) {
-                        $datadep[] = [
-                            'idTache' => $idtache,
-                            'idDepartement' => $value,
-                        ];
-                    }
-                    DB::table('tache_zone')->insert($datadep);
-                }
-
-                if(!blank($arrayvil)){
-                    foreach ($arrayvil as $value) {
-                        $datavil[] = [
-                            'idTache' => $idtache,
-                            'idVille' => $value,
-                        ];
-                    }
-                    DB::table('tache_zone')->insert($datavil);
-                }
-
-                Paiement::create([
-                    'idUer' => $user_id,
-                    'idTache' => $idtache,
-                    'montant' => 1000
-                ]);
-
-                return Paiement::paiement($request, $tache->id , $user_id);
+                DB::table('tache_zone')->insert($datapay);
             }
-            return redirect()->route('form.connection')->With('info',"L'utilisateur n'a pas été trouvé"); // Redirection vers une autre page par exemple
+
+            if(!empty($arraydep)){
+                foreach ($arraydep as $value) {
+                    $datadep[] = [
+                        'idTache' => $tache->id,
+                        'idDepartement' => $value,
+                    ];
+                }
+                DB::table('tache_zone')->insert($datadep);
+            }
+
+            if(!blank($arrayvil)){
+                foreach ($arrayvil as $value) {
+                    $datavil[] = [
+                        'idTache' => $tache->id,
+                        'idVille' => $value,
+                    ];
+                }
+                DB::table('tache_zone')->insert($datavil);
+            }
+
+            Paiement::create([
+                'idUer' => $user->id,
+                'idTache' => $tache->id,
+                'montant' => 1000
+            ]);
+            return Paiement::paiementdo($datas["vueRecherche"], $request, $tache->id , $user->id);
+        } elseif(!blank($user) && !Hash::check($request->password, $user->password)){
+            return redirect()->route('form.connection')->With('info',"Le mot de passe est incorrect"); // Redirection vers une autre page par exemple
         }
+        return redirect()->route('form.connection')->With('info',"L'utilisateur n'a pas été trouvé"); // Redirection vers une autre page par exemple
     }
 
     public function verify(Request $request){

@@ -4,22 +4,26 @@
     <div class="container py-2 col-6" style="font-size:20px;">
             <div class="card shadow">
                 <div class="card-header py-3">
-                    <p class="text-primary m-0 fw-bold" style="text-align: center; font-size:20px"><strong>Trouvez la preuve de</strong></p>
+                    <p class="text-primary m-0 fw-bold" style="text-align: center; font-size:20px"><strong>Trouver les preuves.</strong></p>
                 </div>
                 <div class="card-body">
-                    <form class="user" method="POST" action="" enctype="multipart/form-data">
+                    <form class="user" method="POST" action="{{route('showPreuve')}}" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
-                            <label class="form-label"><strong>Nom</strong></label>
-                            <input type="number" value="" name="nbr_vue_moyen" class="form-control" required>
+                            <label class="form-label"><strong>Tâche</strong></label>
+                            <select class="form-control" name="idTache">
+                                @foreach ($taches as $tache)
+                                    <option value="{{$tache->id}}">T{{$tache->id}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label"><strong>Prenom</strong></label>
-                            <input type="number" value="" name="nbr_vue_moyen" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label"><strong>Tache conserner</strong></label>
-                            <input type="integer" class="form-control" id="avatar" name="avatar" value="">
+                            <label class="form-label"><strong>Travailleur</strong></label>
+                            <select class="form-control" name="idTravailleur">
+                                @foreach ($travailleurs as $travailleur)
+                                    <option value="{{$travailleur->id}}">{{$travailleur->nom}} {{$travailleur->prenom}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <button type="submit" id="submitModal" class="btn btn-primary">Soumettre</button>
                     </form>

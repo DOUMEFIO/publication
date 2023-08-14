@@ -4,6 +4,7 @@
     use App\Models\CentreInteret;
     use App\Models\Departements;
     use App\Models\InfoInfluenceur;
+    use App\Models\TachePreuve;
     use App\Models\Pays;
     use App\Models\Tache;
     use App\Models\TravailleCentre;
@@ -125,7 +126,7 @@ class AdminController extends Controller
                 $uniqueItems[] = $items;
                 $total += $item->nbr_vue_moyen;
             }
-            
+
         }
         $result = $uniqueItems;
         //dd( $result);
@@ -233,7 +234,7 @@ class AdminController extends Controller
            if(empty($listvil) && empty($listdep)){
             $paytableau = $listpay;
            }
-           $depalltableau = Departements::where("country_id",$paytableau)->pluck("id")->implode(",");
+           $depalltableau = Departements::whereIn("country_id",$paytableau)->pluck("id")->implode(",");
            $depalltableau = explode("," , $depalltableau);
            $valeurs_users = [];
             foreach ($result as $element) {
@@ -241,6 +242,7 @@ class AdminController extends Controller
                     $valeurs_users[] = $element["users"];
                 }
             }
+            //dd($depalltableau);
             $resultat = implode(",", $valeurs_users);
            $items1 = InfoInfluenceur::join('users', 'users.id', '=', 'info_influenceur.id_user')
             ->join('travailleur_centre_interet', 'travailleur_centre_interet.id_User', '=', 'info_influenceur.id_user')
@@ -254,22 +256,32 @@ class AdminController extends Controller
             ->get();
 
         $totalinflu=0;
+        $vuesnew = $vue - $total;
+        //dd($vue, $total,$vuesnew);
+        $resultArray = [];
+
         foreach ($items1 as $iteminflu) {
             $userId = $iteminflu->id_User;
-            // Vérifier si l'id_User existe déjà dans le tableau d'identifiants uniques
-            if (!in_array($userId, $uniqueIds)) {
+            $vue = $iteminflu->nbr_vue_moyen;
 
-                $uniqueIds[] = $userId;
-                $items2 = ([
-                    "users" => $iteminflu->id_User,
-                    "vue" => $iteminflu->nbr_vue_moyen
-
-                ]);
-                $uniqueItems[] = $items2;
-                $totalinflu += $iteminflu->nbr_vue_moyen;
+            if (!isset($resultArray[$userId])) {
+                $resultArray[$userId] = [
+                    'id_User' => $userId,
+                    'nbr_vue_moyen' => $vue
+                ];
             }
         }
-        $vuesnew = $vue - $total;
+
+        // Réindexer le tableau pour obtenir des clés numériques
+        $resultArray = array_values($resultArray);
+        foreach ($resultArray as $element) {
+            if (isset($element["users"])) {
+                $uniqueIds[] = $element["users"];
+            }
+        }
+        $uniqueUsersnew = array_unique(array_column($resultArray, 'id_User'));
+        $uniqueUsersnews = array_values($uniqueUsersnew);
+
         //$closestLowerDifference = PHP_INT_MAX; $selectedElement = null;
         foreach ($uniqueItems as $element) {
             $ecart = abs($element['vue'] - $vuesnew); // Calculer l'écart entre la valeur de l'élément et la valeur cible
@@ -278,25 +290,73 @@ class AdminController extends Controller
                 $element_superieur = $element;
             }
         }
+        //dd($vuesnew,$element_superieur);
         $value = $element_superieur["users"];
         $value = explode(",",$value);
         $values = explode(",",$resultat);
-        $influenceursuperieur = array_diff($value, $values);
-        foreach ($influenceursuperieur as $userId) {
-            DB::table('travailleur_tache')->insert([
-                'idtravailleur'=>$userId,
-                'idTache'=>$id,
-                'idAdmin'=>Auth::user()->id
-            ]);
+        $influenceursuperieur = array_diff($values, $value);
+        //dd($values, $value,$influenceursuperieur);
+        $filteredData = [];
+        $totaux = 0;
+        foreach ($uniqueItems as $itemNew) {
+
+            if (in_array($itemNew["users"], $influenceursuperieur)) {
+                $filteredData[] = $itemNew;
+                $totaux += $itemNew["vue"];
+            }
+        }
+        if($vuesnew >= $totaux){
+            $userValues = [];
+            foreach ($filteredData as $item) {
+                $userValues[] = $item["users"];
+            }
+            //dd($vuesnew , $totaux,$uniqueUsersnews,$value,$values,5);
+            foreach ($uniqueUsersnews  as $userId) {
+                DB::table('travailleur_tache')->insert([
+                    'idtravailleur'=>$userId,
+                    'idTache'=>$id,
+                    'idAdmin'=>Auth::user()->id
+                ]);
+            }
+
+            foreach ($value  as $userId) {
+                DB::table('travailleur_tache')->insert([
+                    'idtravailleur'=>$userId,
+                    'idTache'=>$id,
+                    'idAdmin'=>Auth::user()->id
+                ]);
+            }
+
+        }else{
+            $closestValue = null;
+            $closestUsers = null;
+            foreach ($filteredData as $item) {
+                $currentValue = $item["vue"];
+                if ($closestValue === null || abs($currentValue - $vuesnew) < abs($closestValue - $vuesnew)) {
+                    $closestValue = $currentValue;
+                    $closestUsers = $item["users"];
+                }
+            }
+
+             $numberArray = array($closestUsers);
+             //dd($vuesnew , $totaux,$numberArray,$values,$value,6);
+             foreach ($numberArray  as $userId) {
+                DB::table('travailleur_tache')->insert([
+                    'idtravailleur'=>$userId,
+                    'idTache'=>$id,
+                    'idAdmin'=>Auth::user()->id
+                ]);
+            }
+
+            foreach ($value  as $userId) {
+                DB::table('travailleur_tache')->insert([
+                    'idtravailleur'=>$userId,
+                    'idTache'=>$id,
+                    'idAdmin'=>Auth::user()->id
+                ]);
+            }
         }
 
-        foreach ($values  as $userId) {
-            DB::table('travailleur_tache')->insert([
-                'idtravailleur'=>$userId,
-                'idTache'=>$id,
-                'idAdmin'=>Auth::user()->id
-            ]);
-        }
     }
         return redirect()->route("admin.tache");
     }
@@ -305,7 +365,6 @@ class AdminController extends Controller
         $taches = Tache::has('travailleurs')
         ->with('travailleurs')
         ->get();
-
         $clients = $taches->map(function ($tache) {
         $travailleurs = $tache->travailleurs->map(function ($travailleur) {
             return [
@@ -330,40 +389,53 @@ class AdminController extends Controller
     }
 
     public function executez(){
-        $taches = Tache::has('travailleurs')
-        ->with('travailleurs')
+        $taches = Tache::has('travailleurtaches')
+        ->with('travailleurtaches')
+        ->with('type')
+        ->with('travailleur')
         ->get();
         //dd($taches);
         //dd($taches[0]->travailleurs[0]->pivot->capture);
-        $clients = $taches->map(function ($tache) {
-            $travailleurs = $tache->travailleurs->filter(function ($travailleur) {
-                return $travailleur->pivot->capture !== null && $travailleur->pivot->totalVues !== null;
-            })->map(function ($travailleur) {
+        $clientes = $taches->map(function ($tache) {
+            $travailleurs = $tache->travailleurtaches->groupBy('id')->map(function ($travailleursGroup) {
+                $totalVues = 0;
+                $travailleursGroup->each(function ($travailleur) use (&$totalVues) {
+                    $totalVues += $travailleur->pivot->totalVues;
+                });
+                $travailleur = $travailleursGroup->first();
                 return [
                     'nom' => $travailleur->nom,
                     'prenom' => $travailleur->prenom,
                     'capture' => $travailleur->pivot->capture,
-                    'totalVues' => $travailleur->pivot->totalVues,
+                    'totalVues' => $totalVues
                 ];
             })->toArray();
-        $infouser = User::where('id', $tache->idClient)->get(['nom', 'prenom'])->first();
-        $libelle = TypeTache::where('id', $tache->typetache)->get('libelle')->first();
-        return [
-            'idTache' => $tache->id,
-            'nomClient' => $infouser->nom,
-            'capture' => $infouser->capture,
-            'totalVues' => $infouser->totalVues,
-            'prenomClient' => $infouser->prenom,
-            'travailleurs' => $travailleurs,
-            'debut' => $tache->dedut,
-            'fin' => $tache->fin,
-            'libelle' => $libelle->libelle
-        ];
-    })->toArray();
-        return view('admin.tacheexecute', compact('clients'));
+
+            return [
+                'idTache' => $tache->id,
+                'debut' => $tache->debut,
+                'fin' => $tache->fin,
+                'libelle' => $tache->type->libelle,
+                'clientnom' => $tache->travailleur->nom,
+                'clientprenom' => $tache->travailleur->prenom,
+                'travailleurs' => $travailleurs,
+            ];
+        });
+        //dd($clientes);
+        return view('admin.tacheexecute', compact('clientes'));
     }
 
     public function preuve(){
-        return view("admin.preuve");
+        $taches = Tache::all();
+        $travailleurs = User::where("idProfil" , 2)->get();
+        return view("admin.preuve", compact("taches","travailleurs"));
+    }
+
+    public function showPreuve(Request $request){
+        $preuves = TachePreuve::where("idtravailleur",$request->idTravailleur)
+        ->where("idTache", $request->idTache)
+        ->get();
+        $totalVues = $preuves->sum('totalVues');
+        return view("admin.showpreuves", compact("preuves","totalVues"));
     }
 }

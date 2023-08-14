@@ -8,13 +8,13 @@
                     <p class="text-primary m-0 fw-bold">LES TACHES SOUMISES</p>
                 </div>
                 <div class="col md-3" style="padding-left: 600px">
-                    <span class="odd px-0"><a href="#" class="btn btn-primary">AJOUTER UNE TACHE</a></span>
+                    {{-- <span class="odd px-0"><a href="#" class="btn btn-primary">AJOUTER UNE TACHE</a></span> --}}
                 </div>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6 text-nowrap">
-                        <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label class="form-label">Show&nbsp;<select class="d-inline-block form-select form-select-sm">
+                        <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label class="form-label">Voir&nbsp;<select class="d-inline-block form-select form-select-sm">
                                     <option value="10" selected="">10</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>
@@ -22,7 +22,7 @@
                                 </select>&nbsp;</label></div>
                     </div>
                     <div class="col-md-6">
-                        <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
+                        <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="Recherche..." class="form-control form-control-sm" aria-controls="dataTable" placeholder="Recherche..."></label></div>
                     </div>
                 </div>
                 <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -34,9 +34,9 @@
                                 <th>Vues Rechercher</th>
                                 <th>Type de fichier</th>
                                 <th>Déscription</th>
-                                <th>Centre</th>
-                                <th>Zone</th>
-                                <th>Média</th>
+                                <th>Centres</th>
+                                <th>Zones</th>
+                                <th>Médias</th>
                             </tr>
                         </thead>
                         <tbody >
@@ -64,16 +64,16 @@
                                 <td><strong>Vues Recherchées</strong></td>
                                 <td><strong>Type de fichier</strong></td>
                                 <td><strong>Déscription</strong></td>
-                                <td><strong>Centre</strong></td>
-                                <td><strong>Zone</strong></td>
-                                <td><strong>Média</strong></td>
+                                <td><strong>Centres</strong></td>
+                                <td><strong>Zones</strong></td>
+                                <td><strong>Médias</strong></td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
                 <div class="row">
                     <div class="col-md-6 align-self-center">
-                        <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
+                        <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Trouver 1 to 10 of 27</p>
                     </div>
                     <div class="col-md-6">
                         <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">

@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('travailleur_tache', function (Blueprint $table) {
+        Schema::create('tache_preve', function (Blueprint $table) {
             $table->id();
             $table->foreignId('idtravailleur')->constrained('users');
-            $table->foreignId('idAdmin')->constrained('users');
             $table->foreignId('idTache')->constrained('tache');
+            $table->integer('totalVues');
+            $table->string('capture');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('travailleur_tache');
+        Schema::dropIfExists('tache_preve');
     }
 };

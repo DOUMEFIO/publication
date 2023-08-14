@@ -73,30 +73,6 @@
                                     @if(session()->has('error'))
                                         <div class="alert alert-danger"> {!! session('error') !!}</div>
                                     @endif
-
-                                    @if($typetache == 1)
-                                        <input type="hidden" value="{{$pay}}" name="pays">
-                                        <input type="hidden" value="{{$centre}}" name="centre">
-                                        <input type="hidden" value="{{$dep}}" name="departements">
-                                        <input type="hidden" value="{{$vil}}" name="ville">
-                                        <input type="hidden" value="{{$vueRecherche}}" name="vueRecherche">
-                                        <input type="hidden" value="{{$debut}}" name="debut">
-                                        <input type="hidden" value="{{$fin}}" name="fin">
-                                        <input type="hidden" value="{{$description}}" name="description">
-                                        <input type="hidden" value="{{$typetache}}" name="typetache">
-                                    @else
-                                        <input type="hidden" value="{{$pay}}" name="pays">
-                                        <input type="hidden" value="{{$centre}}" name="centre">
-                                        <input type="hidden" value="{{$dep}}" name="departement">
-                                        <input type="hidden" value="{{$vil}}" name="ville">
-                                        <input type="hidden" value="{{$vueRecherche}}" name="vueRecherche">
-                                        <input type="hidden" value="{{$debut}}" name="debut">
-                                        <input type="hidden" value="{{$fin}}" name="fin">
-                                        <input type="hidden" value="{{$url}}" name="url">
-                                        <input type="hidden" value="{{$description}}" name="description">
-                                        <input type="hidden" value="{{$typetache}}" name="typetache">
-                                    @endif
-
                                     <div class="d-flex justify-content-end py-3 px-3">
                                         <button type="submit" class="btn btn-primary" >Enregistrer</button>
                                     </div>

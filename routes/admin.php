@@ -31,5 +31,8 @@ Route::middleware('auth')->group(function (){
 
     Route::get('preuve', [AdminController::class, 'preuve'])
         ->name('preuve');
+
+    Route::post('showPreuve', [AdminController::class, 'showPreuve'])
+        ->name('showPreuve');
 });
 

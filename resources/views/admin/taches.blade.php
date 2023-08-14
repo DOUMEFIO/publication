@@ -22,7 +22,7 @@
                                 </select>&nbsp;</label></div>
                     </div>
                     <div class="col-md-6">
-                        <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
+                        <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="Recherche..." class="form-control form-control-sm" aria-controls="dataTable" placeholder="Recherche..."></label></div>
                     </div>
                 </div>
                 <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -33,8 +33,8 @@
                                 <th>Période</th>
                                 <th>Vues Rechercher</th>
                                 <th>Type de fichier</th>
-                                <th>Centre</th>
-                                <th>Zone</th>
+                                <th>Centres</th>
+                                <th>Zones</th>
                                 <th>N° Tâche</th>
                                 <th>Action</th>
                             </tr>
@@ -74,11 +74,11 @@
                         <tfoot>
                             <tr>
                                 <td><strong>Nom & Prénom</strong></td>
-                                <td><strong>Début & Fin</strong></td>
-                                <td><strong>Vues Recherchées</strong></td>
+                                <td><strong>Période</strong></td>
+                                <td><strong>Vues Rechercher</strong></td>
                                 <td><strong>Type de fichier</strong></td>
-                                <td><strong>Centre</strong></td>
-                                <td><strong>Zone</strong></td>
+                                <td><strong>Centres</strong></td>
+                                <td><strong>Zones</strong></td>
                                 <td><strong>N° Tâche</strong></td>
                                 <td><strong>Action</strong></td>
                             </tr>

@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TravailleurTache extends Model
+class TachePreuve extends Model
 {
     use HasFactory;
-    protected $table="travailleur_tache";
-    protected $fillable=['idtravailleur','idTache','totalVues','idAdmin'];
+    protected $table="tache_preve";
+    protected $fillable=['idtravailleur','idTache','totalVues','capture'];
 
-    public function tacheall()
+    public function infotache()
         {
             return $this->belongsTo(Tache::class,'idTache');
         }

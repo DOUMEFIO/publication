@@ -24,6 +24,11 @@
                         <h4 class="text-black ">Passer une commande</h4>
                         <h5 id="total" style="display:none;"></h5>
                     </div>
+                    @if (session('info'))
+                        <div class="alert alert-success">
+                            {{ session('info') }}
+                        </div>
+                    @endif
                     @if (session('error'))
                         <div class="alert alert-danger">
                             {{ session('error') }}
