@@ -14,7 +14,7 @@
                 @endif
                 <div class="col-lg-4">
                     <div class="card mb-3">
-                        <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="{{asset('storage'.$profil[0]->profil)}}" width="160" height="160">
+                        <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="{{asset('storage'.$profil[0]->photpProfil)}}" width="160" height="160">
                             <div class="mb-3">
                                 <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Modifier la photo</button>
                             </div>
@@ -117,6 +117,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <input type="hidden" value="{{$idlibelles}}" name="idlibelles">
                                         <div class="row" id="noninputs">
                                             <div class="col">
                                                 <div class="mb-3"><label class="form-label" for="last_name"><strong>Centre d'intérets:</strong></label>
@@ -133,8 +134,9 @@
                                             <div class="col">
                                                 <div class="mb-3 ">
                                                     <label class="form-label" ><strong>Vos centres d’intérêts</strong> </label>
-                                                    <select class="selectpicker form-control" multiple name='id_centre[]' required>
-
+                                                    <select class="selectpicker form-control" data-none-results-text="No results matched {0}" title="Selctionner les centres d’intérêts"
+                                                    multiple name='id_centre[]' >
+                                                    <option disabled selected value="{{$idlibelles}}">{{ $libelles->implode(' ,', ', ') }}</option>
                                                         @foreach ($centres as $centre)
                                                             <option value="{{$centre->id}}">{{$centre->libelle}}</option>
                                                         @endforeach

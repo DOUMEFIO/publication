@@ -1,7 +1,7 @@
 <x-app-layout>
     @section('contenue')
 
-    <div class="container-fluid">
+    <div class="modal-body">
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -33,7 +33,7 @@
         </div>
 
         <div class="card shadow">
-            <div class="row card-header">
+            <div class="row card-body">
                 @if (session('info'))
                         <div class="alert alert-success">
                             {{ session('info') }}

@@ -26,6 +26,7 @@ class User extends Authenticatable
         'prenom',
         'email',
         'idProfil',
+        'photpProfil',
         'password',
     ];
 

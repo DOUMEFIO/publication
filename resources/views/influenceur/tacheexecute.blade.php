@@ -4,7 +4,7 @@
 
     <div class="container-fluid">
         <div class="card shadow">
-            <div class="row card-header">
+            <div class="row card-body">
                 <div class="col md-9">
                     <p class="text-primary m-0 fw-bold">LES TACHES EXECUTEES</p>
                 </div>
@@ -66,16 +66,6 @@
                                 </tr>
                             @endforeach
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td><strong>Taches</strong></td></th>
-                                <td><strong>Attribuer à</strong></td></th>
-                                <td><strong>Vues obtenir</strong></td></th>
-                                <td><strong>Créer par</strong></td></th>
-                                <td><strong>Période</strong></td></th>
-                                <td><strong>Type Tâche</strong></td></th>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
                 <div class="row">

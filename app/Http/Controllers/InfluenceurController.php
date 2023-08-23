@@ -29,16 +29,16 @@ class InfluenceurController extends Controller
                 ->leftJoin('pays', 'info_influenceur.id_pay', '=', 'pays.id')
                 ->leftJoin('departements', 'info_influenceur.id_departement', '=', 'departements.id')
                 ->leftJoin('villes', 'info_influenceur.id_ville', '=', 'villes.id')
-                ->select('info_influenceur.profil','users.id','users.idProfil' ,'users.nom', 'users.prenom', 'info_influenceur.tel', 'pays.name as pays', 'departements.name as departement',
+                ->select('users.photpProfil','users.id','users.idProfil' ,'users.nom', 'users.prenom', 'info_influenceur.tel', 'pays.name as pays', 'departements.name as departement',
                  'villes.name as ville','info_influenceur.nbr_vue_moyen', DB::raw('GROUP_CONCAT(centre_interet.libelle SEPARATOR \', \') as interests'))
-                ->groupBy('info_influenceur.profil','users.id','info_influenceur.nbr_vue_moyen','users.idProfil' ,'users.nom', 'users.prenom', 'info_influenceur.tel', 'pays', 'departement', 'ville')
+                ->groupBy('users.photpProfil','users.id','info_influenceur.nbr_vue_moyen','users.idProfil' ,'users.nom', 'users.prenom', 'info_influenceur.tel', 'pays', 'departement', 'ville')
                 ->where('users.idProfil',2)
                 ->get();
         return view('influenceur.show', compact('users','alls'));
     }
 
     public function influenceurconnect(){
-        $profil=InfoInfluenceur::where('id_User',Auth::user()->id)->get('profil');
+        $profil=User::where('id', Auth::user()->id)->get('photpProfil');
         $users=InfoInfluenceur::where('id_User',Auth::user()->id)->get();
         $centres=CentreInteret::all();
         $pays=Pays::all();
@@ -57,7 +57,8 @@ class InfluenceurController extends Controller
                 $result[$key] = $value ?: 0;
             }
             $libelles = CentreInteret::whereIn('id', $result)->pluck('libelle');
-            return view('influenceur.index', compact("pays","users","centreInteret","libelles","centres","profil"));
+            $idlibelles = CentreInteret::whereIn('id', $result)->pluck('id');
+            return view('influenceur.index', compact("pays","users","centreInteret","idlibelles","libelles","centres","profil"));
         }else{
             $url = url("confirm/" . Auth::user()->id);
             return redirect($url);
@@ -229,7 +230,7 @@ class InfluenceurController extends Controller
         $avatar = $request->file('avatar');
         $path = $avatar->store('public/fichiers');
         $img = substr($path, 6);
-        DB::table('info_influenceur')->where('id_User', Auth::user()->id)->update(['profil' => $img]);
+        DB::table('users')->where('id', Auth::user()->id)->update(['photpProfil' => $img]);
         return redirect()->route("influenceurconnect");
     }
 
@@ -241,7 +242,16 @@ class InfluenceurController extends Controller
 
         User::updateUser($request, Auth::user()->id);
 
-        TravailleCentre::userCentre(Auth::user()->id, $request->id_centre);
+        if(!blank ($request->id_centre)){
+            $anciensEnregistrements = array_slice($request->id_centre, 1);
+            $anciensEnregistrements1 = json_decode($request->idlibelles);
+            $nouveauxEnregistrements = array_merge(
+                array_map('strval', $anciensEnregistrements1),
+                $anciensEnregistrements
+            );
+            $nouveauxEnregistrements = array_unique($nouveauxEnregistrements);
+            TravailleCentre::userCentre(Auth::user()->id, $nouveauxEnregistrements);
+        }
 
         return redirect()->route("influenceurconnect");
     }

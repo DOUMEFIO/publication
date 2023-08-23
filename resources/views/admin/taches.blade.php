@@ -1,32 +1,13 @@
 <x-app-layout>
     @section('contenue')
-
-    <div class="container-fluid">
-        <div class="card shadow">
-            <div class="row card-header">
-                <div class="col md-9">
-                    <p class="text-primary m-0 fw-bold">LES TACHES SOUMISES</p>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Modal Data Datatables</h5>
                 </div>
-                <div class="col md-3" style="padding-left: 600px">
-                    <span class="odd px-0"><a href="#" class="btn btn-primary">AJOUTER UNE TACHE</a></span>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 text-nowrap">
-                        <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label class="form-label">Show&nbsp;<select class="d-inline-block form-select form-select-sm">
-                                    <option value="10" selected="">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                </select>&nbsp;</label></div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="Recherche..." class="form-control form-control-sm" aria-controls="dataTable" placeholder="Recherche..."></label></div>
-                    </div>
-                </div>
-                <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
-                    <table class="table my-0" id="dataTable">
+                <div class="card-body">
+                    <table id="model-datatables" class="table table-bordered nowrap table-striped align-middle" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Nom & Prénom</th>
@@ -39,10 +20,10 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody >
+                        <tbody>
                             @foreach ($taches as $tache)
                                 <tr>
-                                    <td>{{$tache->nom}} {{$tache->prenom}}</</td>
+                                    <td>{{$tache->nom}} {{$tache->prenom}}</td>
                                     <td>{{ strftime('%A %e %B %Y', strtotime($tache->debut)) }} à
                                         {{ strftime('%A %e %B %Y', strtotime($tache->fin)) }}
                                     </td>
@@ -57,52 +38,39 @@
                                     </td>
                                     <td>T{{$tache->nbr}}</td>
                                     <td>
-                                        <div class="py-1">
-                                            <a href="{{route('attribuer.tache', ['id' => $tache->nbr,
-                                                'vues' =>$tache->vueRecherche, 'centre' =>$tache->idcentre,
-                                                'pay' => !empty($tache->idpays) ?  $tache->idpays: 0,
-                                                'dep' => !empty($tache->iddepartements) ? $tache->iddepartements : 0,
-                                                'vil' => !empty($tache->idvilles) ?  $tache->idvilles: 0])}}" class="btn btn-success"><i class="fa fa-check"></i>Valider</a>
-                                        </div>
-                                        <div>
-                                            <a href="{{route('showtache.client', ['id' => $tache->nbr])}}" class="btn btn-warning"><i class="fa fa-check"></i>Voir Plus</a>
+                                        <div class="dropdown d-inline-block">
+                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ri-more-fill align-middle"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li>
+                                                    <a class="dropdown-item" href="{{route('attribuer.tache', ['id' => $tache->nbr,
+                                                        'vues' =>$tache->vueRecherche, 'centre' =>$tache->idcentre,
+                                                        'pay' => !empty($tache->idpays) ?  $tache->idpays: 0,
+                                                        'dep' => !empty($tache->iddepartements) ? $tache->iddepartements : 0,
+                                                        'vil' => !empty($tache->idvilles) ?  $tache->idvilles: 0])}}" class="btn btn-success">
+                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>Valider
+                                                    </a>
+                                                <li>
+                                                    <a class="dropdown-item edit-item-btn" href="{{route('showtache.client', ['id' => $tache->nbr])}}" class="btn btn-warning">
+                                                        <i class="ri-eye-fill align-bottom me-2 text-muted"></i>Voir Plus
+                                                    </a>
+                                                </li>
+                                                {{-- <li>
+                                                    <a class="dropdown-item remove-item-btn">
+                                                        <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete
+                                                    </a>
+                                                </li> --}}
+                                            </ul>
                                         </div>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td><strong>Nom & Prénom</strong></td>
-                                <td><strong>Période</strong></td>
-                                <td><strong>Vues Rechercher</strong></td>
-                                <td><strong>Type de fichier</strong></td>
-                                <td><strong>Centres</strong></td>
-                                <td><strong>Zones</strong></td>
-                                <td><strong>N° Tâche</strong></td>
-                                <td><strong>Action</strong></td>
-                            </tr>
-                        </tfoot>
                     </table>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 align-self-center">
-                        <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
-                    </div>
-                    <div class="col-md-6">
-                        <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
-                            <ul class="pagination">
-                                <li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
-                            </ul>
-                        </nav>
-                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </div><!--end row-->
     @endsection
 </x-app-layout>

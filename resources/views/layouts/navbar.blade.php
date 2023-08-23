@@ -1,37 +1,68 @@
-<nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
-    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
-        
-        <ul class="navbar-nav flex-nowrap ms-auto">
-            <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><i class="fas fa-search"></i></a>
-                <div class="dropdown-menu dropdown-menu-end p-3 animated--grow-in" aria-labelledby="searchDropdown">
-                    <form class="me-auto navbar-search w-100">
-                        <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Recherche ...">
-                            <div class="input-group-append"><button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button></div>
-                        </div>
-                    </form>
-                </div>
-            </li>
-            <div class="d-none d-sm-block topbar-divider"></div>
-            <li class="nav-item dropdown no-arrow">
-                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small">{{ Auth::user()->nom }} {{ Auth::user()->prenom }}</span><img class="border rounded-circle img-profile" src="{{asset('template/assets/img/dogs/image2.jpeg')}}"></a>
-                    <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
-                        <a class="dropdown-item" href="#">
-                            <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;{{ Auth::user()->nom }} {{ Auth::user()->prenom }}
-                        </a>
+<header id="page-topbar">
+    <div class="layout-width">
+        <div class="navbar-header">
+            <div class="d-flex">
+                <!-- LOGO -->
+                <div class="navbar-brand-box horizontal-logo">
+                    <a href="index.html" class="logo logo-dark">
+                        <span class="logo-sm">
+                            <img src="{{asset('velson/images/logo-sm.png')}}" alt="" height="22">
+                        </span>
+                        <span class="logo-lg">
+                            <img src="{{asset('velson/images/logo-dark.png')}}" alt="" height="17">
+                        </span>
+                    </a>
 
-                        <a class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw me-2 text-gray-400">
-                            </i>&nbsp;{{ Auth::user()->profil->profilLibelle }}
-                        </a>
-                        <div class="dropdown-divider">
-                        </div>
+                    <a href="index.html" class="logo logo-light">
+                        <span class="logo-sm">
+                            <img src="{{asset('velson/images/logo-sm.png')}}" alt="" height="22">
+                        </span>
+                        <span class="logo-lg">
+                            <img src="{{asset('velson/images/logo-light.png')}}" alt="" height="17">
+                        </span>
+                    </a>
+                </div>
+
+                <button type="button" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger"
+                    id="topnav-hamburger-icon">
+                    <span class="hamburger-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </button>
+
+                <!-- App Search-->
+            </div>
+
+            <div class="d-flex align-items-center">
+                <div class="dropdown ms-sm-3 header-item topbar-user">
+                    <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <span class="d-flex align-items-center">
+                            <img class="rounded-circle header-profile-user" src="{{asset('velson/images/users/avatar-1.jpg')}}"
+                                alt="Header Avatar">
+                            <span class="text-start ms-xl-2">
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ Auth::user()->nom }} {{ Auth::user()->prenom }}</span>
+                                <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{{ Auth::user()->profil->profilLibelle }}</span>
+                            </span>
+                        </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- item-->
+                        <h6 class="dropdown-header" >Bienvenue {{ Auth::user()->nom }}!</h6>
                         <a class="dropdown-item" href="" onclick="event.preventDefault();
                         this.closest('form').submit();">
-                        <form method="get" action="{{route('logout')}}">
-                            <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>{{ __('Se Déconnecter') }}</a>
-                        </form>
+                            <span class="align-middle" data-key="t-logout">
+                                <form method="get" action="{{route('logout')}}">
+                                    <i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>
+                                    {{ __('Se Déconnecter') }}</a>
+                                </form>
+                            </span>
+                        </a>
                     </div>
                 </div>
-            </li>
-        </ul>
+            </div>
+        </div>
     </div>
-</nav>
+</header>

@@ -1,96 +1,121 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <style>
-        .divider:after,
-        .divider:before {
-        content: "";
-        flex: 1;
-        height: 1px;
-        background: #eee;
-}
-    </style>
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/register.css') }}">
-    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
-    <title>Document</title>
-</head>
+<!doctype html>
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
+
+
+<!-- Mirrored from themesbrand.com/velzon/html/default/auth-signin-basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 23 Nov 2022 16:41:56 GMT -->
+@include("layouts.header")
+
 <body>
-    <section >
-        <div class="container py-5 col-10" >
-            <div class="row">
-              <div class=" row d-flex align-items-center justify-content-center h-100">
-                <div class="card col-md-12 col-lg-5 col-xl-5 offset-xl-1 py-3">
-                    @if (session('info'))
-                        <div class="alert alert-success">
-                            {{ session('info') }}
-                        </div>
-                    @endif
-                    <h3 style="text-align: center; color:blue">CONNECTEZ-VOUS</h3>
-                <form method="POST" action="{{route('connecte')}}">
-                    @csrf
-                <!-- Email input -->
-                <div class="form-outline mb-4">
-                  <x-input-label for="email" :value="__('Email')" />
-                  <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-                  <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                </div>
 
-                <!-- Password input -->
-                <div class="form-outline mb-4">
-                    <x-input-label for="password" :value="__('Password')" />
+    <div class="auth-page-wrapper pt-5">
+        <!-- auth page bg -->
+        <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
+            <div class="bg-overlay"></div>
 
-                    <x-text-input id="password" class="block mt-1 w-full"
-                                    type="password"
-                                    name="password"
-                                    required autocomplete="current-password" />
-
-                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                </div>
-
-                <div class="d-flex justify-content-around align-items-center mb-4">
-                  <!-- Checkbox -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
-                    <label class="form-check-label" for="form1Example3">
-                        <input id="remember_me" type="checkbox" class="form-check-input" name="remember">
-                        <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Se Souvenir de moi') }}</span>
-                    </label>
-                  </div>
-                  @if (Route::has('password.request'))
-                   <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                   {{ __('Mot de passe oublier?') }}
-                   </a>
-    @endif
-                </div>
-
-                <!-- Submit button -->
-                <x-primary-button class="btn btn-primary btn-lg btn-block">
-                    {{ __('Connecter') }}
-                </x-primary-button>
-
-                <div class="divider d-flex align-items-center my-4">
-                    <p class="text-center fw-bold mx-3 mb-0 text-muted">Connectez-vous avec</p>
-                </div>
-                <div class="row" style="font-size: 12px">
-                    <div class="col-8">
-                        <a class="btn btn-primary btn-lg btn-block" style="background-color: #3b5998" href="#!"
-                          role="button">
-                          <i class="fab fa-facebook-f me-2" ></i> Facebook
-                        </a>
-                    </div>
-                    <div class="col-4">
-                        <a class="btn btn-primary btn-lg btn-block" style="background-color: #55acee" href="#!"
-                        role="button">
-                        <i class="fab fa-twitter me-2"></i> Google</a>
-                    </div>
-                </div>
-              </form>
+            <div class="shape">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
+                    <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
+                </svg>
             </div>
-          </div>
         </div>
-      </section>
+
+        <!-- auth page content -->
+        <div class="auth-page-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center mt-sm-5 mb-4 text-white-50">
+                            <div>
+                                <a href="index.html" class="d-inline-block auth-logo">
+                                    <img src="{{asset('dashbord/images/images/logo.png')}}" alt="" height="60">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-6 col-xl-5">
+                        <div class="card mt-4">
+
+                            <div class="card-body p-4">
+                                <div class="text-center mt-2">
+                                    <h5 class="text-primary">Bienvenue !</h5>
+                                    @if (session('info'))
+                                    <div class="alert alert-success">
+                                        {{ session('info') }}
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="p-2 mt-4">
+                                    <form method="POST" action="{{route('connecte')}}">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <label for="username" class="form-label">Email</label>
+                                            <input name="email" type="email" class="form-control" id="username" placeholder="Enter username">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <div class="float-end">
+                                                <a href="auth-pass-reset-basic.html" class="text-muted">Mot de Passe oublier?</a>
+                                            </div>
+                                            <label class="form-label" for="password-input">Mot de Passe</label>
+                                            <div class="position-relative auth-pass-inputgroup mb-3">
+                                                <input name="password" type="password" class="form-control pe-5 password-input" placeholder="Enter password" id="password-input">
+                                                <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="auth-remember-check">
+                                            <label class="form-check-label" for="auth-remember-check">Se Souvenir de moi</label>
+                                        </div>
+
+                                        <div class="mt-4">
+                                            <button class="btn btn-success w-100" type="submit">Se connecter</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                        <!-- end card -->
+
+                        <div class="mt-4 text-center">
+                            <p class="mb-0">Je n'ai pas de compte? <a href="{{route('register')}}" class="fw-semibold text-primary text-decoration-underline"> S'inscrire </a> </p>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end auth page content -->
+
+        <!-- footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <p class="mb-0 text-muted">&copy;
+                                <script>document.write(new Date().getFullYear())</script> WasPay. Pulication <i class="mdi mdi-heart text-danger"></i>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- end Footer -->
+    </div>
+    <!-- end auth-page-wrapper -->
+
+    <!-- JAVASCRIPT -->
+    @include("layouts.jss")
 </body>
+
+
+<!-- Mirrored from themesbrand.com/velzon/html/default/auth-signin-basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 23 Nov 2022 16:41:56 GMT -->
 </html>

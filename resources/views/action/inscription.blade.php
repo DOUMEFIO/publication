@@ -1,87 +1,157 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/register.css') }}">
-    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
-    <title>Document</title>
-</head>
+<!doctype html>
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
+
+
+<!-- Mirrored from themesbrand.com/velzon/html/default/auth-signup-basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 23 Nov 2022 16:41:56 GMT -->
+@include("layouts.header")
+
 <body>
-    <section class="h-100 bg-dark">
-        <div class="container py-5 h-100">
 
-          <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-7">
-                <div class="card card-registration my-4">
-                    <div class="row g-0">
-                        <div class="col-xl-12">
-                            <div class="card-body p-md-3 text-black">
-                                <h3 class="mb-3 text-uppercase" style="color: blue; text-align:center">Inscription Client</h3>
-                                <form method="POST" action="{{ route('tache.store') }}" enctype="multipart/form-data">
-                                    @csrf
-                                    <input type="hidden" value="2" name="idprofil">
+    <div class="auth-page-wrapper pt-5">
+        <!-- auth page bg -->
+        <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
+            <div class="bg-overlay"></div>
 
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <x-input-label for="Nom" :value="__('Nom')" />
-                                                <x-text-input id="Nom" style="text-transform: uppercase;" class="form-control form-control-lg" type="text" name="name" :value="old('nom')" required autofocus autocomplete="nom" />
-                                                <x-input-error :messages="$errors->get('nom')" class="mt-2" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <x-input-label for="Prénom" :value="__('Prenom')" />
-                                                <x-text-input id="Prenom" style="text-transform: capitalize;" class="form-control form-control-lg" type="text" name="prenom" :value="old('prenom')" required autofocus autocomplete="prenom" />
-                                                <x-input-error :messages="$errors->get('Prenom')" class="mt-2" />
-                                            </div>
-                                        </div>
-                                    </div>
+            <div class="shape">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
+                    <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
+                </svg>
+            </div>
+        </div>
 
-                                    <div class="form-outline mb-4">
-                                        <x-input-label for="email" :value="__('Adress mail')" />
-                                        <x-text-input id="email" class="form-control form-control-lg" type="email" name="email" :value="old('email')" required autocomplete="username" />
-                                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                                    </div>
+        <!-- auth page content -->
+        <div class="auth-page-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center mt-sm-5 mb-4 text-white-50">
+                            <div>
+                                <a href="#" class="d-inline-block auth-logo">
+                                    <img src="{{asset("dashbord/images/images/logo.png")}}" alt="" height="50">
+                                </a>
+                            </div>
+                            <p class="mt-3 fs-15 fw-medium">S'inscrire</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
 
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <x-input-label for="password" :value="__('Mot de passe')" />
-                                                <x-text-input id="password" class="form-control form-control-lg"
-                                                                type="password"
-                                                                name="password"
-                                                                required autocomplete="new-password" />
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-6 col-xl-5">
+                        <div class="card mt-4">
 
-                                                <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <x-input-label for="password_confirmation" :value="__('Confirmer mot de passe')" />
-
-                                                <x-text-input id="password_confirmation" class="form-control form-control-lg"
-                                                                type="password"
-                                                                name="password_confirmation" required autocomplete="new-password" />
-
-                                                <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="card-body p-4">
+                                <div class="text-center mt-2">
+                                    <h5 class="text-primary">Créer un compte</h5>
                                     @if(session()->has('error'))
                                         <div class="alert alert-danger"> {!! session('error') !!}</div>
                                     @endif
-                                    <div class="d-flex justify-content-end py-3 px-3">
-                                        <button type="submit" class="btn btn-primary" >Enregistrer</button>
-                                    </div>
-                                </form>
+                                </div>
+                                <div class="p-2 mt-4">
+                                    <form class="needs-validation" novalidate method="POST" action="{{ route('tache.store') }}">
+                                        @csrf
+                                        <input type="hidden" value="2" name="idprofil">
+                                        <div class="live-preview">
+                                            <div class="row align-items-center g-3">
+                                                <div class="col-lg-6">
+                                                    <label for="name" class="form-label">Nom <span class="text-danger">*</span></label>
+                                                    <input name="name" type="text" class="form-control" id="name" placeholder="Enter username" required>
+                                                    <div class="invalid-feedback">
+                                                        Entrer votre nom
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-6">
+                                                    <label for="prenom" class="form-label">Prenom <span class="text-danger">*</span></label>
+                                                    <input name="prenom" type="text" class="form-control" id="prenom" placeholder="Enter username" required>
+                                                    <div class="invalid-feedback">
+                                                        Entrer votre prenom
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="username" class="form-label">Email <span class="text-danger">*</span></label>
+                                            <input name="email" type="email" class="form-control" id="username" placeholder="Enter username" required>
+                                            <div class="invalid-feedback">
+                                                Entrer votre mail
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="username" class="form-label">Mot de Passe <span class="text-danger">*</span></label>
+                                            <input name="password" type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                                            <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                                            <div class="invalid-feedback">
+                                                Entrer mot de passe
+                                            </div>
+                                        </div>
+
+                                         <div id="password-contain" class="p-3 bg-light mb-2 rounded">
+                                            <h5 class="fs-13">Password must contain:</h5>
+                                            <p id="pass-length" class="invalid fs-12 mb-2">Minimum <b>8 characters</b></p>
+                                            <p id="pass-lower" class="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
+                                            <p id="pass-upper" class="invalid fs-12 mb-2">At least <b>uppercase</b> letter (A-Z)</p>
+                                            <p id="pass-number" class="invalid fs-12 mb-0">A least <b>number</b> (0-9)</p>
+                                        </div>
+
+                                        <div class="mt-4">
+                                            <button class="btn btn-success w-100" type="submit">Enregister</button>
+                                        </div>
+
+                                        {{-- <div class="mt-4 text-center">
+                                            <div class="signin-other-title">
+                                                <h5 class="fs-13 mb-4 title text-muted">Créer votre compte avec</h5>
+                                            </div>
+
+                                            <div>
+                                                <button type="button" class="btn btn-primary btn-icon waves-effect waves-light"><i class="ri-facebook-fill fs-16"></i></button>
+                                                <button type="button" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-google-fill fs-16"></i></button>
+                                                <button type="button" class="btn btn-dark btn-icon waves-effect waves-light"><i class="ri-github-fill fs-16"></i></button>
+                                                <button type="button" class="btn btn-info btn-icon waves-effect waves-light"><i class="ri-twitter-fill fs-16"></i></button>
+                                            </div>
+                                        </div> --}}
+                                    </form>
+
+                                </div>
                             </div>
+                            <!-- end card body -->
+                        </div>
+                        <!-- end card -->
+
+                        <div class="mt-4 text-center">
+                            <p class="mb-0">Vous avez déjà un compte ? <a href="{{ route('login') }}" class="fw-semibold text-primary text-decoration-underline"> Connexion </a> </p>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end auth page content -->
+
+        <!-- footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <p class="mb-0 text-muted">&copy;
+                                <script>document.write(new Date().getFullYear())</script> WasPay. Pulication <i class="mdi mdi-heart text-danger"></i> by Themesbrand
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-@include('layouts.body')
+        </footer>
+        <!-- end Footer -->
+    </div>
+    <!-- end auth-page-wrapper -->
+
+    <!-- JAVASCRIPT -->
+    @include("layouts.jss")
+</body>
+
+
+<!-- Mirrored from themesbrand.com/velzon/html/default/auth-signup-basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 23 Nov 2022 16:41:58 GMT -->
+</html>

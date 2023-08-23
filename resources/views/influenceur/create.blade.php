@@ -1,6 +1,5 @@
 <x-app-layout>
     @section("contenue")
-
     <div class="container py-2 col-6" style="font-size:20px;">
             <div class="card shadow">
                 <div class="card-header py-3">
@@ -13,7 +12,7 @@
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label"><strong>Numéro WhatsApp</strong></label>
-                                    <input type="tel" name="tel" id="phone" class="form-control" required>
+                                    <input type="tel" name="tel" class="form-control rounded-end flag-input">
                                 </div>
                             </div>
                             <div class="col">
@@ -33,19 +32,22 @@
                             </select>
                         </div>
                         <div class="mb-3" style="text-align: center">
+
                             <div class="row">
                                 <div class="col-3">
-                                    <h6 class="">Sexe: </h6>
+                                    <h3 class="form-check-label">Sexe: </h3>
                                 </div>
                                 <div class="col-4">
-                                    <input class="form-check-input" type="radio" name="sexe" id="femaleGender"
-                                      value="Féminin" required/>
-                                    <label class="form-check-label" for="femaleGender">Féminin</label>
+                                    <input class="form-check-input" type="radio" name="sexe" id="flexRadioDefault1" value="Féminin">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Féminin
+                                    </label>
                                 </div>
                                 <div class="col-4">
-                                    <input class="form-check-input" type="radio" name="sexe" id="maleGender"
-                                      value="Masculin" required/>
-                                    <label class="form-check-label" for="maleGender">Masculin</label>
+                                    <input class="form-check-input" type="radio" name="sexe" id="flexRadioDefault2" value="Masculin">
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Masculin
+                                    </label>
                                 </div>
                             </div>
                         </div>

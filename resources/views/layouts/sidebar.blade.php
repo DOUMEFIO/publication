@@ -1,83 +1,116 @@
-<nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
-    <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-            <div class="sidebar-brand-icon rotate-n-15"><img src="{{asset("dashbord/images/images/logo.png")}}" width="50px"></div>
-            <div class="sidebar-brand-text mx-3"><span>WasPay</span></div>
+<div class="app-menu navbar-menu">
+    <!-- LOGO -->
+    <div class="navbar-brand-box">
+        <!-- Dark Logo-->
+        <a href="#" class="logo logo-dark">
+            <span class="logo-sm">
+                <img src="{{asset('dashbord/images/images/logo.png')}}" alt="" height="22">
+            </span>
+            <span class="logo-lg">
+                <img src="{{asset('dashbord/images/images/logo.png')}}" alt="" height="17">
+            </span>
         </a>
-        <hr class="sidebar-divider my-0">
-        <ul class="navbar-nav text-light" id="accordionSidebar">
-            @if (Auth::User()->idProfil == 1)
-                <li class="nav-item"><a class="nav-link active" href="{{route("admin.index")}}"><i class="fas fa-tachometer-alt"></i><span>Centres D'interets</span></a></li>
-            @endif
-        </ul>
-        <ul class="navbar-nav text-light" id="accordionSidebar">
-            @if (Auth::User()->idProfil == 1)
-                <li class="nav-item"><a class="nav-link active" href="{{route("show.influenceur")}}"><i class="fas fa-tachometer-alt"></i><span>Influenceurs</span></a></li>
-            @endif
-        </ul>
-        <ul class="navbar-nav text-light" id="accordionSidebar">
-            @if (Auth::User()->idProfil == 1)
-                <li class="nav-item"><a class="nav-link active" href="{{route("admin.tache")}}"><i class="fas fa-tachometer-alt"></i><span>Toutes Tâches</span></a></li>
-            @endif
-        </ul>
-        <ul class="navbar-nav text-light" id="accordionSidebar">
-            @if (Auth::User()->idProfil == 1)
-                <li class="nav-item"><a class="nav-link active" href="{{route("admin.tachevalide")}}"><i class="fas fa-tachometer-alt"></i><span>Tâches Valideées</span></a></li>
-            @endif
-        </ul>
-        <ul class="navbar-nav text-light" id="accordionSidebar">
-            @if (Auth::User()->idProfil == 1)
-                <li class="nav-item"><a class="nav-link active" href="{{route("tache.partager")}}"><i class="fas fa-tachometer-alt"></i><span>Tâches Attribuées</span></a></li>
-            @endif
-        </ul>
-
-        <ul class="navbar-nav text-light" id="accordionSidebar">
-            @if (Auth::User()->idProfil == 1)
-                <li class="nav-item"><a class="nav-link active" href="{{route("tache.executez")}}"><i class="fas fa-tachometer-alt"></i><span>Tâches Exécutées</span></a></li>
-            @endif
-        </ul>
-
-        <ul class="navbar-nav text-light" id="accordionSidebar">
-            @if (Auth::User()->idProfil == 2)
-                <li class="nav-item"><a class="nav-link active" href="{{route("influenceurconnect")}}"><i class="fas fa-tachometer-alt"></i><span>Profil</span></a></li>
-            @endif
-        </ul>
-
-        <ul class="navbar-nav text-light" id="accordionSidebar">
-            @if (Auth::User()->idProfil == 2)
-                <li class="nav-item"><a class="nav-link active" href="{{route("infl.tachencour")}}"><i class="fas fa-tachometer-alt"></i><span>Tâche En cours</span></a></li>
-            @endif
-        </ul>
-
-        <ul class="navbar-nav text-light" id="accordionSidebar">
-            @if (Auth::User()->idProfil == 2)
-                <li class="nav-item"><a class="nav-link active" href="{{route("tachedo")}}"><i class="fas fa-tachometer-alt"></i><span>Tâches Exécutées</span></a></li>
-            @endif
-        </ul>
-
-        <ul class="navbar-nav text-light" id="accordionSidebar">
-            @if (Auth::User()->idProfil == 3)
-                <li class="nav-item"><a class="nav-link active" href="{{route("/dashboard")}}"><i class="fas fa-tachometer-alt"></i><span>Tâche</span></a></li>
-            @endif
-        </ul>
-
-        <ul class="navbar-nav text-light" id="accordionSidebar">
-            @if (Auth::User()->idProfil == 3)
-                <li class="nav-item"><a class="nav-link active" href="{{route("clienttacheencours")}}"><i class="fas fa-tachometer-alt"></i><span>Tâche En cours</span></a></li>
-            @endif
-        </ul>
-
-        <ul class="navbar-nav text-light" id="accordionSidebar">
-            @if (Auth::User()->idProfil == 3)
-                <li class="nav-item"><a class="nav-link active" href="{{route("clienttacheexecutez")}}"><i class="fas fa-tachometer-alt"></i><span>Tâche Exécutée</span></a></li>
-            @endif
-        </ul>
-
-        <ul class="navbar-nav text-light" id="accordionSidebar">
-            @if (Auth::User()->idProfil == 1 || Auth::User()->idProfil == 3 || Auth::User()->idProfil == 2)
-                <li class="nav-item"><a class="nav-link active" href="{{route("preuve")}}"><i class="fas fa-tachometer-alt"></i><span>Preuve</span></a></li>
-            @endif
-        </ul>
-        <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+        <!-- Light Logo-->
+        <a href="#" class="logo logo-light">
+            <span class="logo-sm">
+                <img src="{{asset('dashbord/images/images/logo.png')}}" alt="" height="22">
+            </span>
+            <span class="logo-lg">
+                <img src="{{asset('dashbord/images/images/logo.png')}}" alt="" height="60">
+            </span>
+        </a>
+        <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
+            <i class="ri-record-circle-line"></i>
+        </button>
     </div>
-</nav>
 
+    <div id="scrollbar">
+        <div class="container-fluid">
+
+            <div id="two-column-menu">
+            </div>
+            <ul class="navbar-nav" id="navbar-nav">
+                <li class="menu-title"><span data-key="t-menu">Menu</span></li>
+                 <!-- end Dashboard Menu -->
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Autres</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarApps">
+                        <ul class="nav nav-sm flex-column">
+                            @if (Auth::User()->idProfil == 1)
+                                <li class="nav-item">
+                                    <a href="{{route('admin.index')}}" class="nav-link" data-key="t-calendar"> Centres D'interets </a>
+                                </li>
+                            @endif
+                            @if (Auth::User()->idProfil == 1 || Auth::User()->idProfil == 3)
+                                <li class="nav-item">
+                                    <a href="{{route('show.influenceur')}}" class="nav-link" data-key="t-chat"> Influenceurs </a>
+                                </li>
+                            @endif
+                            @if (Auth::User()->idProfil == 2)
+                                <li class="nav-item">
+                                    <a href="{{route('influenceurconnect')}}" class="nav-link" data-key="t-select2">Profil</a>
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
+                </li>
+                <!-- end Dashboard Menu -->
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarForms" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
+                        <i class="ri-file-list-3-line"></i> <span data-key="t-forms">Tâches</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarForms">
+                        <ul class="nav nav-sm flex-column">
+                            @if (Auth::User()->idProfil == 1)
+                                <li class="nav-item">
+                                    <a href="{{route('admin.tache')}}" class="nav-link" data-key="t-select2">Toutes Tâches</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin.tachevalide')}}" class="nav-link" data-key="t-select2">Tâches Valideées</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('tache.partager')}}" class="nav-link" data-key="t-select2">Tâches Attribuées</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('tache.executez')}}" class="nav-link" data-key="t-select2">Tâches Exécutées</a>
+                                </li>
+                            @endif
+
+                            @if (Auth::User()->idProfil == 2)
+                                <li class="nav-item">
+                                    <a href="{{route('infl.tachencour')}}" class="nav-link" data-key="t-select2">Tâche En cours</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('tachedo')}}" class="nav-link" data-key="t-select2">Tâches Exécutées</a>
+                                </li>
+                            @endif
+
+                            @if (Auth::User()->idProfil == 3)
+                                <li class="nav-item">
+                                    <a href="{{route('/dashboard')}}" class="nav-link" data-key="t-select2">Tâche</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('clienttacheencours')}}" class="nav-link" data-key="t-select2">Tâche En cours</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('clienttacheexecutez')}}" class="nav-link" data-key="t-select2">Tâche Exécutées</a>
+                                </li>
+                            @endif
+
+                            @if (Auth::User()->idProfil == 1 || Auth::User()->idProfil == 2 || Auth::User()->idProfil == 3)
+                                <li class="nav-item">
+                                    <a href="{{route('preuve')}}" class="nav-link" data-key="t-select2">Preuve</a>
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+
+    <div class="sidebar-background"></div>
+</div>

@@ -38,7 +38,7 @@ class NewUserWelcomeMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New User Welcome Mail',
+            subject: 'WasPay',
         );
     }
 

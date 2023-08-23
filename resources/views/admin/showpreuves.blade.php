@@ -1,7 +1,7 @@
 <x-app-layout>
     @section('contenue')
         <div class="card shadow">
-            <div class="row card-header">
+            <div class="row card-body">
                 <div class="col md-9">
                     <p class="text-primary m-0 fw-bold">Les Preuves</p>
                     <p class="text-primary m-0 fw-bold">Vues Total: {{$totalVues}}</p>

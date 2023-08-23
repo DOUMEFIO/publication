@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('tel');
             $table->integer('nbr_vue_moyen');
             $table->string('sexe');
-            $table->string('profil')->nullable();
             $table->foreignId('id_pay')->constrained('pays');
             $table->foreignId('id_departement')->constrained('departements');
             $table->foreignId('id_ville')->constrained('villes');

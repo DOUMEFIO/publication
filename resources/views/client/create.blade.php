@@ -1,12 +1,12 @@
 <x-app-layout>
     @section('contenue')
-        <div class="container py-2 col-8" style="font-size:20px;">
+        <div class="container py-2 col-12" style="font-size:20px;">
             <div class="card card-body ">
                   @if(session()->has('error'))
-			       <div class="alert alert-succes"> {!! session('error') !!}</div>
+			        <div class="alert alert-succes"> {!! session('error') !!}</div>
 		          @endif
                 <div class="card shadow">
-                    <div class="card-header py-3">
+                    <div class="py-3">
                         <p class="text-primary m-0 fw-bold" style="text-align: center; font-size:20px"><strong>Créer Tâche</strong></p>
                         <div id="total" style="display:none;">
                         </div>

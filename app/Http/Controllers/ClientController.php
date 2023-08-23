@@ -94,71 +94,48 @@ class ClientController extends Controller
         $img = substr($request->url, 9);
         $tache = Tache::createTache($request, $user_id, $img);
         $idtache = $tache->id;
-        $arraypay = $request->pays;
-        $arraydep = $request->departements;
-        $arrayvil = $request->villes;
-        if(!empty($arrayvil)){
-            $zone1 = "vil";
+        $allPays = $request->pays;
+        $allDeps = $request->departements;
+        $allVilles = $request->villes;
+        if(!empty($allVilles)){
             //les villes
-            $villelist = implode(',', $arrayvil);
-            $ids = explode(",", $villelist);
-            $deletdep = Villes::whereIn('id', $ids)->pluck('state_id')->implode(",");
-            $departementlist= implode(',', $arraydep);
-            $departementArray = explode(",", $departementlist);
-            $villeRemoveArray = explode(",", $deletdep);
-            $resultArray = array_diff($departementArray, $villeRemoveArray);
-            $departementlist= implode(',', $resultArray);
+            $villelist = implode(',', $allVilles);
+
             //les departement
-            $resultArray = array_push($departementArray, $deletdep);
-            $resultData = implode(",", $departementArray);
-            $resultData = explode(",", $resultData);
-            if(!empty($resultData)){
-                //les departements
-                $deletpay = Departements::whereIn('id', $resultData)->pluck('country_id')->implode(",");
-                $listpay= implode(',', $arraypay);
-                $paysArray = explode(",", $listpay);
-                $payRemoveArray = explode(",", $deletpay);
-                $resultArraypay = array_diff($paysArray, $payRemoveArray);
-                //les pays
-                $resultDatapay = implode(",", $resultArraypay);
-            }else{
-                //les departements
-                $ids = explode(",", $departementlist);
-                //dd($departementlists);
-                $deletpay = Departements::whereIn('id', $ids)->pluck('country_id')->implode(",");
-                //dd($deletpay);
-                $listpay= implode(',', $arraypay);
-                $paysArray = explode(",", $listpay);
-                $payRemoveArray = explode(",", $deletpay);
-                $resultArraypay = array_diff($paysArray, $payRemoveArray);
-                //les pays
-                $resultDatapay = implode(",", $resultArraypay);
-                $departementlist = "";
-                //dd($departementlist,$listpay, $deletpay,$resultDatapay,$paysArray,$payRemoveArray);
-            }
-            //dd($ids,$villeRemoveArray,$villelist, $departementlist, $resultDatapay,$paysArray,$payRemoveArray);
-            //dd($villelist, $departementlist, $resultDatapay);
-        } elseif(!empty($arraydep)  && empty($arrayvil)){
+            $depToDelete = Villes::whereIn('id', $allVilles)->pluck('state_id')->toArray();
+            $depToSave = array_diff($allDeps, $depToDelete);
+            $departementlist= implode(',', $depToSave);
+
+            //les pays
+            $paysToDelete = Departements::whereIn('id', $allDeps)->pluck('country_id')->toArray();
+            $payToSave = array_diff($allPays, $paysToDelete);
+            $payslist = implode(",", $payToSave);
+            //dd($villelist,$departementlist,$payslist);
+
+        } elseif(!empty($allDeps)  && empty($allVilles)){
+            //les villes
             $villelist = "";
+
             //les departements
-            $departementlist = $arraydep;
-            $payslist = $arraypay;
-            $paysArraylist = implode(",", $payslist);
-            $deletpay = Departements::whereIn('id', $departementlist)->pluck('country_id')->implode(",");
-            $departementArraylist = implode(",", $payslist);
-            $departementArray = explode(",", $departementArraylist);
-            $villeRemoveArray = explode(",", $deletpay);
-            $resultArraypay = array_diff($departementArray, $villeRemoveArray);
-            $resultDatapay = implode(",", $resultArraypay);
-            $departementlist = implode(",", $arraydep);
-            //dd($villelist, $departementlist, $resultDatapay);
-        } elseif(!empty($arraypay)  && empty($arraydep) && empty($arrayvil)){
+            $departementlist= implode(',', $allDeps);
+
+            //les pays
+            $deletpay = Departements::whereIn('id', $allDeps)->pluck('country_id')->toArray();
+            $resultallPays = array_diff($allPays, $deletpay);
+            $payslist = implode(",", $resultallPays);
+            //dd($villelist, $departementlist, $payslist);
+        } elseif(!empty($allPays)  && empty($allDeps) && empty($allVilles)){
+            //les villes
             $villelist = "";
+
+            //les departements
             $departementlist = "";
-            $resultDatapay = implode(",", $arraypay);
-            //dd($villelist, $departementlist, $resultDatapay);
+
+            //les pays
+            $payslist = implode(",", $allPays);
+            //dd($villelist, $departementlist, $payslist);
         }
-        //dd($villelist, $departementlist, $resultDatapay);
+        dd($villelist, $departementlist, $payslist);
         $centres=[];
         foreach ($request->centre as $value) {
             $centres[] = [
@@ -171,7 +148,7 @@ class ClientController extends Controller
         $datapay = [];
         $datadep = [];
         $datavil = [];
-        $pay = !blank($resultDatapay) ? explode("," , $resultDatapay) : null;
+        $pay = !blank($payslist) ? explode("," , $payslist) : null;
         $arraydep = !blank($departementlist) ? explode("," ,$departementlist) : null;
         $arrayvil = !blank($villelist) ? explode("," ,$villelist) : null;
 

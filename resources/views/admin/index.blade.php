@@ -1,12 +1,11 @@
 <x-app-layout>
     @section('contenue')
-    <div class="container-fluid">
         <div class="card shadow col-xl-6 mx-auto">
-            <div class="row card-header">
-                <div class="col">
+            <div class="row card-body">
+                <div class="col md-6">
                     <p class="text-primary m-0 fw-bold">Centre Interet</p>
                 </div>
-                <div class="col md-3" style="padding-left: 100px">
+                <div class="col md-6" style="padding-left: 100px">
                     <span class="odd px-5"><a href="centre.create" class="btn btn-primary">AJOUTER</a></span>
                 </div>
             </div>
@@ -70,6 +69,5 @@
                 </div>
             </div>
         </div>
-    </div>
     @endsection
 </x-app-layout>

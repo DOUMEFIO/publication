@@ -33,9 +33,9 @@
                         <tbody >
                             @foreach ($users as $user )
                                 <tr>
-                                    @if ($user->profil)
+                                    @if ($user->photpProfil)
                                     <td>
-                                        <img class="rounded-circle me-2" src="{{asset('storage'.$user->profil)}}" width="30" height="30">{{$user->nom}} {{$user->prenom}}
+                                        <img class="rounded-circle me-2" src="{{asset('storage'.$user->photpProfil)}}" width="30" height="30">{{$user->nom}} {{$user->prenom}}
                                     </td>
                                     @else
                                     <td>
@@ -43,7 +43,7 @@
                                     </td>
                                     @endif
                                     <td style="text-align:center">{{$user->tel}}</td>
-                                    <td>{{$user->pays}},{{$user->departement}}, {{$user->ville}}</td>
+                                    <td>{{$user->pays}}, {{$user->departement}}, {{$user->ville}}</td>
                                     <td style="text-align:center">{{$user->interests}}</td>
                                     <td style="text-align:center">{{$user->nbr_vue_moyen}}</td>
                                 </tr>
