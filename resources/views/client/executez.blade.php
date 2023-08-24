@@ -32,7 +32,6 @@
                                 <th>Taches</th>
                                 <th>Attribuer à</th>
                                 <th>Vues obtenir</th>
-                                <th>Créer par</th>
                                 <th>Période</th>
                                 <th>Type Tâche</th>
                             </tr>
@@ -56,8 +55,8 @@
                                             @endforeach
                                         </ul>
                                     </td>
-                                    <td>{{$client['clientnom'] }} {{$client['clientprenom']}}
-                                    </td>
+                                    {{-- <td>{{$client['clientnom'] }} {{$client['clientprenom']}}
+                                    </td> --}}
                                     <td>
                                         {{ strftime('%A %e %B %Y', strtotime($client['debut'])) }} à</br>
                                         {{ strftime('%A %e %B %Y', strtotime($client['fin'])) }}
@@ -66,16 +65,6 @@
                                 </tr>
                             @endforeach
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td><strong>Taches</strong></td></th>
-                                <td><strong>Attribuer à</strong></td></th>
-                                <td><strong>Vues obtenir</strong></td></th>
-                                <td><strong>Créer par</strong></td></th>
-                                <td><strong>Période</strong></td></th>
-                                <td><strong>Type Tâche</strong></td></th>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
                 <div class="row">

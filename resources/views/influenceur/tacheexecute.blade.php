@@ -30,7 +30,7 @@
                         <thead>
                             <tr>
                                 <th>Taches</th>
-                                <th>Attribuer à</th>
+                               {{--  <th>Attribuer à</th> --}}
                                 <th>Vues obtenir</th>
                                 <th>Créer par</th>
                                 <th>Période</th>
@@ -41,20 +41,16 @@
                             @foreach ($clientes as $client)
                                 <tr>
                                     <td>T{{$client['idTache']}}</td>
-                                    <td>
-                                        <ul>
+                                    {{-- <td>
                                             @foreach ($client['travailleurs'] as $travailleur)
-                                                <li>{{ $travailleur['nom'] }}
+                                                {{ $travailleur['nom'] }}
                                                     {{ $travailleur['prenom'] }}
                                             @endforeach
-                                        </ul>
-                                    </td>
+                                    </td> --}}
                                     <td>
-                                        <ul>
                                             @foreach ($client['travailleurs'] as $travailleur)
-                                                <li>{{ $travailleur['totalVues'] }}
+                                            {{ $travailleur['totalVues'] }}
                                             @endforeach
-                                        </ul>
                                     </td>
                                     <td>{{$client['clientnom'] }} {{$client['clientprenom']}}
                                     </td>

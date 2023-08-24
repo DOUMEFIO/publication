@@ -1,12 +1,67 @@
 <x-app-layout>
     @section('contenue')
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form method="post" action="{{route('centre.store')}}">
+                        @csrf
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Nom du centre d'interet</strong></label>
+                                    <input style="font-size: 15px" type="text" name="libelle" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group " >
+                            <div class="row">
+                                <div class="col md-5" style="text-align: right">
+                                    <button class="btn btn-primary btn-sm" type="submit">Soumettre</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form method="" action="" >
+{{--                         @csrf
+ --}}                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Modifier</strong></label>
+                                    <input style="font-size: 15px" type="text" name="libelle" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group " >
+                            <div class="row">
+                                <div class="col md-5" style="text-align: right">
+                                    <button class="btn btn-primary btn-sm" type="submit">Soumettre</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
         <div class="card shadow col-xl-6 mx-auto">
             <div class="row card-body">
                 <div class="col md-6">
                     <p class="text-primary m-0 fw-bold">Centre Interet</p>
                 </div>
                 <div class="col md-6" style="padding-left: 100px">
-                    <span class="odd px-5"><a href="centre.create" class="btn btn-primary">AJOUTER</a></span>
+                    <span class="odd px-5"><button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">AJOUTER</button>
+                    </span>
                 </div>
             </div>
             <div class="card-body">
@@ -39,7 +94,7 @@
                             @foreach ($centreInterets as $centreInteret )
                                 <tr>
                                     <td>{{$centreInteret->libelle}}</td>
-                                    <td>Modifier</td>
+                                    <td><button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">MODIFIER</button></td>
                                 </tr>
                             @endforeach
                         </tbody>

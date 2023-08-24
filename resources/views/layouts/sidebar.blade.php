@@ -30,6 +30,18 @@
             <div id="two-column-menu">
             </div>
             <ul class="navbar-nav" id="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Tableau de bord</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarDashboards">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="dashboard-nft.html" class="nav-link" data-key="t-nft"> Statistiques</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                  <!-- end Dashboard Menu -->
                 <li class="nav-item">
@@ -68,7 +80,7 @@
                                     <a href="{{route('admin.tache')}}" class="nav-link" data-key="t-select2">Toutes Tâches</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{route('admin.tachevalide')}}" class="nav-link" data-key="t-select2">Tâches Valideées</a>
+                                    <a href="{{route('admin.tachevalide')}}" class="nav-link" data-key="t-select2">Tâches Validées</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{route('tache.partager')}}" class="nav-link" data-key="t-select2">Tâches Attribuées</a>

@@ -13,7 +13,7 @@
                     <div class="modal-body">
                         <form class="user" method="POST" action="{{route('updatevues')}}" enctype="multipart/form-data">
                             @csrf
-                            <input type="text" value="" name="id" id="tacheIdInput">
+                            <input type="hidden" name="id" id="tacheIdInput">
                             <div class="mb-3">
                                 <label class="form-label"><strong>Nombres vues Realisée</strong></label>
                                 <input type="number" value="" name="nbr_vue_moyen" class="form-control" required>
@@ -22,11 +22,9 @@
                                 <label class="form-label"><strong>Capture</strong></label>
                                 <input type="file" class="form-control" id="avatar" name="avatar" value="">
                             </div>
-                            <button type="submit" id="submitModal" class="btn btn-primary">Enregistrer</button>
+                            <button type="submit" id="submitModal" class="btn btn-primary" style="float: right">Enregistrer</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
                         </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
                     </div>
                 </div>
             </div>
@@ -79,9 +77,9 @@
                                     <td>{{$tache->tacheall->type->libelle}}</td>
                                     <td>{{$tache->tacheall->description}}</td>
                                     <td></td>
-{{--                                <td><button onclick="showModal({{$tache->idTache}})" class="btn btn-primary btn-sm" type="button" >Nbrs Vues Réalisée</button></td>
- --}}                               <td><a class="btn btn-primary btn-sm" href="{{ route('vuesrealise', ['id' => $tache->idTache]) }}">Nbrs Vues Réalisées</td>
-                                </tr>
+                               <td><button onclick="showModal({{$tache->idTache}})" class="btn btn-primary btn-sm" type="button" >Nbrs Vues Réalisée</button></td>
+{{--                                <td><a class="btn btn-primary btn-sm" href="{{ route('vuesrealise', ['id' => $tache->idTache]) }}">Nbrs Vues Réalisées</td>
+ --}}                                </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
@@ -115,14 +113,15 @@
             </div>
         </div>
     </div>
-    <button id="triggerModal" class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
+    <button style="display: none" id="triggerModal" class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
     @endsection
+    @push('scripts')
+        <script>
+            function showModal(id){
+    
+                $('#tacheIdInput').val(id);
+                $('#triggerModal').trigger('click')
+            }
+        </script>
+    @endpush
 </x-app-layout>
-@push('scripts')
-    <script>
-        function showModal(id){
-            $('#tacheIdInput').val(id);
-            $('#triggerModal').trigger('click')
-        }
-    </script>
-@endpush

@@ -286,7 +286,7 @@ class InfluenceurController extends Controller
             $taches = TachePreuve::with("infotache")->get();
             return redirect()->route('infl.tachencour')->with('info','Vos preuves ont été soumises.');
         } else {
-           return redirect()->back()->with('info','Le délai de cette tâche est dépassé.');
+           return redirect()->back()->with('info','Vous n\'etes pas dans la période de la tâche.');
         }
     }
 
@@ -297,7 +297,7 @@ class InfluenceurController extends Controller
         ->with('travailleur')
         ->get();
         $clientes = $taches->map(function ($tache) {
-            $travailleurs = $tache->travailleurtaches->where('id', 6)->groupBy('id')->map(function ($travailleursGroup) {
+            $travailleurs = $tache->travailleurtaches->where('id', Auth::user()->id)->groupBy('taches.id')->map(function ($travailleursGroup) {
                 $totalVues = 0;
                 $travailleursGroup->each(function ($travailleur) use (&$totalVues) {
                     $totalVues += $travailleur->pivot->totalVues;
@@ -310,7 +310,7 @@ class InfluenceurController extends Controller
                     'totalVues' => $totalVues
                 ];
             })->toArray();
-
+      //dd( $travailleurs);
             return [
                 'idTache' => $tache->id,
                 'debut' => $tache->debut,

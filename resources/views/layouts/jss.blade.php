@@ -61,6 +61,7 @@
     <script src="{{asset('velson/js/app.js')}}"></script>
 
     <script>
+        
         $(function() {
           $('#typetache').change(function() {
             switch(parseInt( $('#typetache').val())){
@@ -154,3 +155,4 @@
       });
 
   </script>
+@stack('scripts')

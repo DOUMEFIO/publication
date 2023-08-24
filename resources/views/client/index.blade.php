@@ -35,14 +35,13 @@
                                 <th>Déscription</th>
                                 <th>Centres</th>
                                 <th>Zones</th>
-                                <th>Médias</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody >
                             @foreach ($taches as $tache)
                                 <tr>
-                                    <td>{{ strftime('%A %e %B %Y', strtotime($tache->debut)) }} à
+                                    <td>{{ strftime('%A %e %B %Y', strtotime($tache->debut)) }} à</br>
                                         {{ strftime('%A %e %B %Y', strtotime($tache->fin)) }}
                                     </td>
                                     <td>{{$tache->vueRecherche}}</td>
@@ -52,24 +51,11 @@
                                     <td>{{$tache->pays}},
                                         {{$tache->departements}},
                                         {{$tache->villes}}
-                                        </td>
-                                    <td>Voir</td>
+                                    </td>
                                     <td>{{$tache->status_libelle}}</td>
                                 </tr>
                             @endforeach
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td><strong>Période</strong></td>
-                                <td><strong>Vues Recherchées</strong></td>
-                                <td><strong>Type de fichier</strong></td>
-                                <td><strong>Déscription</strong></td>
-                                <td><strong>Centres</strong></td>
-                                <td><strong>Zones</strong></td>
-                                <td><strong>Médias</strong></td>
-                                <td><strong>Actions</strong></td>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
                 <div class="row">

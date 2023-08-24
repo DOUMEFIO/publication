@@ -36,11 +36,9 @@
                                             <div class="row mb-3">
                                                 <input type="file" class="form-control" id="avatar" name="avatar">
                                             </div>
-                                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
+                                            <button type="submit" class="btn btn-primary" style="float:right">Enregistrer</button>
                                         </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
                                     </div>
                                 </div>
                             </div>
