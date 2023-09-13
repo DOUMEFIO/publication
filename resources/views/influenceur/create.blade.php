@@ -6,6 +6,7 @@
                     @if ($errors->has('tel'))
                         <div class="alert alert-danger">
                             {{ $errors->first('tel') }}
+                            new
                         </div>
                     @endif
                     <p class="text-primary m-0 fw-bold" style="text-align: center; font-size:20px"><strong>Completez vos informations</strong></p>

@@ -59,7 +59,7 @@
                                         @csrf
                                         <div class="mb-3">
                                             <label for="username" class="form-label">Email</label>
-                                            <input name="email" type="email" class="form-control" id="username" placeholder="Enter username">
+                                            <input name="email" type="email" class="form-control" id="username" placeholder="Enter username" required>
                                         </div>
 
                                         <div class="mb-3">
@@ -68,7 +68,7 @@
                                             </div>
                                             <label class="form-label" for="password-input">Mot de Passe</label>
                                             <div class="position-relative auth-pass-inputgroup mb-3">
-                                                <input name="password" type="password" class="form-control pe-5 password-input" placeholder="Enter password" id="password-input">
+                                                <input name="password" type="password" class="form-control pe-5 password-input" placeholder="Enter password" id="password-input" required>
                                                 <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
                                             </div>
                                         </div>
