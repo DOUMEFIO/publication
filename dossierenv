@@ -2,7 +2,7 @@ APP_NAME=WasPay
 APP_ENV=local
 APP_KEY=base64:IraPVBhdnMDYpGLN/E8Ljabie3cdgOZ9f7i7UjRHy4w=
 APP_DEBUG=true
-APP_URL=http://localhost
+APP_URL=http://publication.lapieuvretechnologique.info
 
 LOG_CHANNEL=stack
 LOG_DEPRECATIONS_CHANNEL=null
@@ -61,10 +61,10 @@ PAYPLUS_API_KEY=FYI06BB8TA8R3KCT7
 PAYPLUS_MODE=live
 PAYPLUS_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF9hcHAiOiIzMjcxIiwiaWRfYWJvbm5lIjo4MjA2LCJkYXRlY3JlYXRpb25fYXBwIjoiMjAyMy0wNi0wOSAxMTowMToxMCJ9.BdZggaEwEEeX6dFlbLVQHAuqAPdOZc3xV77BgtqGkXI
 PAYPLUS_APPLICATION_NAME=Testing
-PAYPLUS_APPLICATION_WEBSITE_URL="http://127.0.0.1:8000"
-PAYPLUS_APPLICATION_CANCEL_URL="http://127.0.0.1:8000"
-PAYPLUS_APPLICATION_CALLBACK_URL="http://127.0.0.1:8000/valider"
-PAYPLUS_APPLICATION_RETURN_URL="http://127.0.0.1:8000/valider"
+PAYPLUS_APPLICATION_WEBSITE_URL="http://publication.lapieuvretechnologique.info"
+PAYPLUS_APPLICATION_CANCEL_URL="http://publication.lapieuvretechnologique.info"
+PAYPLUS_APPLICATION_CALLBACK_URL="http://publication.lapieuvretechnologique.info/valider"
+PAYPLUS_APPLICATION_RETURN_URL="http://publication.lapieuvretechnologique.info/valider"
 
 MAIL_MAILER=smtp
 MAIL_HOST=smtp.gmail.com
