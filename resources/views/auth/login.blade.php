@@ -53,6 +53,12 @@
                                             {{ session('info') }}
                                         </div>
                                     @endif
+
+                                    @if (session('info2'))
+                                        <div class="alert alert-danger">
+                                            {{ session('info2') }}
+                                        </div>
+                                    @endif
                                 </div>
                                 <div class="p-2 mt-4">
                                     <form method="POST" action="{{ route('login') }}">
