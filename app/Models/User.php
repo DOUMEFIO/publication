@@ -62,6 +62,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Profil::class,'idProfil');
     }
+    
     public function workers()
     {
         return $this->hasMany(TravailleurTache::class);

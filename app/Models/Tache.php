@@ -11,10 +11,7 @@ class Tache extends Model
 {
     use HasFactory;
     protected $table = "tache";
-    protected $fillable = [
-        'idClient', 'vueRecherche', 'debut', 'fin', 'fichier', 'description',
-        'typetache', 'idStatus'
-    ];
+    protected $guarded = [];
 
     public static function createTache($data, $user_id,$img)
     {
@@ -47,6 +44,11 @@ class Tache extends Model
     public function type()
     {
         return $this->belongsTo(TypeTache::class, 'typetache');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'idStatus');
     }
 
     public function travailleur()

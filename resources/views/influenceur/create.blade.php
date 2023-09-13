@@ -1,8 +1,13 @@
 <x-app-layout>
     @section("contenue")
-    <div class="container py-2 col-6" style="font-size:20px;">
+    <div class="container py-2 col-12" style="font-size:20px;">
             <div class="card shadow">
                 <div class="card-header py-3">
+                    @if ($errors->has('tel'))
+                        <div class="alert alert-danger">
+                            {{ $errors->first('tel') }}
+                        </div>
+                    @endif
                     <p class="text-primary m-0 fw-bold" style="text-align: center; font-size:20px"><strong>Completez vos informations</strong></p>
                 </div>
                 <div class="card-body">
@@ -12,7 +17,7 @@
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label"><strong>Numéro WhatsApp</strong></label>
-                                    <input type="tel" name="tel" class="form-control rounded-end flag-input">
+                                    <input type="tel" name="tel" class="form-control rounded-end flag-input" required>
                                 </div>
                             </div>
                             <div class="col">

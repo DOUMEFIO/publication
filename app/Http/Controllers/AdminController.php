@@ -17,6 +17,8 @@
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\DB;
 
+use function Pest\Laravel\get;
+
 class AdminController extends Controller
 {
     public function index(){
@@ -35,7 +37,7 @@ class AdminController extends Controller
                 ->leftJoin('status', 'tache.idStatus', '=', 'status.id')
                 ->leftJoin('centre_interet', 'tache_centre.idCentre', '=', 'centre_interet.id')
                 ->leftJoin('type_tache', 'tache.typetache', '=', 'type_tache.id')
-                ->select('tache.idStatus','type_tache.libelle as tache_libelle','users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
+                ->select('tache.realisation','tache.idStatus','type_tache.libelle as tache_libelle','users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
                         'tache.typetache','tache.vueRecherche','status.libelle as status_libelle','tache.id as nbr','users.prenom','users.id','users.idProfil',
                     DB::raw('GROUP_CONCAT(DISTINCT centre_interet.libelle) as centre'),
                     DB::raw('GROUP_CONCAT(DISTINCT centre_interet.id) as idcentre'),
@@ -45,10 +47,9 @@ class AdminController extends Controller
                     DB::raw('GROUP_CONCAT(DISTINCT departements.name) as departements'),
                     DB::raw('GROUP_CONCAT(DISTINCT villes.id) as idvilles'),
                     DB::raw('GROUP_CONCAT(DISTINCT villes.name) as villes'))
-                ->groupBy('users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
+                ->groupBy('users.nom','tache.debut','tache.realisation','tache.fin','tache.fichier','tache.description',
                 'tache.typetache','tache_libelle','tache.idStatus','tache.vueRecherche','status_libelle','nbr','users.prenom','users.id','users.idProfil')
                 ->where('users.idProfil',3)
-                ->where('tache.idStatus',1)
                 ->where('payement',"paye")
                 ->get();
                 //dd($taches);
@@ -66,23 +67,19 @@ class AdminController extends Controller
                 ->leftJoin('status', 'tache.idStatus', '=', 'status.id')
                 ->leftJoin('centre_interet', 'tache_centre.idCentre', '=', 'centre_interet.id')
                 ->leftJoin('type_tache', 'tache.typetache', '=', 'type_tache.id')
-                ->select('tache.idStatus','type_tache.libelle as tache_libelle','users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
+                ->select('tache.realisation','tache.idStatus','type_tache.libelle as tache_libelle','users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
                         'tache.typetache','tache.vueRecherche','status.libelle as status_libelle','tache.id as tacheid','users.prenom','users.id','users.idProfil',
                     DB::raw('GROUP_CONCAT(DISTINCT centre_interet.libelle) as centre'),
                     DB::raw('GROUP_CONCAT(DISTINCT pays.name) as pays'),
                     DB::raw('GROUP_CONCAT(DISTINCT departements.name) as departements'),
                     DB::raw('GROUP_CONCAT(DISTINCT villes.name) as villes'))
-                ->groupBy('users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
+                ->groupBy('tache.realisation','users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
                 'tache.typetache','tache_libelle','tache.idStatus','tache.vueRecherche','status_libelle','tacheid','users.prenom','users.id','users.idProfil')
                 ->where('users.idProfil',3)
                 ->where('tache.idStatus',2)
                 ->where('payement',"paye")
                 ->get();
         return view('admin.tachevalide', compact("taches"));
-    }
-
-    public function createCentre(){
-        return view('admin.centreCreate');
     }
 
     public function centreStore(Request $request){
@@ -92,9 +89,20 @@ class AdminController extends Controller
         return redirect()->route("admin.index");
     }
 
+    public function edit(Request $request){
+        DB::table('centre_interet')->where('id', $request->id)->update(['libelle' => $request->libelle]);
+        return redirect()->back()->with('info', 'Votre modification est prise en compte');
+    }
+
     public function tacheAttribut(Request $request,$id,$vues,
         $centre,$pay,$dep,$vil){
         DB::table('tache')->where('id', $id)->update(['idStatus' => 2]);
+        $date = Tache::where('id', $id)->first();
+        $date1 = strtotime($date->debut);
+        $date2 = strtotime($date->fin);
+        $nombre_de_secondes = $date2 - $date1;
+        $nombre_de_jours = intval(ceil($nombre_de_secondes / (60 * 60 * 24)));
+        $vues = intval($vues)/$nombre_de_jours;
         //dd($id,$vues,$centre,$pay,$dep,$vil);
         $listcentre = explode("," , $centre);
         $listpay = explode("," , $pay);
@@ -131,7 +139,8 @@ class AdminController extends Controller
         $result = $uniqueItems;
         //dd( $result);
         $totalvues=0;
-        $vue = intval($vues);
+        $vue = $vues;
+        //dd($vue, 45);
         $selectedElement = null;
         $tableau=[];
         $closestGreaterElement = null;
@@ -233,7 +242,7 @@ class AdminController extends Controller
 
            if(empty($listvil) && empty($listdep)){
             $paytableau = $listpay;
-           }
+            }
            $depalltableau = Departements::whereIn("country_id",$paytableau)->pluck("id")->implode(",");
            $depalltableau = explode("," , $depalltableau);
            $valeurs_users = [];
@@ -244,23 +253,23 @@ class AdminController extends Controller
             }
             //dd($depalltableau);
             $resultat = implode(",", $valeurs_users);
-           $items1 = InfoInfluenceur::join('users', 'users.id', '=', 'info_influenceur.id_user')
-            ->join('travailleur_centre_interet', 'travailleur_centre_interet.id_User', '=', 'info_influenceur.id_user')
-            ->select('info_influenceur.*', 'users.nom','users.id as users','users.idprofil',
-                'travailleur_centre_interet.id_Centre')
-            ->where('users.idprofil' , 2)
-            ->whereIn('id_Centre' , $listcentre)
-            ->whereIn('id_departement' , $depalltableau)
-            ->whereNotIn("info_influenceur.id_user",$valeurs_users)
-            ->distinct()
-            ->get();
+            $items1 = InfoInfluenceur::join('users', 'users.id', '=', 'info_influenceur.id_user')
+                ->join('travailleur_centre_interet', 'travailleur_centre_interet.id_User', '=', 'info_influenceur.id_user')
+                ->select('info_influenceur.*', 'users.nom','users.id as users','users.idprofil',
+                    'travailleur_centre_interet.id_Centre')
+                ->where('users.idprofil' , 2)
+                ->whereIn('id_Centre' , $listcentre)
+                ->whereIn('id_departement' , $depalltableau)
+                ->whereNotIn("info_influenceur.id_user",$valeurs_users)
+                ->distinct()
+                ->get();
 
-        $totalinflu=0;
-        $vuesnew = $vue - $total;
-        //dd($vue, $total,$vuesnew);
-        $resultArray = [];
+            $totalinflu=0;
+            $vuesnew = $vue - $total;
+            //dd($vue, $total,$vuesnew);
+            $resultArray = [];
 
-        foreach ($items1 as $iteminflu) {
+            foreach ($items1 as $iteminflu) {
             $userId = $iteminflu->id_User;
             $vue = $iteminflu->nbr_vue_moyen;
 
@@ -356,13 +365,34 @@ class AdminController extends Controller
                 ]);
             }
         }
-
-    }
+        }
         return redirect()->route("admin.tache");
     }
 
     public function distribuer(){
-        $taches = Tache::has('travailleurs')
+        $taches = DB::table('tache')
+                ->leftJoin('users', 'tache.idClient', '=', 'users.id')
+                ->leftJoin('tache_zone', 'tache.id', '=', 'tache_zone.idTache')
+                ->leftJoin('tache_centre', 'tache.id', '=', 'tache_centre.idTache')
+                ->leftJoin('villes', 'tache_zone.idVille', '=', 'villes.id')
+                ->leftJoin('pays', 'tache_zone.idPay', '=', 'pays.id')
+                ->leftJoin('departements', 'tache_zone.idDepartement', '=', 'departements.id')
+                ->leftJoin('status', 'tache.idStatus', '=', 'status.id')
+                ->leftJoin('centre_interet', 'tache_centre.idCentre', '=', 'centre_interet.id')
+                ->leftJoin('type_tache', 'tache.typetache', '=', 'type_tache.id')
+                ->select('tache.realisation','tache.idStatus','type_tache.libelle as tache_libelle','users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
+                        'tache.typetache','tache.vueRecherche','status.libelle as status_libelle','tache.id as tacheid','users.prenom','users.id','users.idProfil',
+                    DB::raw('GROUP_CONCAT(DISTINCT centre_interet.libelle) as centre'),
+                    DB::raw('GROUP_CONCAT(DISTINCT pays.name) as pays'),
+                    DB::raw('GROUP_CONCAT(DISTINCT departements.name) as departements'),
+                    DB::raw('GROUP_CONCAT(DISTINCT villes.name) as villes'))
+                ->groupBy('tache.realisation','users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
+                'tache.typetache','tache_libelle','tache.idStatus','tache.vueRecherche','status_libelle','tacheid','users.prenom','users.id','users.idProfil')
+                ->where('users.idProfil',3)
+                ->where('tache.idStatus',1)
+                ->where('payement',"paye")
+                ->get();
+        /* $taches = Tache::has('travailleurs')
         ->with('travailleurs')
         ->get();
         $clients = $taches->map(function ($tache) {
@@ -383,9 +413,8 @@ class AdminController extends Controller
             'fin' => $tache->fin,
             'libelle' => $libelle->libelle
         ];
-    })->toArray();
-
-        return view("admin.attribuerTache", compact("clients"));
+       })->toArray(); */
+        return view("admin.attribuerTache", compact("taches"));
     }
 
     public function executez(){
@@ -425,17 +454,33 @@ class AdminController extends Controller
         return view('admin.tacheexecute', compact('clientes'));
     }
 
-    public function preuve(){
-        $taches = Tache::all();
-        $travailleurs = User::where("idProfil" , 2)->get();
-        return view("admin.preuve", compact("taches","travailleurs"));
-    }
-
-    public function showPreuve(Request $request){
-        $preuves = TachePreuve::where("idtravailleur",$request->idTravailleur)
-        ->where("idTache", $request->idTache)
+    public function showPreuve($id, $idinfluenceur){
+        $user = User::where('id', $idinfluenceur)->get();
+        $preuves = TachePreuve::where("idtravailleur",$idinfluenceur)
+        ->where("idTache", $id)
         ->get();
         $totalVues = $preuves->sum('totalVues');
-        return view("admin.showpreuves", compact("preuves","totalVues"));
+        return view("admin.showpreuves", compact("preuves","totalVues","user","id"));
+    }
+
+    public function statistique(){
+        $tachevalide = Tache::where('idStatus', 2)->get();
+        $tachenonvalide = Tache::where('idStatus', 1)->get();
+        $tacheall = Tache::all();
+        $tachevueatteint = Tache::where('realisation', 'Vues Atteint')->get();
+        $tachevuenonatteint = Tache::where('realisation', 'Vues Non Atteint')->get();
+        $tachenonexecute = Tache::where('realisation', 'Non Exécutée')
+        ->where ('idStatus', 2) ->get();
+        $client = User::where('idProfil', 3)->get();
+        $influenceur = User::where('idProfil', 2)->get();
+        return view("statistique.statistique", compact('client','influenceur','tachevalide','tachevueatteint',
+                                                'tacheall','tachenonvalide',
+                                                'tachevuenonatteint','tachenonexecute'));
+    }
+
+    public function tableaudebord($id){
+        $taches = Tache::with('travailleur')->where('realisation', $id)
+        ->where ('idStatus', 2)->get();
+        return view("statistique.show", compact('taches','id'));
     }
 }

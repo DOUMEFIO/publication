@@ -10,4 +10,9 @@ class TacheCentre extends Model
     use HasFactory;
     protected $table="tache_centre";
     protected $fillable=['idTache','idCentre'];
+
+    public function centre()
+    {
+        return $this->belongsTo(CentreInteret::class, 'idCentre');
+    }
 }

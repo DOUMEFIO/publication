@@ -17,6 +17,8 @@
     <link href="{{asset('velson/libs/swiper/swiper-bundle.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('velson/libs/dropzone/dropzone.css')}}" rel="stylesheet" type="text/css" />
 
+    <!-- glightbox css -->
+    <link rel="stylesheet" href="{{asset('velson/libs/glightbox/css/glightbox.min.css')}}">
     <!-- Layout config Js -->
     <script src="{{asset('velson/js/layout.js')}}"></script>
     <!-- Bootstrap Css -->

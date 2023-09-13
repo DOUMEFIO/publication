@@ -30,44 +30,38 @@
             <div id="two-column-menu">
             </div>
             <ul class="navbar-nav" id="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Tableau de bord</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="sidebarDashboards">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="dashboard-nft.html" class="nav-link" data-key="t-nft"> Statistiques</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                 <!-- end Dashboard Menu -->
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Autres</span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="sidebarApps">
-                        <ul class="nav nav-sm flex-column">
-                            @if (Auth::User()->idProfil == 1)
-                                <li class="nav-item">
-                                    <a href="{{route('admin.index')}}" class="nav-link" data-key="t-calendar"> Centres D'interets </a>
-                                </li>
-                            @endif
-                            @if (Auth::User()->idProfil == 1 || Auth::User()->idProfil == 3)
+                @if (Auth::User()->idProfil == 1 || Auth::User()->idProfil == 3)
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('statistique')}}">
+                            <i class="ri-honour-line"></i> <span data-key="t-widgets">Tableau de bord</span>
+                        </a>
+                    </li>
+                @endif
+
+                @if (Auth::User()->idProfil == 1)
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('admin.index')}}">
+                            <i class="ri-honour-line"></i> <span data-key="t-widgets">Centres D'interets</span>
+                        </a>
+                    </li>
+                    <li class="menu-title"><span data-key="t-menu">Menu</span></li>
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
+                            <i class="ri-apps-2-line"></i> <span data-key="t-apps">Utilisateurs</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="sidebarApps">
+                            <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
                                     <a href="{{route('show.influenceur')}}" class="nav-link" data-key="t-chat"> Influenceurs </a>
                                 </li>
-                            @endif
-                            @if (Auth::User()->idProfil == 2)
+
                                 <li class="nav-item">
-                                    <a href="{{route('influenceurconnect')}}" class="nav-link" data-key="t-select2">Profil</a>
+                                    <a href="{{route('show.client')}}" class="nav-link" data-key="t-chat"> Clients </a>
                                 </li>
-                            @endif
-                        </ul>
-                    </div>
-                </li>
+                            </ul>
+                        </div>
+                    </li>
+                @endif
                 <!-- end Dashboard Menu -->
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarForms" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
@@ -83,7 +77,7 @@
                                     <a href="{{route('admin.tachevalide')}}" class="nav-link" data-key="t-select2">Tâches Validées</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{route('tache.partager')}}" class="nav-link" data-key="t-select2">Tâches Attribuées</a>
+                                    <a href="{{route('tache.partager')}}" class="nav-link" data-key="t-select2">Tâches Non Validées</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{route('tache.executez')}}" class="nav-link" data-key="t-select2">Tâches Exécutées</a>
@@ -101,7 +95,7 @@
 
                             @if (Auth::User()->idProfil == 3)
                                 <li class="nav-item">
-                                    <a href="{{route('/dashboard')}}" class="nav-link" data-key="t-select2">Tâche</a>
+                                    <a href="{{route('/dashboard')}}" class="nav-link" data-key="t-select2">Toutes les Tâches</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{route('clienttacheencours')}}" class="nav-link" data-key="t-select2">Tâche En cours</a>
@@ -110,15 +104,23 @@
                                     <a href="{{route('clienttacheexecutez')}}" class="nav-link" data-key="t-select2">Tâche Exécutées</a>
                                 </li>
                             @endif
-
-                            @if (Auth::User()->idProfil == 1 || Auth::User()->idProfil == 2 || Auth::User()->idProfil == 3)
-                                <li class="nav-item">
-                                    <a href="{{route('preuve')}}" class="nav-link" data-key="t-select2">Preuve</a>
-                                </li>
-                            @endif
                         </ul>
                     </div>
                 </li>
+                @if (Auth::User()->idProfil == 2)
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('influenceurconnect')}}">
+                            <i class="ri-honour-line"></i> <span data-key="t-widgets">Profil</span>
+                        </a>
+                    </li>
+                @endif
+                @if (Auth::User()->idProfil == 3)
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('clientconnect')}}">
+                            <i class="ri-honour-line"></i> <span data-key="t-widgets">Profil</span>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </div>
         <!-- Sidebar -->

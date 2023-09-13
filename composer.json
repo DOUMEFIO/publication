@@ -13,6 +13,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^2.12",
+        "pbmedia/laravel-ffmpeg": "^8.3",
         "stephaneass/payplus": "^1.0@dev",
         "twilio/sdk": "^7.0",
         "wisdom-diala/countrypkg-laravel": "^1.0"

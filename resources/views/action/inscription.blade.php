@@ -42,7 +42,7 @@
 
                             <div class="card-body p-4">
                                 <div class="text-center mt-2">
-                                    <h5 class="text-primary">Créer un compte</h5>
+                                    <h5 class="text-primary">Créer un compte Client</h5>
                                     @if(session()->has('error'))
                                         <div class="alert alert-danger"> {!! session('error') !!}</div>
                                     @endif
@@ -99,19 +99,6 @@
                                         <div class="mt-4">
                                             <button class="btn btn-success w-100" type="submit">Enregister</button>
                                         </div>
-
-                                        {{-- <div class="mt-4 text-center">
-                                            <div class="signin-other-title">
-                                                <h5 class="fs-13 mb-4 title text-muted">Créer votre compte avec</h5>
-                                            </div>
-
-                                            <div>
-                                                <button type="button" class="btn btn-primary btn-icon waves-effect waves-light"><i class="ri-facebook-fill fs-16"></i></button>
-                                                <button type="button" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-google-fill fs-16"></i></button>
-                                                <button type="button" class="btn btn-dark btn-icon waves-effect waves-light"><i class="ri-github-fill fs-16"></i></button>
-                                                <button type="button" class="btn btn-info btn-icon waves-effect waves-light"><i class="ri-twitter-fill fs-16"></i></button>
-                                            </div>
-                                        </div> --}}
                                     </form>
 
                                 </div>

@@ -75,7 +75,6 @@ class TacheController extends Controller
             ]);
             event(new Registered($user));
             RegistrationLinkController::send($user->email);
-
             $users = User::where('email',$request->email)->get()->first();
             $datas = $this->getFormDatas($request);
             $img = substr($datas["url"], 9);
@@ -127,12 +126,6 @@ class TacheController extends Controller
                 }
                 DB::table('tache_zone')->insert($datavil);
             }
-
-            Paiement::create([
-                'idUer' => $user->id,
-                'idTache' => $tache->id,
-                'montant' => 1000
-            ]);
            return Paiement::paiementdo($datas["vueRecherche"],$request, $tache->id , $user->id);
         }
     }
@@ -191,11 +184,6 @@ class TacheController extends Controller
                 DB::table('tache_zone')->insert($datavil);
             }
 
-            Paiement::create([
-                'idUer' => $user->id,
-                'idTache' => $tache->id,
-                'montant' => 1000
-            ]);
             return Paiement::paiementdo($datas["vueRecherche"], $request, $tache->id , $user->id);
         } elseif(!blank($user) && !Hash::check($request->password, $user->password)){
             return redirect()->route('form.connection')->With('info',"Le mot de passe est incorrect"); // Redirection vers une autre page par exemple
@@ -212,6 +200,13 @@ class TacheController extends Controller
         if ($co->confirm($token)) {
             $user_id = $co->getCustomData("user_id");
             $task_id = $co->getCustomData("task_id");
+            $total_amount = $co->getCustomData("montant");
+            Paiement::create([
+                'idUer' => $user_id,
+                'idTache' =>$task_id,
+                'montant' => $total_amount,
+                'token'   => $token,
+            ]);
             if (!blank($user_id)) {
                 $user = User::find($user_id);
                 DB::table('tache')->where('id', $task_id)->update(['payement' => 'paye']);

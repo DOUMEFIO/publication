@@ -1,10 +1,11 @@
 <x-app-layout>
     @section('name')
-        Les Influenceurs
+        Les Clients
     @endsection
     @section('title')
         Utilisateurs
     @endsection
+
     @section('contenue')
     <div class="container-fluid">
         <div class="card shadow">
@@ -27,36 +28,24 @@
                         <thead>
                             <tr>
                                 <th>Nom & Prénom</th>
-                                <th>Téléphone</th>
-                                <th>Résidence</th>
-                                <th>Centre D'Interet</th>
-                                <th>Vues moyens</th>
+                                <th>Email</th>
+                                <th>Date de creation</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody >
                             @foreach ($users as $user )
                                 <tr>
-                                    @if ($user->photpProfil)
-                                    <td>
-                                        <img class="rounded-circle me-2" src="{{asset('storage'.$user->photpProfil)}}" width="30" height="30">{{$user->nom}} {{$user->prenom}}
-                                    </td>
-                                    @else
-                                    <td>
-                                        <img class="rounded-circle me-2" src="{{asset('velson/images/users/user-dummy-img.jpg')}}" width="30" height="30">{{$user->nom}} {{$user->prenom}}
-                                    </td>
-                                    @endif
-                                    <td style="text-align:center">{{$user->tel}}</td>
-                                    <td>{{$user->pays}}, {{$user->departement}}, {{$user->ville}}</td>
-                                    <td style="text-align:center">{{$user->interests}}</td>
-                                    <td style="text-align:center">{{$user->nbr_vue_moyen}}</td>
-                                    <td>
-                                        <button class="btn btn-soft-secondary btn-sm dropdown" type="button" >
-                                            <a class="dropdown-item edit-item-btn" href="{{route('showtacheallinfluenceur', ['id'=>$user->id])}}" class="btn btn-warning">
-                                                <i class="ri-eye-fill align-bottom me-2 text-muted"></i>Voir Plus
-                                            </a>
-                                        </button>
-                                    </td>
+                                    <td>{{$user->nom}} {{$user->prenom}}</td>
+                                    <td>{{$user->email}}</td>
+                                    <td><span class="badge text-bg-success">
+                                        {{ \Carbon\Carbon::parse($user->created_at)->locale('fr')->isoFormat('dddd D MMMM YYYY') }}
+                                    </span></td>
+                                    <td><button class="btn btn-soft-secondary btn-sm dropdown" type="button" >
+                                        <a class="dropdown-item edit-item-btn" href="{{route('showtache.all', ['id' => $user->id])}}" class="btn btn-warning">
+                                            <i class="ri-eye-fill align-bottom me-2 text-muted"></i>Voir Plus
+                                        </a>
+                                    </button></td>
                                 </tr>
                             @endforeach
                         </tbody>

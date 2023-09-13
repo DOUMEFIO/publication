@@ -1,13 +1,14 @@
 <x-app-layout>
-
+    @section('name')
+        LES TACHES ATTRIBUES
+    @endsection
+    @section('title')
+        Tâches
+    @endsection
     @section('contenue')
-
     <div class="container-fluid">
         <div class="card shadow">
             <div class="row card-body">
-                <div class="col md-9">
-                    <p class="text-primary m-0 fw-bold">LES TACHES ATTRIBUES</p>
-                </div>
                 <div class="col md-3" style="padding-left: 600px">
                 </div>
             </div>
@@ -29,18 +30,17 @@
                     <table class="table my-0" id="dataTable">
                         <thead>
                             <tr>
-                                <th>Taches</th>
+                                <th>N° Taches</th>
                                 <th>Attribuer à</th>
                                 <th>Vues obtenir</th>
-                                <th>Créer par</th>
                                 <th>Période</th>
-                                <th>Type Tâche</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody >
                             @foreach ($clientes as $client)
                                 <tr>
-                                    <td>T{{$client['idTache']}}</td>
+                                    <td><span class="badge text-bg-primary">T{{$client['idTache']}}</span></td>
                                     <td>
                                         <ul>
                                             @foreach ($client['travailleurs'] as $travailleur)
@@ -56,26 +56,20 @@
                                             @endforeach
                                         </ul>
                                     </td>
-                                    <td>{{$client['clientnom'] }} {{$client['clientprenom']}}
-                                    </td>
+                                    <td><span class="badge text-bg-success">{{ \Carbon\Carbon::parse($client['debut'])->locale('fr')->isoFormat('dddd D MMMM YYYY') }} au <br>
+                                        {{ \Carbon\Carbon::parse($client['fin'])->locale('fr')->isoFormat('dddd D MMMM YYYY') }}</span></td>
                                     <td>
-                                        {{ strftime('%A %e %B %Y', strtotime($client['debut'])) }} à</br>
-                                        {{ strftime('%A %e %B %Y', strtotime($client['fin'])) }}
+                                        <div class="dropdown d-inline-block">
+                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button" >
+                                                <a class="dropdown-item edit-item-btn" href="{{route('showtache.client', ['id' => $client['idTache']])}}" class="btn btn-warning">
+                                                    <i class="ri-eye-fill align-bottom me-2 text-muted"></i>Voir Plus
+                                                </a>
+                                            </button>
+                                        </div>
                                     </td>
-                                    <td>{{$client['libelle']}}</td>
                                 </tr>
                             @endforeach
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td><strong>Taches</strong></td></th>
-                                <td><strong>Attribuer à</strong></td></th>
-                                <td><strong>Vues obtenir</strong></td></th>
-                                <td><strong>Créer par</strong></td></th>
-                                <td><strong>Période</strong></td></th>
-                                <td><strong>Type Tâche</strong></td></th>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
                 <div class="row">

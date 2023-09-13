@@ -14,9 +14,6 @@ Route::middleware('auth')->group(function (){
     Route::get('admin.tachevalide', [AdminController::class, 'tachevalide'])
         ->name('admin.tachevalide');
 
-    Route::get('centre.create', [AdminController::class, 'createCentre'])
-        ->name('centre.create');
-
     Route::post('centre.store', [AdminController::class, 'centreStore'])
         ->name('centre.store');
 
@@ -29,10 +26,17 @@ Route::middleware('auth')->group(function (){
     Route::get('tache.executez', [AdminController::class, 'executez'])
         ->name('tache.executez');
 
-    Route::get('preuve', [AdminController::class, 'preuve'])
-        ->name('preuve');
-
-    Route::post('showPreuve', [AdminController::class, 'showPreuve'])
+    Route::get('showPreuve/{id}/{idinfluenceur}', [AdminController::class, 'showPreuve'])
         ->name('showPreuve');
+
+    Route::get('statistique', [AdminController::class, 'statistique'])
+        ->name('statistique');
+
+    Route::get('tableaudebord/{id}', [AdminController::class, 'tableaudebord'])
+        ->name('tableaudebord');
+
+    Route::post('editcentre', [AdminController::class, 'edit'])
+        ->name('editcentre');
+
 });
 

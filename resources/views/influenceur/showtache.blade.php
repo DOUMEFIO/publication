@@ -1,11 +1,32 @@
 <x-app-layout>
-    @section('name')
-        Tâches
-    @endsection
-    @section('name')
-        Tâches
-    @endsection
     @section('contenue')
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modifier la photo de profil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form class="user" method="POST" action="{{route('updatevues')}}" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="id" id="tacheIdInput">
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Nombres vues Realisée</strong></label>
+                            <input type="number" value="" name="nbr_vue_moyen" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Capture</strong></label>
+                            <input type="file" class="form-control" id="avatar" name="avatar" value="">
+                        </div>
+                        <button type="submit" id="submitModal" class="btn btn-primary" style="float: right">Enregistrer</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="container-fluid">
         <div class="profile-foreground position-relative mx-n4 mt-n4">
@@ -43,12 +64,6 @@
                     <div class="row text text-white-50 text-center">
                         <div class="col-lg-6 col-4">
                             <div class="p-2">
-                                <h4 class="text-white mb-1">{{$clients[0]["totalinflu"]}}</h4>
-                                <p class="fs-14 mb-0">Influenceurs</p>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-4">
-                            <div class="p-2">
                                 <h4 class="text-white mb-1">{{$clients[0]["totalvues"]}}/{{$clients[0]["vueRecherche"]}}</h4>
                                 <p class="fs-14 mb-0">Vues</p>
                             </div>
@@ -73,27 +88,21 @@
                                 </a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link fs-14" data-bs-toggle="tab" href="#activities" role="tab" aria-selected="false" tabindex="-1">
-                                    <i class="ri-list-unordered d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Influenceurs</span>
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link fs-14" data-bs-toggle="tab" href="#projects" role="tab" aria-selected="false" tabindex="-1">
-                                    <i class="ri-price-tag-line d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Réalisation/Preuves</span>
+                                <a class="nav-link fs-14" data-bs-toggle="tab" onclick="showModal({{$clients[0]['idTache']}})" role="tab" aria-selected="false" tabindex="-1">
+                                    <i class="ri-list-unordered d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Ajouter Preuve</span>
                                 </a>
                             </li>
                         </ul>
-                        @if ($clients[0]["profil"] == 3)
-                            <div class="flex-shrink-0">
-                                @if ($clients[0]["status"] != "Valide")
-                                    <a href="{{route('attribuer.tache', ['id' => $clients[0]["idTache"],
-                                        'vues' =>$clients[0]["vueRecherche"], 'centre' =>$idcentre,
-                                        'pay' => !empty($idpays) ?  $idpays: 0,
-                                        'dep' => !empty($iddepartements) ? $iddepartements : 0,
-                                        'vil' => !empty($idvilles) ?  $idvilles: 0])}}" class="btn btn-success"><i class="ri-edit-box-line align-bottom"></i> Valider </a>
-                                @endif
+                        @if (session('info'))
+                            <div class="alert alert-success">
+                                {{ session('info') }}
                             </div>
                         @endif
+                        <div class="flex-shrink-0">
+                            <a href="{{route('showPreuve', ['id' => $clients[0]['idTache'],
+                                'idinfluenceur' =>$user])}}" class="btn btn-success"><i class="ri-edit-box-line align-bottom"></i>Preuve
+                            </a>
+                        </div>
                     </div>
                     <!-- Tab panes -->
                     <div class="tab-content pt-4 text-muted">
@@ -102,7 +111,6 @@
                                 <div class="col-xxl-3">
                                     <div class="card">
                                     </div>
-
                                     <div class="card">
                                         <div class="card-body">
                                             <h5 class="card-title mb-3">Les détails de la tâche T{{$clients[0]["idTache"]}}</h5>
@@ -110,9 +118,9 @@
                                                 <table class="table table-borderless mb-0">
                                                     <tbody>
                                                         <tr>
-                                                            <th class="ps-0" scope="row"><a href="{{route('showtache.all', ['id'=>$clients[0]['idClient']])}}"><span class="badge text-bg-primary">Client :</span></a></th>
-                                                            <td class="text-muted"><a href="{{route('showtache.all', ['id'=>$clients[0]['idClient']])}}">{{$clients[0]["nomClient"]}}
-                                                                {{$clients[0]["prenomClient"]}}. {{$clients[0]["mailClient"]}}</a></td>
+                                                            <th class="ps-0" scope="row">Client :</th>
+                                                            <td class="text-muted">{{$clients[0]["nomClient"]}}
+                                                                {{$clients[0]["prenomClient"]}}. {{$clients[0]["mailClient"]}}</td>
                                                         </tr>
                                                         <tr>
                                                             <th class="ps-0" scope="row">Vues Rechercher :</th>
@@ -181,106 +189,7 @@
                             </div>
                             <!--end row-->
                         </div>
-                        <div class="tab-pane fade" id="activities" role="tabpanel">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title mb-3">Les Influenceurs</h5>
-                                    <div class="acitivity-timeline">
-                                        @foreach ($clients[0]["travailleurs"] as $influenceur)
-                                            <div class="acitivity-item d-flex px-3">
-                                                @if (!blank($influenceur['image']))
-                                                    <div class="flex-shrink-0">
-                                                        <img src="{{asset('storage'.$influenceur['image'])}}" alt="" class="avatar-xs rounded-circle acitivity-avatar">
-                                                    </div>
-                                                @else
-                                                <div class="flex-shrink-0">
-                                                    <img src="{{asset('velson/images/users/user-dummy-img.jpg')}}" alt="" class="avatar-xs rounded-circle acitivity-avatar">
-                                                </div>
-                                                @endif
-
-                                                <div class="flex-grow-1 ms-3">
-                                                    <h6 class="mb-1">{{$influenceur['nom']}} {{$influenceur['prenom']}} <span class="badge bg-soft-primary text-primary align-middle">{{$influenceur['vues']}}/J</span></h6>
-                                                    <p class="text-muted mb-2"> {{$influenceur['email']}}. {{$influenceur['tel']}}</p>
-                                                    <small class="mb-0 text-muted">{{$influenceur['sexe']}}</small>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                                <!--end card-body-->
-                            </div>
-                            <!--end card-->
-                        </div>
                         <!--end tab-pane-->
-                        <div class="tab-pane fade" id="projects" role="tabpanel">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        @foreach ($clients[0]["travailleurstaches"] as $execute)
-                                            <div class="col-xxl-3 col-sm-6">
-                                                <div class="card profile-project-card shadow-none profile-project-warning">
-                                                    <div class="card-body p-4">
-                                                        <div class="d-flex">
-                                                            <div class="flex-grow-1 text-muted overflow-hidden">
-                                                                <h5 class="fs-14 text-truncate"><a href="#" class="text-dark">{{$execute['nom']}} {{$execute['prenom']}}</a></h5>
-                                                                <p class="text-muted text-truncate mb-0">Total Vues obtenues : {{$execute['totalVues']}}</p>
-                                                            </div>
-                                                            <div class="flex-shrink-0 ms-2">
-                                                                <a href="{{route('showtacheallinfluenceur', ['id'=>$execute['id']])}}"><div class="badge badge-soft-warning fs-10">Voir Plus</div></a>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="d-flex mt-4">
-                                                            <div class="flex-grow-1">
-                                                                <div class="d-flex align-items-center gap-2">
-                                                                    <div>
-                                                                        <a href="{{route('showPreuve', ['id' => $clients[0]["idTache"],
-                                                                            'idinfluenceur' =>$execute['id']])}}" class="btn btn-success"><i class="ri-edit-box-line align-bottom"></i>Preuve</a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- end card body -->
-                                                </div>
-                                                <!-- end card -->
-                                            </div>
-                                        @endforeach
-                                        <!--end col-->
-                                        <div class="col-lg-12">
-                                            <div class="mt-4">
-                                                <ul class="pagination pagination-separated justify-content-center mb-0">
-                                                    <li class="page-item disabled">
-                                                        <a href="javascript:void(0);" class="page-link"><i class="mdi mdi-chevron-left"></i></a>
-                                                    </li>
-                                                    <li class="page-item active">
-                                                        <a href="javascript:void(0);" class="page-link">1</a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a href="javascript:void(0);" class="page-link">2</a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a href="javascript:void(0);" class="page-link">3</a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a href="javascript:void(0);" class="page-link">4</a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a href="javascript:void(0);" class="page-link">5</a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a href="javascript:void(0);" class="page-link"><i class="mdi mdi-chevron-right"></i></a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--end row-->
-                                </div>
-                                <!--end card-body-->
-                            </div>
-                            <!--end card-->
-                        </div>
                     </div>
                     <!--end tab-content-->
                 </div>
@@ -290,5 +199,14 @@
         <!--end row-->
 
     </div>
+    <button style="display: none" id="triggerModal" class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
     @endsection
+    @push('scripts')
+        <script>
+            function showModal(id){
+                $('#tacheIdInput').val(id);
+                $('#triggerModal').trigger('click')
+            }
+        </script>
+    @endpush
 </x-app-layout>

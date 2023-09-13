@@ -12,7 +12,9 @@ use App\Models\Tache;
 use App\Models\TachePreuve;
 use App\Models\TravailleurTache;
 use App\Models\User;
+use App\Models\TacheCentre;
 use App\Models\Villes;
+use App\Models\Zone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,8 +23,7 @@ class InfluenceurController extends Controller
 {
     public function show(){
         $alls=User::where('idProfil', 2)->get();
-
-            $users = DB::table('users')
+        $users = DB::table('users')
                 ->leftJoin('info_influenceur', 'users.id', '=', 'info_influenceur.id_user')
                 ->leftJoin('travailleur_centre_interet', 'users.id', '=', 'travailleur_centre_interet.id_User')
                 ->leftJoin('centre_interet', 'travailleur_centre_interet.id_Centre', '=', 'centre_interet.id')
@@ -58,6 +59,7 @@ class InfluenceurController extends Controller
             }
             $libelles = CentreInteret::whereIn('id', $result)->pluck('libelle');
             $idlibelles = CentreInteret::whereIn('id', $result)->pluck('id');
+
             return view('influenceur.index', compact("pays","users","centreInteret","idlibelles","libelles","centres","profil"));
         }else{
             $url = url("confirm/" . Auth::user()->id);
@@ -65,8 +67,7 @@ class InfluenceurController extends Controller
         }
     }
 
-    public function create()
-    {
+    public function create(){
         $centres = CentreInteret::all();
         $pays = Pays::all();
         $departements = Departements::all();
@@ -74,8 +75,7 @@ class InfluenceurController extends Controller
         return view('influenceur.create', compact('centres', 'pays', 'departements', 'villes'));
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         InfoInfluenceur::createInfoInfluenceur($request, Auth::user()->id);
 
         TravailleCentre::userCentre(Auth::user()->id, $request->input('id_centre'));
@@ -83,8 +83,7 @@ class InfluenceurController extends Controller
         return redirect()->route('influenceurconnect');
     }
 
-    public function getStates()
-    {
+    public function getStates(){
         $country_id = request("country");
         $departements = Departements::where("country_id", $country_id)->get();
         $option = "<option value=''>Selectionner</option>";
@@ -94,8 +93,7 @@ class InfluenceurController extends Controller
         return $option;
     }
 
-    public function getCities()
-    {
+    public function getCities(){
         $satates_id = request("states");
         $villes = Villes::where("state_id", $satates_id)->get();
         $option = "<option value=''>Selectionner</option>";
@@ -105,8 +103,7 @@ class InfluenceurController extends Controller
         return $option;
     }
 
-    public function getListeStates()
-    {
+    public function getListeStates(){
         $country_id = explode('_', request("country"));
         $option = '<option value="">Selectionner</option>';
         $departments = DB::table('departements')
@@ -118,8 +115,7 @@ class InfluenceurController extends Controller
         return $option;
     }
 
-    public function getListeCity()
-    {
+    public function getListeCity(){
         $states_id = explode('_', request("state"));
         $option = '<option value="">Selectionner</option>';
         $villes = DB::table('villes')
@@ -131,8 +127,7 @@ class InfluenceurController extends Controller
         return $option;
     }
 
-    public function totalvues()
-    {
+    public function totalvues(){
         $items = DB::table('info_influenceur')
                 ->join('users', 'users.id', '=', 'info_influenceur.id_user')
                 ->join('travailleur_centre_interet', 'travailleur_centre_interet.id_User', '=', 'info_influenceur.id_user')
@@ -231,7 +226,7 @@ class InfluenceurController extends Controller
         $path = $avatar->store('public/fichiers');
         $img = substr($path, 6);
         DB::table('users')->where('id', Auth::user()->id)->update(['photpProfil' => $img]);
-        return redirect()->route("influenceurconnect");
+        return redirect()->back();
     }
 
     public function pictureUpdatee(Request $request){
@@ -253,15 +248,23 @@ class InfluenceurController extends Controller
             TravailleCentre::userCentre(Auth::user()->id, $nouveauxEnregistrements);
         }
 
-        return redirect()->route("influenceurconnect");
+        return redirect()->back();
     }
 
     public function influtachencour(){
-        $taches = TravailleurTache::with('tacheall.type')
-         ->where('idtravailleur', Auth::user()->id)
-         ->get();
-         //dd($taches);
-        return view('influenceur.tacheattribuer', compact('taches'));
+        $currentDate = now()->toDateString();
+        $tachesall = TravailleurTache::with('tacheall.type','tacheall.travailleur')
+            ->where('idtravailleur', Auth::user()->id)
+            ->get();
+        $taches = [];
+
+        foreach ($tachesall as $tache) {
+            if ($currentDate >= $tache->tacheall->debut && $currentDate <= $tache->tacheall->fin) {
+                $taches[] = $tache; // Ajouter la tâche au tableau si elle est en cours
+            }
+        }
+
+        return view('influenceur.tacheattribuer', compact('taches','currentDate'));
     }
 
     public function vuesrealisee($id){
@@ -284,7 +287,16 @@ class InfluenceurController extends Controller
                 'capture' => $img
             ]);
             $taches = TachePreuve::with("infotache")->get();
-            return redirect()->route('infl.tachencour')->with('info','Vos preuves ont été soumises.');
+            $vues = Tache::where('id', $request->id)->first('vueRecherche');
+            $realisation = TachePreuve::where('idTache', $request->id)->get('totalVues');
+            $sommeTotalVues = $realisation->sum('totalVues');
+            if($vues->vueRecherche <= $sommeTotalVues  ){
+                DB::table('tache')->where('id', $request->id)->update(['realisation' => 'Vues Atteint']);
+            }
+            else{
+                DB::table('tache')->where('id', $request->id)->update(['realisation' => 'Vues Non Atteint']);
+            }
+            return redirect()->back()->with('info','Vos preuves ont été soumises.');
         } else {
            return redirect()->back()->with('info','Vous n\'etes pas dans la période de la tâche.');
         }
@@ -323,5 +335,127 @@ class InfluenceurController extends Controller
         });
         //dd($clientes);
         return view('influenceur.tacheexecute', compact('clientes'));
+    }
+
+    public function infludistribuer($id){
+        $taches = Tache::has('travailleurs')
+        ->with('travailleurs')
+        ->get();
+        $clients = $taches->where('id', $id)->map(function ($tache) {
+        $travailleurs = $tache->travailleurs->map(function ($travailleur) {
+            return [
+                'nom' => $travailleur->nom,
+                'prenom' => $travailleur->prenom,
+            ];
+        })->toArray();
+        $infouser = User::where('id', $tache->idClient)->get(['nom', 'prenom'])->first();
+        $libelle = TypeTache::where('id', $tache->typetache)->get('libelle')->first();
+        return [
+            'idTache' => $tache->id,
+            'nomClient' => $infouser->nom,
+            'prenomClient' => $infouser->prenom,
+            'travailleurs' => $travailleurs,
+            'debut' => $tache->dedut,
+            'fin' => $tache->fin,
+            'libelle' => $libelle->libelle
+        ];
+        })->toArray();
+        dd($clients,$id);
+        return view("admin.attribuerTache", compact("clients"));
+    }
+
+    public function clienttache($id){
+        $user = Auth::user()->id;
+        $centres = TacheCentre::where('idTache', $id)
+        ->with('centre')
+        ->get();
+
+        $zones = Zone::where('idTache', $id)
+        ->with('residencepay','residencedep','residencevil')
+        ->get();
+
+        $pays = $zones->pluck('residencepay.name')->implode(', ');
+        $departements = $zones->pluck('residencedep.name')->implode(' ');
+        $villes = $zones->pluck('residencevil.name')->implode(' ');
+        $centre = $centres->pluck('centre.libelle')->implode(' ');
+
+        $idpays = implode(',', array_filter(explode(',', $zones->pluck('idPay')->implode(','))));
+        $iddepartements = implode(',', array_filter(explode(',', $zones->pluck('idDepartement')->implode(','))));
+        $idvilles = implode(',', array_filter(explode(',', $zones->pluck('idVille')->implode(','))));
+        $idcentre = implode(',', array_filter(explode(',', $centres->pluck('idCentre')->implode(','))));
+
+
+        $taches = Tache::with('travailleurs','type','status','travailleurtaches')
+        ->where('id', $id)
+        ->get();
+        $clients = $taches->map(function ($tache) {
+            $totalVuesGlobal = 0;
+            $travailleurstaches = $tache->travailleurtaches->groupBy('id')->map(function ($travailleursGroup) {
+                $totalVues = 0;
+                $travailleursGroup->each(function ($travailleur) use (&$totalVues) {
+                    $totalVues += $travailleur->pivot->totalVues;
+                });
+                $travailleur = $travailleursGroup->first();
+                return [
+                    'id' => $travailleur->id,
+                    'nom' => $travailleur->nom,
+                    'prenom' => $travailleur->prenom,
+                    'capture' => $travailleur->pivot->capture,
+                    'totalVues' => $totalVues
+                ];
+            })->toArray();
+            foreach ($travailleurstaches as $travailleur) {
+                $totalVuesGlobal += $travailleur['totalVues'];
+            }
+
+            $travailleurs = $tache->travailleurs->map(function ($travailleur) {
+                $infoinfluenceur = InfoInfluenceur::where("id_User", $travailleur->id)->get();
+                return [
+                    'id' => $travailleur->id,
+                    'nom' => $travailleur->nom,
+                    'prenom' => $travailleur->prenom,
+                    'image'=>$travailleur->photpProfil,
+                    'email'=>$travailleur->email,
+                    'tel' => $infoinfluenceur[0]-> tel,
+                    'vues' => $infoinfluenceur[0]-> nbr_vue_moyen,
+                    'sexe' => $infoinfluenceur[0]-> sexe,
+                ];
+            })->toArray();
+            $infouser = User::where('id', $tache->idClient)->get(['nom', 'prenom'])->first();
+            return [
+                "idTache" => $tache->id,
+                "vueRecherche" => $tache->vueRecherche,
+                "nomClient" => $infouser->nom,
+                "mailClient" => $infouser->email,
+                "fin" => $tache->fin,
+                "debuts" => $tache->debut,
+                "fichier" => $tache->fichier,
+                "description" => $tache->description,
+                'prenomClient' => $infouser->prenom,
+                'libelle' => $tache->type->libelle,
+                'status' => $tache->status->libelle,
+                'totalvues' => $totalVuesGlobal,
+                'totalinflu' => count($travailleurs),
+                'travailleurs' => $travailleurs,
+                'travailleurstaches' => $travailleurstaches,
+            ];
+        })->toArray();
+        return view("influenceur.showtache", compact("user","pays","departements","villes","centre","clients",
+                                                "idpays","iddepartements","idvilles","idcentre"));
+    }
+
+    public function influenceurtache($id){
+        $influenceurs = InfoInfluenceur::with("type","residencepay","residencedep","residencevil")
+        ->where("id_User", $id)->get();
+        $centres = TravailleCentre::with("centre")->where("id_User", $id)->get();
+        $taches = TravailleurTache::with("tacheall.status","tacheall.travailleur")->where("idtravailleur", $id)->get();
+        return view('influenceur.showtacheclient', compact("influenceurs","centres","taches"));
+    }
+
+    public function whatsapcofirm($id){
+        $code = str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
+        DB::table('info_influenceur')->where('id_User',$id)->update(['code' => $code]);
+        $url = "https://wa.me/22968455275?text=" . urlencode("$code");
+        return redirect()->away($url);
     }
 }

@@ -40,8 +40,11 @@
                     <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
-                            <img class="rounded-circle header-profile-user" src="{{asset('velson/images/users/avatar-1.jpg')}}"
-                                alt="Header Avatar">
+                            @if ( Auth::user()->photpProfil )
+                                <img class="rounded-circle header-profile-user" src="{{asset('storage'.Auth::user()->photpProfil)}}" alt="Header Avatar">
+                            @else
+                                <img class="rounded-circle header-profile-user" src="{{asset('velson/images/users/user-dummy-img.jpg')}}" alt="Header Avatar">
+                            @endif
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ Auth::user()->nom }} {{ Auth::user()->prenom }}</span>
                                 <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{{ Auth::user()->profil->profilLibelle }}</span>

@@ -1,7 +1,12 @@
 <x-app-layout>
+    @section('name')
+        Profil
+    @endsection
+    @section('title')
+        Profil
+    @endsection
     @section('contenue')
         <div class="container-fluid">
-            <h3 class="text-dark mb-4">Profil</h3>
             <div class="row mb-3">
                 @if($errors->any())
                     <div class="alert alert-danger">
@@ -18,7 +23,7 @@
                             <div class="mb-3">
                                 <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Modifier la photo</button>
                             </div>
-                                <button class="btn btn-primary btn-sm" type="button">Confirmer votre numéro</button>
+                                <a href="{{route('whatsapcofirm', [ 'id' => Auth::user()->id])}}"><button class="btn btn-primary btn-sm" type="button">Confirmer votre numéro</button></a>
                         </div>
 
                         <!-- Modal -->

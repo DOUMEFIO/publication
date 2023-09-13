@@ -57,6 +57,7 @@ class ActionController extends Controller
             //dd($villelist, $departementlist, $payslist);
 
             $centre= implode(',', $request->input('centre'));
+
             if ($request->file('avatar')) {
                 $fichier = $request->file('avatar');
                 // Vérification de l'extension du fichier

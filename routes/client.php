@@ -19,6 +19,9 @@ Route::middleware('auth')->group(function (){
     Route::post('store.client', [ClientController::class, 'store'])
         ->name('store.client');
 
+    Route::get('show.client', [ClientController::class, 'show'])
+        ->name('show.client');
+
     Route::post('direction', [ClientController::class, 'direction'])
         ->name('direction');
 
@@ -32,5 +35,14 @@ Route::middleware('auth')->group(function (){
 
     Route::get('showtache.client/{id}', [ClientController::class, 'clienttache'])
        ->name('showtache.client');
+
+    Route::get('edittache.client}', [ClientController::class, 'edittache'])
+       ->name('edittache.client');
+
+    Route::get('clientconnect}', [ClientController::class, 'clientconnect'])
+       ->name('clientconnect');
+
+    Route::get('showtache.all/{id}', [ClientController::class, 'clienttacheall'])
+       ->name('showtache.all');
 
 });

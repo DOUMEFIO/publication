@@ -15,4 +15,9 @@ class CentreInteret extends Model
     {
         return $this->hasMany(TravailleCentre::class);
     }
+
+    public function centres()
+    {
+        return $this->hasMany(TacheCentre::class);
+    }
 }

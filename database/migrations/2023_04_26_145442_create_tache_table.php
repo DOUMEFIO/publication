@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string("fin");
             $table->string("fichier");
             $table->string("description");
+            $table->string("realisation")->default("Non Exécutée");
             $table->foreignId('typetache')->constrained('type_tache');
             $table->foreignId('idStatus')->constrained('status')->nullable();
             $table->string('payement')->nullable();

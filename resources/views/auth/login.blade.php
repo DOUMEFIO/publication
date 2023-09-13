@@ -43,13 +43,13 @@
                                 <div class="text-center mt-2">
                                     <h5 class="text-primary">Bienvenue !</h5>
                                     @if (session('error'))
-                                        <div class="alert alert-danger">
+                                        <div class="alert alert-success">
                                             {{ session('error') }}
                                         </div>
                                     @endif
 
                                     @if (session('info'))
-                                        <div class="alert alert-danger">
+                                        <div class="alert alert-success">
                                             {{ session('info') }}
                                         </div>
                                     @endif
@@ -107,7 +107,7 @@
                     <div class="col-lg-12">
                         <div class="text-center">
                             <p class="mb-0 text-muted">&copy;
-                                <script>document.write(new Date().getFullYear())</script> WasPay. Pulication <i class="mdi mdi-heart text-danger"></i> 
+                                <script>document.write(new Date().getFullYear())</script> WasPay. Pulication <i class="mdi mdi-heart text-danger"></i>
                             </p>
                         </div>
                     </div>

@@ -1,13 +1,11 @@
 <x-app-layout>
-
+    @section('name')
+        Les Tâches Exécutées
+    @endsection
     @section('contenue')
-
     <div class="container-fluid">
         <div class="card shadow">
             <div class="row card-body">
-                <div class="col md-9">
-                    <p class="text-primary m-0 fw-bold">LES TACHES ATTRIBUES</p>
-                </div>
                 <div class="col md-3" style="padding-left: 600px">
                 </div>
             </div>
@@ -33,7 +31,9 @@
                                 <th>Attribuer à</th>
                                 <th>Vues obtenir</th>
                                 <th>Période</th>
-                                <th>Type Tâche</th>
+                                <th >Status</th>
+                                <th >Réalisation</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody >
@@ -55,13 +55,35 @@
                                             @endforeach
                                         </ul>
                                     </td>
-                                    {{-- <td>{{$client['clientnom'] }} {{$client['clientprenom']}}
-                                    </td> --}}
                                     <td>
-                                        {{ strftime('%A %e %B %Y', strtotime($client['debut'])) }} à</br>
-                                        {{ strftime('%A %e %B %Y', strtotime($client['fin'])) }}
+                                        {{ \Carbon\Carbon::parse($client['debut'])->locale('fr')->isoFormat('dddd D MMMM YYYY') }} au <br>
+                                        {{ \Carbon\Carbon::parse($client['fin'])->locale('fr')->isoFormat('dddd D MMMM YYYY') }}</span></td>
+                                    @if ($client['status']["libelle"] == "Valide")
+                                        <td class="status"><span class="badge badge-soft-success text-uppercase">{{$client['status']["libelle"]}}</span>
+                                        </td>
+                                    @else
+                                        <td class="status"><span class="badge badge-soft-warning text-uppercase">{{$client['status']["libelle"]}}</span>
+                                        </td>
+                                    @endif
+                                    @if ($client['realisation'] ==  "Non Exécuter")
+                                        <td class="status"><span class="badge badge-soft-danger text-uppercase">{{$client['realisation']}}</span>
+                                        </td>
+                                    @elseif ($client['realisation'] ==  "Vues Non Atteint")
+                                        <td class="status"><span class="badge badge-soft-warning text-uppercase">{{$client['realisation']}}</span>
+                                        </td>
+                                    @else
+                                        <td class="status"><span class="badge badge-soft-success text-uppercase">{{$client['realisation']}}</span>
+                                        </td>
+                                    @endif
+                                    <td>
+                                        <div class="dropdown d-inline-block">
+                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button" >
+                                                <a class="dropdown-item edit-item-btn" href="{{route('showtache.client', ['id' => $client['idTache']])}}" class="btn btn-warning">
+                                                    <i class="ri-eye-fill align-bottom me-2 text-muted"></i>Voir Plus
+                                                </a>
+                                            </button>
+                                        </div>
                                     </td>
-                                    <td>{{$client['libelle']}}</td>
                                 </tr>
                             @endforeach
                         </tbody>

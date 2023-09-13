@@ -42,12 +42,18 @@
 
     <!--Swiper slider js-->
     <script src="{{asset('velson/libs/swiper/swiper-bundle.min.js')}}"></script>
+    <script src="{{asset('velson/js/pages/profile.init.js')}}"></script>
+
+    <!-- glightbox js -->
+    <script src="{{asset('velson/libs/glightbox/js/glightbox.min.js')}}"></script>
+
+    <!-- isotope-layout -->
+    <script src="{{asset('velson/libs/isotope-layout/isotope.pkgd.min.js')}}"></script>
+
+    <script src="{{asset('velson/js/pages/gallery.init.js')}}"></script>
 
     <!-- Dashboard init -->
     <script src="{{asset('velson/js/pages/dashboard-ecommerce.init.js')}}"></script>
-
-    <!-- App js -->
-    <script src="{{asset('velson/js/app.js')}}"></script>
 
     <!-- ckeditor -->
     <script src="{{asset('velson/libs/%40ckeditor/ckeditor5-build-classic/build/ckeditor.js')}}"></script>
@@ -56,12 +62,23 @@
     <script src="{{asset('velson/libs/dropzone/dropzone-min.js')}}"></script>
     <!-- project-create init -->
     <script src="{{asset('velson/js/pages/project-create.init.js')}}"></script>
+    <!-- list.js min js -->
+    <script src="{{asset('velson/libs/list.js/list.min.js')}}"></script>
+
+    <!--list pagination js-->
+    <script src="{{asset('velson/libs/list.pagination.js/list.pagination.min.js')}}"></script>
+
+    <!-- ecommerce-order init js -->
+    <script src="{{asset('velson/js/pages/ecommerce-order.init.js')}}"></script>
+
+    <!-- Sweet Alerts js -->
+    <script src="{{asset('velson/libs/sweetalert2/sweetalert2.min.js')}}"></script>
 
     <!-- App js -->
     <script src="{{asset('velson/js/app.js')}}"></script>
 
     <script>
-        
+
         $(function() {
           $('#typetache').change(function() {
             switch(parseInt( $('#typetache').val())){
@@ -150,7 +167,7 @@
               document.querySelector("#selectedCountry").textContent = selectedCountry.name;
                 document.querySelector("#dialCode").textContent = '+' + countryCode;
               input.value = '+' + countryCode;
-              }); 
+              });
           });
       });
 

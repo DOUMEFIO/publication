@@ -16,7 +16,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Mail\OrderShipped;
+use App\Models\TacheCentre;
 use App\Models\User;
+use App\Models\Zone;
 use Illuminate\Support\Facades\Mail;
 use StephaneAss\Payplus\Pay\PayPlus;
 
@@ -63,6 +65,7 @@ class ClientController extends Controller
      }
 
     public function tacheenregistrer(){
+        $currentDate = now()->toDateString();
         $user = Auth::user()->id;
         $taches = DB::table('tache')
             ->leftJoin('users', 'tache.idClient', '=', 'users.id')
@@ -74,18 +77,18 @@ class ClientController extends Controller
             ->leftJoin('status', 'tache.idStatus', '=', 'status.id')
             ->leftJoin('centre_interet', 'tache_centre.idCentre', '=', 'centre_interet.id')
             ->leftJoin('type_tache', 'tache.typetache', '=', 'type_tache.id')
-            ->select('type_tache.libelle as tache_libelle','users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
-                    'tache.typetache','tache.vueRecherche','status.libelle as status_libelle','tache.id','users.prenom','users.id','users.idProfil',
+            ->select('tache.id as idtache','tache.realisation','type_tache.libelle as tache_libelle','users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
+                    'tache.typetache','tache.vueRecherche','status.libelle as status_libelle','tache.idClient','users.prenom','users.id','users.idProfil',
                 DB::raw('GROUP_CONCAT(DISTINCT centre_interet.libelle) as centre'),
                 DB::raw('GROUP_CONCAT(DISTINCT pays.name) as pays'),
                 DB::raw('GROUP_CONCAT(DISTINCT departements.name) as departements'),
                 DB::raw('GROUP_CONCAT(DISTINCT villes.name) as villes'))
-            ->groupBy('users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
-            'tache.typetache','tache_libelle','tache.vueRecherche','status_libelle','tache.id','users.prenom','users.id','users.idProfil')
+            ->groupBy('idtache','users.nom','tache.debut','tache.realisation','tache.fin','tache.fichier','tache.description',
+            'tache.typetache','tache_libelle','tache.vueRecherche','status_libelle','tache.idClient','users.prenom','users.id','users.idProfil')
             ->where('users.id',$user)
             ->where('payement',"paye")
             ->get();
-        return view('client.index', compact('taches'));
+        return view('client.index', compact('taches','currentDate'));
     }
 
     public function store(Request $request){
@@ -216,31 +219,84 @@ class ClientController extends Controller
     }
 
     public function clienttache($id){
-        $tache = DB::table('tache')
-                ->leftJoin('users', 'tache.idClient', '=', 'users.id')
-                ->leftJoin('tache_zone', 'tache.id', '=', 'tache_zone.idTache')
-                ->leftJoin('tache_centre', 'tache.id', '=', 'tache_centre.idTache')
-                ->leftJoin('villes', 'tache_zone.idVille', '=', 'villes.id')
-                ->leftJoin('pays', 'tache_zone.idPay', '=', 'pays.id')
-                ->leftJoin('departements', 'tache_zone.idDepartement', '=', 'departements.id')
-                ->leftJoin('status', 'tache.idStatus', '=', 'status.id')
-                ->leftJoin('centre_interet', 'tache_centre.idCentre', '=', 'centre_interet.id')
-                ->leftJoin('type_tache', 'tache.typetache', '=', 'type_tache.id')
-                ->select('tache.idStatus','type_tache.libelle as tache_libelle','users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
-                        'tache.typetache','tache.vueRecherche','status.libelle as status_libelle','tache.id as nbr','users.prenom','users.id','users.idProfil',
-                    DB::raw('GROUP_CONCAT(DISTINCT centre_interet.libelle) as centre'),
-                    DB::raw('GROUP_CONCAT(DISTINCT centre_interet.id) as idcentre'),
-                    DB::raw('GROUP_CONCAT(DISTINCT pays.id) as idpays'),
-                    DB::raw('GROUP_CONCAT(DISTINCT pays.name) as pays'),
-                    DB::raw('GROUP_CONCAT(DISTINCT departements.id) as iddepartements'),
-                    DB::raw('GROUP_CONCAT(DISTINCT departements.name) as departements'),
-                    DB::raw('GROUP_CONCAT(DISTINCT villes.id) as idvilles'),
-                    DB::raw('GROUP_CONCAT(DISTINCT villes.name) as villes'))
-                ->groupBy('users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
-                'tache.typetache','tache_libelle','tache.idStatus','tache.vueRecherche','status_libelle','nbr','users.prenom','users.id','users.idProfil')
-                ->where('tache.id',$id)
-                ->get();
-        return view("admin.showtache", compact("tache"));
+        $centres = TacheCentre::where('idTache', $id)
+        ->with('centre')
+        ->get();
+
+        $zones = Zone::where('idTache', $id)
+        ->with('residencepay','residencedep','residencevil')
+        ->get();
+
+        $pays = $zones->pluck('residencepay.name')->implode(', ');
+        $departements = $zones->pluck('residencedep.name')->implode(' ');
+        $villes = $zones->pluck('residencevil.name')->implode(' ');
+        $centre = $centres->pluck('centre.libelle')->implode(' ');
+
+        $idpays = implode(',', array_filter(explode(',', $zones->pluck('idPay')->implode(','))));
+        $iddepartements = implode(',', array_filter(explode(',', $zones->pluck('idDepartement')->implode(','))));
+        $idvilles = implode(',', array_filter(explode(',', $zones->pluck('idVille')->implode(','))));
+        $idcentre = implode(',', array_filter(explode(',', $centres->pluck('idCentre')->implode(','))));
+
+
+        $taches = Tache::with('travailleurs','type','status','travailleurtaches')
+        ->where('id', $id)
+        ->get();
+        $clients = $taches->map(function ($tache) {
+            $totalVuesGlobal = 0;
+            $travailleurstaches = $tache->travailleurtaches->groupBy('id')->map(function ($travailleursGroup) {
+                $totalVues = 0;
+                $travailleursGroup->each(function ($travailleur) use (&$totalVues) {
+                    $totalVues += $travailleur->pivot->totalVues;
+                });
+                $travailleur = $travailleursGroup->first();
+                return [
+                    'id' => $travailleur->id,
+                    'nom' => $travailleur->nom,
+                    'prenom' => $travailleur->prenom,
+                    'capture' => $travailleur->pivot->capture,
+                    'totalVues' => $totalVues
+                ];
+            })->toArray();
+            foreach ($travailleurstaches as $travailleur) {
+                $totalVuesGlobal += $travailleur['totalVues'];
+            }
+
+            $travailleurs = $tache->travailleurs->map(function ($travailleur) {
+                $infoinfluenceur = InfoInfluenceur::where("id_User", $travailleur->id)->get();
+                return [
+                    'id' => $travailleur->id,
+                    'nom' => $travailleur->nom,
+                    'prenom' => $travailleur->prenom,
+                    'image'=>$travailleur->photpProfil,
+                    'email'=>$travailleur->email,
+                    'tel' => $infoinfluenceur[0]-> tel,
+                    'vues' => $infoinfluenceur[0]-> nbr_vue_moyen,
+                    'sexe' => $infoinfluenceur[0]-> sexe,
+                ];
+            })->toArray();
+            $infouser = User::where('id', $tache->idClient)->get(['nom', 'prenom','idProfil','email'])->first();
+            return [
+                "idClient" => $tache->idClient,
+                "idTache" => $tache->id,
+                "vueRecherche" => $tache->vueRecherche,
+                "profil" => $infouser->idProfil,
+                "nomClient" => $infouser->nom,
+                "mailClient" => $infouser->email,
+                "fin" => $tache->fin,
+                "debuts" => $tache->debut,
+                "fichier" => $tache->fichier,
+                "description" => $tache->description,
+                'prenomClient' => $infouser->prenom,
+                'libelle' => $tache->type->libelle,
+                'status' => $tache->status->libelle,
+                'totalvues' => $totalVuesGlobal,
+                'totalinflu' => count($travailleurs),
+                'travailleurs' => $travailleurs,
+                'travailleurstaches' => $travailleurstaches,
+            ];
+        })->toArray();
+        return view("admin.showtache", compact("pays","departements","villes","centre","clients",
+                                                "idpays","iddepartements","idvilles","idcentre"));
     }
 
     public function clienttacheencours(){
@@ -248,7 +304,7 @@ class ClientController extends Controller
         $taches = Tache::has('travailleurs')
         ->with('travailleurs')
         ->get();
-        $clients = $taches->where('idClient',Auth::user()->id)
+        $clientsall = $taches->where('idClient',Auth::user()->id)
         ->where('debut', '<=', $currentDate)
         ->where('fin', '>=', $currentDate)
         ->map(function ($tache) {
@@ -263,14 +319,24 @@ class ClientController extends Controller
         $libelle = TypeTache::where('id', $tache->typetache)->get('libelle')->first();
         return [
             'idTache' => $tache->id,
+            'realisation' => $tache->realisation,
+            'status' => $tache->status,
+            'vues' => $tache->vueRecherche,
+            'debut' => $tache->debut,
+            'fin' => $tache->fin,
+            'libelle' => $libelle->libelle,
             'nomClient' => $infouser->nom,
             'prenomClient' => $infouser->prenom,
             'travailleurs' => $travailleurs,
-            'debut' => $tache->dedut,
-            'fin' => $tache->fin,
-            'libelle' => $libelle->libelle
         ];
         })->toArray();
+        $clients = [];
+        $currentDate = now()->toDateString();
+        foreach ($clientsall as $client) {
+            if ($currentDate >= $client["debut"] && $currentDate <= $client["fin"]) {
+                $clients[] = $client; // Ajouter la tâche au tableau si elle est en cours
+            }
+        }
         return view("client.encours", compact('clients'));
     }
 
@@ -301,6 +367,8 @@ class ClientController extends Controller
                 'idTache' => $tache->id,
                 'debut' => $tache->debut,
                 'fin' => $tache->fin,
+                'realisation' => $tache->realisation,
+                'status' => $tache->status,
                 'libelle' => $tache->type->libelle,
                 'clientnom' => $tache->travailleur->nom,
                 'clientprenom' => $tache->travailleur->prenom,
@@ -308,5 +376,26 @@ class ClientController extends Controller
             ];
         });
         return view("client.executez", compact('clientes'));
+    }
+
+    public function show(){
+        $users = User::where('idProfil',3)->get();
+        return view("client.show", compact("users"));
+    }
+
+    public function clienttacheall($id){
+        $taches = Tache::with("travailleur")->where('idClient',$id)->get();
+        return view("client.tachesall", compact("taches"));
+    }
+
+    public function clientconnect(){
+        $clients = Tache::with("travailleur")
+        ->where('idClient', Auth::user()->id)
+        ->get();
+        return view("client.profil", compact("clients"));
+    }
+
+    public function edittache(Request $request){
+        return redirect()->back()->with('info', 'Votre modification a été prise en compte');
     }
 }

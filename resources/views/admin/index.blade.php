@@ -1,4 +1,10 @@
 <x-app-layout>
+    @section('name')
+        Les centres d'interets
+    @endsection
+    @section('title')
+        Les centres d'interets
+    @endsection
     @section('contenue')
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -31,13 +37,14 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form method="" action="" >
-{{--                         @csrf
- --}}                        <div class="row">
+                    <form method="post" action="{{route('editcentre')}}" >
+                       @csrf
+                       <input type="hidden" id="tacheIdInput" name="id">
+                        <div class="row">
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label"><strong>Modifier</strong></label>
-                                    <input style="font-size: 15px" type="text" name="libelle" class="form-control" required>
+                                    <input style="font-size: 15px" type="text" id="libelle" name="libelle" class="form-control" required>
                                 </div>
                             </div>
                         </div>
@@ -54,15 +61,16 @@
         </div>
     </div>
 
-        <div class="card shadow col-xl-6 mx-auto">
-            <div class="row card-body">
-                <div class="col md-6">
-                    <p class="text-primary m-0 fw-bold">Centre Interet</p>
+        <div class="card shadow col-xl mx-auto">
+            @if (session('info'))
+                <div class="alert alert-success">
+                    {{ session('info') }}
                 </div>
-                <div class="col md-6" style="padding-left: 100px">
-                    <span class="odd px-5"><button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">AJOUTER</button>
-                    </span>
-                </div>
+            @endif
+            <div class="row card-body" style="float: right;">
+                <span class="odd px-1">
+                    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">AJOUTER</button>
+                </span>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -86,24 +94,25 @@
                     <table class="table my-0" id="dataTable">
                         <thead>
                             <tr>
-                                <th>Nom du centre Interet</th>
+                                <th>#</th>
+                                <th>Centre Interet</th>
+                                <th>Date de creation</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody >
+                            @php
+                                $compteur = 1;
+                            @endphp
                             @foreach ($centreInterets as $centreInteret )
                                 <tr>
+                                    <td>{{ $compteur++ }}</td>
                                     <td>{{$centreInteret->libelle}}</td>
-                                    <td><button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">MODIFIER</button></td>
+                                    <td><span class="badge text-bg-success">{{ \Carbon\Carbon::parse($centreInteret->created_at)->locale('fr')->isoFormat('dddd D MMMM YYYY') }}</span></td>
+                                    <td><button class="btn btn-secondary" type="button" onclick="showModal('{{$centreInteret->id}}','{{$centreInteret->libelle}}')">MODIFIER</button></td>
                                 </tr>
                             @endforeach
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td><strong>Nom du centre Interet</strong></td>
-                                <td><strong>Action</strong></td>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
                 <div class="row">
@@ -124,5 +133,16 @@
                 </div>
             </div>
         </div>
+        <button style="display: none" id="triggerModal" class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2"></button>
     @endsection
+    @push('scripts')
+        <script>
+            function showModal(id, ids){
+                $('#tacheIdInput',).val(id);
+                $('#triggerModal').trigger('click')
+                $('#libelle').val(ids);
+                $('#triggerModal').trigger('click')
+            }
+        </script>
+    @endpush
 </x-app-layout>

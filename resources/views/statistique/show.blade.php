@@ -1,10 +1,9 @@
-
 <x-app-layout>
     @section('name')
-        Les Tâches Validées
+        Tâches
     @endsection
     @section('title')
-        Tâches
+        {{$id}}
     @endsection
     @section('contenue')
     <div class="row">
@@ -16,32 +15,32 @@
                             <table class="table table-nowrap align-middle" id="orderTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">
-                                        <th data-sort="id"> N° Tâche</th>
-                                        <th data-sort="customer_name"> Nom & Prénom</th>
-                                        <th data-sort="product_name">Période </th>
-                                        <th data-sort="status">Vues Rechercher</th>
-                                        <th data-sort="status">Status</th>
-                                        <th data-sort="status">Réalisation</th>
-                                        <th data-sort="city">Action</th>
+                                        <th data-sort="customer_name"> N° Tâche</th>
+                                        <th > Client</th>
+                                        <th >Période </th>
+                                        <th >Vues Rechercher</th>
+                                        <th >Status</th>
+                                        <th >Réalisation</th>
+                                        <th >Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all">
                                     @foreach ($taches as $tache)
                                         <tr>
-                                            <td class="status"><span class="badge badge-soft-primary text-uppercase">T{{$tache->tacheid}}</span>
+                                            <td class="customer_name"><span class="badge badge-soft-primary text-uppercase">T{{$tache->id}}</span>
                                             </td>
-                                            <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">{{$tache->nom}} {{$tache->prenom}}</td>
-                                            <td class="customer_name">{{ strftime('%A %e %B %Y', strtotime($tache->debut)) }} à </br>
-                                                {{ strftime('%A %e %B %Y', strtotime($tache->fin)) }}</td>
+                                            <td class="">{{$tache->travailleur->nom}} {{$tache->travailleur->prenom}}</td>
+                                            <td class="">{{ \Carbon\Carbon::parse($tache->debut)->locale('fr')->isoFormat('dddd D MMMM YYYY') }} au <br>
+                                                                      {{ \Carbon\Carbon::parse($tache->fin)->locale('fr')->isoFormat('dddd D MMMM YYYY') }}</td>
                                             <td class="product_name"><span class="badge badge-soft-primary text-uppercase">{{$tache->vueRecherche}}</span></td>
-                                            @if ($tache->status_libelle == "Valide")
+                                            @if ($tache->idStatus == 2)
                                                 <td class="status"><span class="badge badge-soft-success text-uppercase">Validée</span>
                                                 </td>
                                             @else
                                                 <td class="status"><span class="badge badge-soft-warning text-uppercase">Non Validée</span>
                                                 </td>
                                             @endif
-                                            @if ($tache->realisation ==  "Non Exécuter")
+                                            @if ($tache->realisation ==  "Non Exécutée")
                                                 <td class="status"><span class="badge badge-soft-danger text-uppercase">{{$tache->realisation}}</span>
                                                 </td>
                                             @elseif ($tache->realisation ==  "Vues Non Atteint")
@@ -54,7 +53,7 @@
                                             <td>
                                                 <div class="dropdown d-inline-block">
                                                     <button class="btn btn-soft-secondary btn-sm dropdown" type="button" >
-                                                        <a class="dropdown-item edit-item-btn" href="{{route('showtache.client', ['id' => $tache->tacheid])}}" class="btn btn-warning">
+                                                        <a class="dropdown-item edit-item-btn" href="{{route('showtache.client', ['id' => $tache->id])}}" class="btn btn-warning">
                                                             <i class="ri-eye-fill align-bottom me-2 text-muted"></i>Voir Plus
                                                         </a>
                                                     </button>

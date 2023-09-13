@@ -66,7 +66,9 @@ class InfoInfluenceur extends Model
 
     public static function createInfoInfluenceur($data, $user){
         $data->validate([
-            'tel' => ['required', 'unique:'.self::class],
+            'tel' => ['required', 'unique:' . self::class],
+        ], [
+            'tel.unique' => 'Votre numéro de téléphone existe déjà.',
         ]);
         self::create([
             'id_User' => $user,
@@ -77,5 +79,6 @@ class InfoInfluenceur extends Model
             'id_departement' => $data->departement,
             'id_ville' => $data->ville
         ]);
+        return redirect()->back()->withErrors(['tel' => 'Votre numéro de téléphone existe déjà.']);
     }
 }

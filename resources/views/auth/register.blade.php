@@ -42,7 +42,7 @@
 
                             <div class="card-body p-4">
                                 <div class="text-center mt-2">
-                                    <h5 class="text-primary">Créer un compte</h5>
+                                    <h5 class="text-primary">Créer un compte Influenceur</h5>
                                     @if (session('error'))
                                     <div class="alert alert-danger">
                                         {{ session('error') }}
@@ -149,7 +149,7 @@
                     <div class="col-lg-12">
                         <div class="text-center">
                             <p class="mb-0 text-muted">&copy;
-                                <script>document.write(new Date().getFullYear())</script> WasPay. Pulication <i class="mdi mdi-heart text-danger"></i> by Themesbrand
+                                <script>document.write(new Date().getFullYear())</script> WasPay. Pulication <i class="mdi mdi-heart text-danger"></i> La Pieuvre Technologique
                             </p>
                         </div>
                     </div>

@@ -10,7 +10,7 @@ class Paiement extends Model
 {
     use HasFactory;
     protected $table="paiement";
-    protected $fillable=['idUer','idTache','montant'];
+    protected $guarded=[];
 
     public static function paiementdo($vues,$data, $id_tache, $user_id){
         $co = (new PayPlus())->init();
@@ -23,6 +23,7 @@ class Paiement extends Model
         $co->addCustomData('email', $mail);
         $co->addCustomData('task_id', $id_tache);
         $co->addCustomData('user_id', $user_id);
+        $co->addCustomData('montant', $total_amount);
 
         // démarrage du processus de paiement
         // envoi de la requete

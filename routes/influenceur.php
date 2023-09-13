@@ -51,10 +51,22 @@ Route::middleware('auth')->group(function (){
 
     Route::get('vuesrealise/{id}', [InfluenceurController::class, 'vuesrealisee'])
         ->name('vuesrealise');
-    
+
     Route::post('updatevues', [InfluenceurController::class, 'updatevues'])
         ->name('updatevues');
 
     Route::get('tachedo', [InfluenceurController::class, 'tachedo'])
         ->name('tachedo');
+
+    Route::get('infludistribuer/{id}', [InfluenceurController::class, 'infludistribuer'])
+        ->name('infludistribuer');
+
+    Route::get('showtache.influenceur/{id}', [InfluenceurController::class, 'clienttache'])
+        ->name('showtache.influenceur');
+
+    Route::get('showtacheallinfluenceur/{id}', [InfluenceurController::class, 'influenceurtache'])
+        ->name('showtacheallinfluenceur');
+
+    Route::get('whatsapcofirm/{id}', [InfluenceurController::class, 'whatsapcofirm'])
+        ->name('whatsapcofirm');
 });

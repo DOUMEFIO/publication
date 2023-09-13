@@ -15,6 +15,5 @@ class TypeTache extends Model
     public function tache()
     {
         return $this->hasMany(Tache::class);
-
     }
 }

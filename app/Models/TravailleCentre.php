@@ -17,6 +17,11 @@ class TravailleCentre extends Model
             return $this->belongsTo(CentreInteret::class,'id_Centre');
         }
 
+    public function infoinfluenceur()
+        {
+            return $this->belongsTo(InfoInfluenceur::class,'id_User');
+        }
+
     public static function userCentre($user_id, $centre){
         $centres=[];
         foreach ($centre as $value) {

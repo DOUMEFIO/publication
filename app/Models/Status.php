@@ -10,4 +10,8 @@ class Status extends Model
     use HasFactory;
     protected $table="status";
     protected $fillable=['libelle'];
+    public function tache()
+    {
+        return $this->hasMany(Tache::class);
+    }
 }

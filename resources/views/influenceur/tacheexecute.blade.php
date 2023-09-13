@@ -1,13 +1,14 @@
 <x-app-layout>
-
+    @section('name')
+        Les Tâches EXécutées
+    @endsection
+    @section('title')
+        Tâche
+    @endsection
     @section('contenue')
-
     <div class="container-fluid">
         <div class="card shadow">
             <div class="row card-body">
-                <div class="col md-9">
-                    <p class="text-primary m-0 fw-bold">LES TACHES EXECUTEES</p>
-                </div>
                 <div class="col md-3" style="padding-left: 600px">
                 </div>
             </div>
@@ -35,12 +36,13 @@
                                 <th>Créer par</th>
                                 <th>Période</th>
                                 <th>Type Tâche</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody >
                             @foreach ($clientes as $client)
                                 <tr>
-                                    <td>T{{$client['idTache']}}</td>
+                                    <td><span class="badge badge-soft-primary">T{{$client['idTache']}}</span></td>
                                     {{-- <td>
                                             @foreach ($client['travailleurs'] as $travailleur)
                                                 {{ $travailleur['nom'] }}
@@ -55,10 +57,19 @@
                                     <td>{{$client['clientnom'] }} {{$client['clientprenom']}}
                                     </td>
                                     <td>
-                                        {{ strftime('%A %e %B %Y', strtotime($client['debut'])) }} à</br>
+                                        {{ strftime('%A %e %B %Y', strtotime($client['debut'])) }} à <br>
                                         {{ strftime('%A %e %B %Y', strtotime($client['fin'])) }}
                                     </td>
                                     <td>{{$client['libelle']}}</td>
+                                    <td>
+                                        <div class="dropdown d-inline-block">
+                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button" >
+                                                <a class="dropdown-item edit-item-btn" href="{{route('showtache.influenceur', ['id' => $client['idTache']])}}" class="btn btn-warning">
+                                                    <i class="ri-eye-fill align-bottom me-2 text-muted"></i>Voir Plus
+                                                </a>
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
