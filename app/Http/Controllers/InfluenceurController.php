@@ -72,7 +72,7 @@ class InfluenceurController extends Controller
         $pays = Pays::all();
         $departements = Departements::all();
         $villes = Villes::all();
-        return view('influenceur.create', compact('centres', 'pays', 'departements', 'villes'));
+        return view('influenceur.createinfo', compact('centres', 'pays', 'departements', 'villes'));
     }
 
     public function store(Request $request){
