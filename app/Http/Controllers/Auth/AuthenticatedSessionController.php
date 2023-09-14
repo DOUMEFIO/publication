@@ -27,9 +27,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $user=User::where('email',$request->email)
-        ->where('password',Hash::make($request->email))->first();
-        if($user){
+        $user=User::where('email',$request->email)->first();
+        if(!blank($user) && Hash::check($request->password, $user->password)){
             $users=User::where('email',$request->email)->get('idProfil');
             if($users[0]->idProfil == 1){
                 $request->authenticate();
@@ -50,8 +49,11 @@ class AuthenticatedSessionController extends Controller
 
                 return redirect()->intended(RouteServiceProvider::HOME);
             } 
-        } else{
-        return redirect()->back()->with('info2', 'Email ou Mot de passe incorrect');
+        } elseif(!blank($user) && !Hash::check($request->password, $user->password)){
+            return redirect()->back()->with('info2', 'Mot de passe incorrect'); 
+        }
+        else{
+        return redirect()->back()->with('info2', "L'utilisateur n'a pas été trouvé");
        }
     }
 
