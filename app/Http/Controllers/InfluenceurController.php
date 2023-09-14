@@ -38,7 +38,7 @@ class InfluenceurController extends Controller
         return view('influenceur.show', compact('users','alls'));
     }
 
-    public function influenceurconnect(){
+    public function influenceurconnect(Request $data){
         $profil=User::where('id', Auth::user()->id)->get('photpProfil');
         $users=InfoInfluenceur::where('id_User',Auth::user()->id)->get();
         $centres=CentreInteret::all();
@@ -72,11 +72,16 @@ class InfluenceurController extends Controller
         $pays = Pays::all();
         $departements = Departements::all();
         $villes = Villes::all();
-        return view('influenceur.createinfo', compact('centres', 'pays', 'departements', 'villes'));
+        return view('influenceur.create', compact('centres', 'pays', 'departements', 'villes'));
     }
 
     public function store(Request $request){
-        InfoInfluenceur::createInfoInfluenceur($request, Auth::user()->id);
+        $tel = InfoInfluenceur::where('tel', $request->tel)->exists();
+        if(!$tel){
+            InfoInfluenceur::createInfoInfluenceur($request, Auth::user()->id);
+        } else{
+            return redirect()->back()->with('tel', 'Votre numéro de téléphone existe déjà.');
+        }
 
         TravailleCentre::userCentre(Auth::user()->id, $request->input('id_centre'));
 

@@ -6,9 +6,9 @@
     <div class="container py-2 col-12" style="font-size:20px;">
             <div class="card shadow">
                 <div class="card-header py-3">
-                    @if ($errors->has('tel'))
-                        <div class="alert alert-danger">
-                            {{ $errors->first('tel') }}
+                    @if (session('tel'))
+                        <div class="alert alert-success">
+                            {{ session('tel') }}
                         </div>
                     @endif
                     <p class="text-primary m-0 fw-bold" style="text-align: center; font-size:20px"><strong>Completez vos informations</strong></p>
