@@ -1,4 +1,7 @@
 <x-app-layout>
+    @section('name')
+        Plus d'Info
+    @endsection
     @section("contenue")
     <div class="container py-2 col-12" style="font-size:20px;">
             <div class="card shadow">
