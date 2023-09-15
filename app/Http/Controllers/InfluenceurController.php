@@ -79,13 +79,11 @@ class InfluenceurController extends Controller
         $tel = InfoInfluenceur::where('tel', $request->tel)->exists();
         if(!$tel){
             InfoInfluenceur::createInfoInfluenceur($request, Auth::user()->id);
+            TravailleCentre::userCentre(Auth::user()->id, $request->input('id_centre'));
+            return redirect()->route('influenceurconnect');
         } else{
-            return redirect()->back()->with('tel', 'Votre numéro de téléphone existe déjà.');
+            return redirect()->back()->with('tel', 'Votre numéro de téléphone existe déjà.')->withInput();
         }
-
-        TravailleCentre::userCentre(Auth::user()->id, $request->input('id_centre'));
-
-        return redirect()->route('influenceurconnect');
     }
 
     public function getStates(){

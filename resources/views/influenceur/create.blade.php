@@ -6,8 +6,9 @@
     <div class="container py-2 col-12" style="font-size:20px;">
             <div class="card shadow">
                 <div class="card-header py-3">
+                    {{dd(session()->all())}}
                     @if (session('tel'))
-                        <div class="alert alert-success">
+                        <div class="alert alert-danger">
                             {{ session('tel') }}
                         </div>
                     @endif
@@ -20,13 +21,13 @@
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label"><strong>Numéro WhatsApp</strong></label>
-                                    <input type="tel" name="tel" class="form-control rounded-end flag-input" required>
+                                    <input type="tel" name="tel" class="form-control rounded-end flag-input" value="{{old('tel')}}" required >
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label"><strong>Vues moyennes</strong></label>
-                                    <input type="number" name="nbr_vue_moyen" class="form-control" required>
+                                    <input type="number" name="nbr_vue_moyen" class="form-control" value="{{old('nbr_vue_moyen')}}" required>
                                 </div>
                             </div>
                         </div>
