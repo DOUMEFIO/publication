@@ -457,7 +457,6 @@ class InfluenceurController extends Controller
 
     public function whatsapcofirm($id){
         $code = str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
-        DB::table('info_influenceur')->where('id_User',$id)->update(['code' => $code]);
         $url = "https://wa.me/22968455275?text=" . urlencode("$code");
         return redirect()->away($url);
     }

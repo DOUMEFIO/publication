@@ -33,7 +33,7 @@
                 @if (Auth::User()->idProfil == 1 || Auth::User()->idProfil == 3)
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="{{route('statistique')}}">
-                            <i class="ri-honour-line"></i> <span data-key="t-widgets">Tableau de bord</span>
+                            <i class="ri-home-gear-line"></i> <span data-key="t-widgets">Tableau de bord</span>
                         </a>
                     </li>
                 @endif
@@ -42,6 +42,11 @@
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="{{route('admin.index')}}">
                             <i class="ri-honour-line"></i> <span data-key="t-widgets">Centres D'interets</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('paiement.index')}}">
+                            <i class="ri-honour-line"></i> <span data-key="t-widgets">Paiement</span>
                         </a>
                     </li>
                     <li class="menu-title"><span data-key="t-menu">Menu</span></li>

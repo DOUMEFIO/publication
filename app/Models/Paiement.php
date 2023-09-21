@@ -12,6 +12,11 @@ class Paiement extends Model
     protected $table="paiement";
     protected $guarded=[];
 
+    public function client()
+    {
+        return $this->belongsTo(User::class, 'idUer');
+    }
+
     public static function paiementdo($vues,$data, $id_tache, $user_id){
         $co = (new PayPlus())->init();
         $co->addItem("$data->email", 3, 150, 450, "Je suis un client");
