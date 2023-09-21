@@ -6,7 +6,7 @@
     <div class="container py-2 col-12" style="font-size:20px;">
             <div class="card shadow">
                 <div class="card-header py-3">
-                    {{dd(session()->all())}}
+                    {{-- {{dd(session()->all())}} --}} 
                     @if (session('tel'))
                         <div class="alert alert-danger">
                             {{ session('tel') }}
