@@ -23,7 +23,9 @@
                             <div class="mb-3">
                                 <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Modifier la photo</button>
                             </div>
-                                <a href="{{route('whatsapcofirm', [ 'id' => Auth::user()->id])}}"><button class="btn btn-primary btn-sm" type="button">Confirmer votre numéro</button></a>
+                            @if ($users[0]->validation == 0)
+                                <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1">Confirmer votre numéro</button>
+                            @endif
                         </div>
 
                         <!-- Modal -->
@@ -43,6 +45,30 @@
                                             </div>
                                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
                                             <button type="submit" class="btn btn-primary" style="float:right">Enregistrer</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <form class="user" method="POST" action="{{route('infopictureUpdate')}}" enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="">
+                                                <h5 class="modal-title" id="exampleModalLabel">Vérification</h5>
+                                            </div>
+                                            <div class="modal-header">
+                                                <h6 class="modal-title" id="exampleModalLabel"> Veuillez confimer votre numéro en
+                                                    cliquant sur ce lien <a href="{{route('whatsapcofirm', [ 'id' => Auth::user()->id])}}" target="_blank">https://wa.me/{{$users[0]->tel}}</a>
+                                                </h6>
+                                            </div>
+                                            <div class="modal-header">
+                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
+                                                <button type="submit" class="btn btn-primary" style="float:right">Vérifier</button>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
