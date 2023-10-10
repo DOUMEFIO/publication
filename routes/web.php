@@ -36,4 +36,3 @@ require __DIR__.'/form.php';
 require __DIR__.'/admin.php';
 require __DIR__.'/influenceur.php';
 require __DIR__.'/paiement.php';
-require __DIR__.'/api.php';
