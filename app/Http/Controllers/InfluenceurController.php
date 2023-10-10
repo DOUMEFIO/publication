@@ -227,6 +227,7 @@ class InfluenceurController extends Controller
     public function pictureUpdate(Request $request){
         $avatar = $request->file('avatar');
         $path = $avatar->store('public/fichiers');
+        dd($path);
         $img = substr($path, 6);
         DB::table('users')->where('id', Auth::user()->id)->update(['photpProfil' => $img]);
         return redirect()->back();
@@ -456,9 +457,7 @@ class InfluenceurController extends Controller
     }
 
     public function whatsapcofirm($id){
-        $code = "Bonjour WasPay";
-        $telwaspay = +22954069095;
-        $url = "https://wa.me/$telwaspay?text=" . urlencode("$code");
+        $url =  "https://wa.me/22893837180?text=Bonjour WasPay";
         return redirect()->away($url);
     }
 }

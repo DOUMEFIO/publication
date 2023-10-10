@@ -12,6 +12,9 @@
                 <div class="card-body pt-0">
                     <div>
                         <div class="table-responsive table-card mb-1">
+                            @if(session()->has('info'))
+                                <div class="alert alert-danger"> {!! session('info') !!}</div>
+                            @endif
                             <table class="table table-nowrap align-middle" id="orderTable">
                                 <thead class="text-muted table-light">
                                     <tr class="text-uppercase">

@@ -55,7 +55,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-body">
-                                        <form class="user" method="POST" action="{{route('infopictureUpdate')}}" enctype="multipart/form-data">
+                                        <form class="user" method="Post" action="{{route('whatsapp-verification')}}" enctype="multipart/form-data">
                                             @csrf
                                             <div class="">
                                                 <h5 class="modal-title" id="exampleModalLabel">Vérification</h5>
