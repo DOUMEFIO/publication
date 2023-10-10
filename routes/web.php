@@ -5,8 +5,6 @@ use App\Http\Controllers\InfluenceurController;
 use App\Models\TypeTache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Payplus\CallbackController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +27,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::any('whatsapp-verification', [CallbackController::class, 'confirmWhatsappNumber']);
 require __DIR__.'/auth.php';
 require __DIR__.'/centreInteret.php';
 require __DIR__.'/possede.php';
@@ -39,3 +36,4 @@ require __DIR__.'/form.php';
 require __DIR__.'/admin.php';
 require __DIR__.'/influenceur.php';
 require __DIR__.'/paiement.php';
+require __DIR__.'/api.php';
