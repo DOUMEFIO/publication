@@ -65,9 +65,10 @@ class InfoInfluenceur extends Model
     }
 
     public static function createInfoInfluenceur($data, $user){
+        $tel = str_replace([' ', '(', ')', '+'], '', $data->tel);
         self::create([
             'id_User' => $user,
-            'tel' => $data->tel,
+            'tel' => $tel,
             'nbr_vue_moyen' => $data->nbr_vue_moyen,
             'sexe' => $data->sexe,
             'id_pay' => $data->pay,

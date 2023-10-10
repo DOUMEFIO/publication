@@ -6,7 +6,7 @@
     <div class="container py-2 col-12" style="font-size:20px;">
             <div class="card shadow">
                 <div class="card-header py-3">
-                    {{-- {{dd(session()->all())}} --}} 
+                    {{-- {{dd(session()->all())}} --}}
                     @if (session('tel'))
                         <div class="alert alert-danger">
                             {{ session('tel') }}
@@ -20,8 +20,8 @@
                         <div class="row">
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label"><strong>Numéro WhatsApp</strong></label>
-                                    <input type="tel" name="tel" class="form-control rounded-end flag-input" value="{{old('tel')}}" required >
+                                    <label class="form-label"><strong>Numéro WhatsApp(Ex:+229 52678909)</strong></label>
+                                    <input type="tel" placeholder="Example:+229 52678909" name="tel" class="form-control rounded-end flag-input" value="{{old('tel')}}" required >
                                 </div>
                             </div>
                             <div class="col">
