@@ -12,6 +12,7 @@
     use App\Models\TypeTache;
     use App\Models\User;
     use App\Models\Villes;
+    use App\Models\Admin;
     use App\Models\Zone;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
@@ -365,12 +366,8 @@ class AdminController extends Controller
                 }
             }
             }
-            $tachedo = Tache::with('type')->where('id',$id)->first();
-            $tacheUser = TravailleurTache::where('idTache',$id)->pluck('idtravailleur')->toArray();
-            $tacheinflu = InfoInfluenceur::whereIn('id_User',$tacheUser)->implode('tel',',');
-            $message = "Bonjour monsieur voici vos nouveau tâche qui début de tel et fini tel jour. C'est un ".$tachedo->type->libelle ;
-            dd($message, $tachedo->description, $tachedo->fichier,$tacheinflu);
-            return redirect()->route("admin.tache");
+            Admin::sendtachewhatsap($id);
+            //le return n'est pas là
         } else{
             return redirect()->route("admin.tache")->with("info","Il y a pas d'influenceur dans ce de pays");
         }

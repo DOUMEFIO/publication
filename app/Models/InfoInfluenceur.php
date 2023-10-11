@@ -33,10 +33,11 @@ class InfoInfluenceur extends Model
         }
 
     public static function updateInfluenceur($data, $user){
+        $tel = str_replace([' ', '(', ')', '+'], '', $data->tel);
         if (is_null($data->departement) && is_null($data->ville)) {
             $info = ([
                 'sexe' => $data->sexe,
-                'tel' => $data->tel,
+                'tel' => $tel,
                 'nbr_vue_moyen' => $data->vuesmoyen,
                 'id_pay' => $data->pay
             ]);
@@ -44,7 +45,7 @@ class InfoInfluenceur extends Model
         } elseif (is_null($data->ville)) {
             $info = ([
                 'sexe' => $data->sexe,
-                'tel' => $data->tel,
+                'tel' => $tel,
                 'nbr_vue_moyen' => $data->vuesmoyen,
                 'id_pay' => $data->pay,
                 'id_departement' => $data->departement
@@ -54,7 +55,7 @@ class InfoInfluenceur extends Model
         else {
             $info = ([
                 'sexe' => $data->sexe,
-                'tel' => $data->tel,
+                'tel' => $tel,
                 'nbr_vue_moyen' => $data->vuesmoyen,
                 'id_pay' => $data->pay,
                 'id_departement' => $data->departement,
