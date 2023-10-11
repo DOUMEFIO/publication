@@ -24,8 +24,13 @@ class Admin extends Model
         } else {
             $message = "Bonjour monsieur voici vos nouveau tâche qui début le ".$debutFormatee. " et prend fin le ".$finFormatee. " C'est un ".$tachedo->type->libelle.". Il y a pas de description." ;
         }
+        if ($tachedo->fichier){
+            $fichier = "http://publication.lapieuvretechnologique.info/storage".$tachedo->fichier;
+        } else {
+            $fichier = "" ;
+        }
         $message = $message;
-        //dd($message, $tachedo->description, $tachedo->fichier,$tacheinflu);
+        //dd($message, $tachedo->description, $fichier,$tacheinflu);
         $client = new Client();
         $headers = [
         'Authorization' => '01da56df-8699-483d-96a1-d4f3675b1ede',
@@ -36,7 +41,7 @@ class Admin extends Model
             $destinataire = preg_replace('/\D/', '', $destinataire);
             $body = [
                 "receiver" => $destinataire,
-                "media" => $tachedo->fichier,
+                "media" => $fichier,
                 "message" => $message,
                 "callback_url" => "",
             ];
