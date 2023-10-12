@@ -367,7 +367,7 @@ class AdminController extends Controller
             }
             }
             Admin::sendtachewhatsap($id);
-            //le return n'est pas là
+            return back()->with('info', 'La tâche a été distribiée');
         } else{
             return redirect()->route("admin.tache")->with("info","Il y a pas d'influenceur dans ce de pays");
         }
