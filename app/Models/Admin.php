@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
+use App\Models\InfoInfluenceur;
 
 class Admin extends Model
 {
@@ -20,35 +21,40 @@ class Admin extends Model
         $dateFin = Carbon::parse($tachedo->debut);
         $finFormatee = $dateFin->isoFormat('dddd D MMMM YYYY', 'Do MMMM YYYY');
         if ($tachedo->description){
-            $message = "Bonjour1 monsieur voici vos nouveau tâche qui début le ".$debutFormatee. " et prend fin le ".$finFormatee. " C'est un ".$tachedo->type->libelle. " La description est <strong> $tachedo->description</strong>";
+            $message = "Bonjour monsieur, Voici votre nouvelle tâche qui débute le *$debutFormatee*
+            et prend fin le *$finFormatee*. C'est un *$tachedo->type->libelle*. Le contenu est *$tachedo->description*";
         } else {
-            $message = "Bonjour monsieur voici vos nouveau tâche qui début le ".$debutFormatee. " et prend fin le ".$finFormatee. " C'est un ".$tachedo->type->libelle.". Il y a pas de description." ;
-        }
-        if ($tachedo->fichier){
-            $fichier = "http://publication.lapieuvretechnologique.info/storage".$tachedo->fichier;
-        } else {
-            $fichier = "" ;
+            $message = "Bonjour monsieur, Voici votre nouvelle tâche qui débute le *$debutFormatee*
+            et prend fin le *$finFormatee*.  C'est un *$tachedo->type->libelle*. Il y a pas de cotenu.";
         }
         $message = $message;
-        //dd($message, $tachedo->description, $fichier,$tacheinflu);
+        $data = [];
+
         $client = new Client();
         $headers = [
         'Authorization' => '01da56df-8699-483d-96a1-d4f3675b1ede',
-        'Apikey' => '0510efde-39e9-4927-a440-f9029d5997f2',
+        'X-api-key' => '0510efde-39e9-4927-a440-f9029d5997f2',
         'Content-Type' => 'application/json'
         ];
-        foreach ($tacheinflu as $destinataire) {
-            $destinataire = preg_replace('/\D/', '', $destinataire);
-            $body = [
-                "receiver" => $destinataire,
-                "media" => $fichier,
-                "message" => $message,
-                "callback_url" => "",
-            ];
-            $request = new Request('POST', 'http://51.161.128.10:3366/api/send_message', $headers, $body);
-            $res = $client->sendAsync($request)->wait();
-            echo $res->getBody();
-        }
+
+        $tacheinflus = [22968947612,22968455275,22961158910,22967710659];
+            foreach ($tacheinflus as $tacheinflu) {
+                $data = [
+                    "receiver" => $tacheinflu,
+                    "media" => "http://publication.lapieuvretechnologique.info/storage".$tachedo->fichier,
+                    "message" => $message,
+                    "callback_url" => ""
+                ];
+                $client = new Client();
+                $body = json_encode($data);
+                $request = new Request('POST', "http://51.161.128.10:3366/api/send_message", $headers, $body);
+                $res = $client->sendAsync($request)->wait();
+                dump($res->getBody()->getContents());
+            }
+
+
+
+
     }
 
 }
