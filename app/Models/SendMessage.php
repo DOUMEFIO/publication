@@ -38,7 +38,6 @@ class SendMessage extends Model
                 //echo json_encode($payload).PHP_EOL;
                 //echo 'recipient => '.$recipient.' , status : '.$res->getStatusCode().PHP_EOL;
                 //echo $res->getBody().PHP_EOL;
-                return back()->with('ifo', 'La tâche a été distribiée');
                 if($res->getStatusCode() == 201 || $res->getStatusCode() == 200){
                     //$resp = json_decode($res->getBody(), true);
                 }else{}
@@ -75,7 +74,6 @@ class SendMessage extends Model
                 //echo json_encode($payload).PHP_EOL;
                 //echo 'recipient => '.$recipient.' , status : '.$res->getStatusCode().PHP_EOL;
                 //echo $res->getBody().PHP_EOL;
-                return back()->with('ifo', 'La tâche a été distribiée');
                 if($res->getStatusCode() == 201 || $res->getStatusCode() == 200){
                    // $resp = json_decode($res->getBody(), true);
 
