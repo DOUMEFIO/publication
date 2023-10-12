@@ -202,7 +202,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Enregistrer</button></div>
+                                        <div class="mb-3"><button id="saved" class="btn btn-primary btn-sm" type="submit" disabled>Enregistrer</button></div>
                                     </form>
                                 </div>
                             </div>
@@ -216,6 +216,8 @@
 </x-app-layout>
 <script>
     // Désactive tous les éléments input
+    var saveButton = document.getElementById('saved');
+    saveButton.disabled = true;
     var inputs = document.getElementsByTagName('input');
     for (var i = 6; i < inputs.length; i++) {
         inputs[i].disabled = true;
@@ -237,6 +239,7 @@
 
     // Réactive tous les éléments input
     function enableAllInputs() {
+        
         var inputs = document.getElementsByTagName('input');
         for (var i = 1; i < inputs.length; i++) {
             inputs[i].disabled = false;
@@ -256,6 +259,7 @@
     enableButton.addEventListener('click', function() {
         enableAllInputs();
         enableAllOptions();
+        saveButton.disabled = false;
         $('#input').attr('style','')
         $('#noninput').attr('style','display:none')
         $('#noninputs').attr('style','display:none')
