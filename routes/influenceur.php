@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\InfluenceurController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Payplus\CallbackController;
 use Illuminate\Support\Facades\Route;
 
     Route::get('get_liste_states', [InfluenceurController::class, 'getListeStates'])
@@ -69,4 +70,7 @@ Route::middleware('auth')->group(function (){
 
     Route::get('whatsapcofirm/{id}', [InfluenceurController::class, 'whatsapcofirm'])
         ->name('whatsapcofirm');
+
+    Route::any('verified/{tel}', [CallbackController::class, 'checkPhone'])->name('verified.tel');
+
 });

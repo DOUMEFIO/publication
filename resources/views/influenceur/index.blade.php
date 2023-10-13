@@ -26,6 +26,9 @@
                             @if ($users[0]->validation == 0)
                                 <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1">Confirmer votre numéro</button>
                             @endif
+                            @if (session()->has('info'))
+                                <div class="alert alert-success px-4"> {!! session('info') !!}</div>
+                            @endif
                         </div>
 
                         <!-- Modal -->
@@ -55,7 +58,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-body">
-                                        <form class="user" method="" action="" enctype="multipart/form-data">
+                                        <form class="user" method="get" action="{{route('verified.tel', [ 'tel' => $users[0]->tel])}}" enctype="multipart/form-data">
                                             @csrf
                                             <div class="">
                                                 <h5 class="modal-title" id="exampleModalLabel">Vérification</h5>
