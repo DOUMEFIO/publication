@@ -126,6 +126,13 @@
                         </a>
                     </li>
                 @endif
+                @if (Auth::User()->idProfil == 1)
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('viewprice')}}">
+                            <i class="ri-home-gear-line"></i> <span data-key="t-widgets">Paramètre</span>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </div>
         <!-- Sidebar -->

@@ -13,6 +13,7 @@
     use App\Models\User;
     use App\Models\Villes;
     use App\Models\Admin;
+    use App\Models\ViewPrice;
     use App\Models\Zone;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
@@ -487,5 +488,39 @@ class AdminController extends Controller
         $taches = Tache::with('travailleur')->where('realisation', $id)
         ->where ('idStatus', 2)->get();
         return view("statistique.show", compact('taches','id'));
+    }
+
+    public function viewprice(){
+        $prices = ViewPrice::all();
+        return view('admin.parametre', compact('prices'));
+    }
+
+    public function createparametre(){
+        $taches = Tache::all();
+        return view('admin.createparametre', compact('taches'));
+    }
+
+    public function createprice(Request $request){
+        ViewPrice::create([
+            'idTache' => $request->idtache,
+            'prixtache' => $request->prixclient,
+            'prixinfluenceur' => $request->prixinfluenceur,
+        ]);
+        return view('admin.parametre');
+    }
+
+    public function editprice($id){
+        $taches = Tache::all();
+        return view('admin.editprice', compact('taches','id'));
+    }
+
+    public function updateprice(Request $request){
+        $info = ([
+            'idTache' => $request->idtache,
+            'prixtache' => $request->prixclient,
+            'prixinfluenceur' => $request->prixinfluenceur
+        ]);
+        ViewPrice::where("id", $request->id)->update($info);
+        return redirect()->route('viewprice');
     }
 }
