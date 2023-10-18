@@ -31,14 +31,28 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-3 ">
-                            <label class="form-label" ><strong>Vos centres d’intérêts</strong> </label>
-                            <select data-none-results-text="No results matched {0}" title="Selctionner les centres d’intérêts"
-                            class="selectpicker form-control" multiple name='id_centre[]' required>
-                                @foreach ($centres as $centre)
-                                    <option value="{{$centre->id}}">{{$centre->libelle}}</option>
-                                @endforeach
-                            </select>
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3 ">
+                                    <label class="form-label" ><strong>Vos centres d’intérêts</strong> </label>
+                                    <select data-none-results-text="No results matched {0}" title="Selctionner les centres d’intérêts"
+                                    class="selectpicker form-control" multiple name='id_centre[]' required>
+                                        @foreach ($centres as $centre)
+                                            <option value="{{$centre->id}}">{{$centre->libelle}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="mb-3 ">
+                                    <label class="form-label" ><strong>Paiement</strong> </label>
+                                    <select title="Selctionner les centres d’intérêts"
+                                    class="form-control" name='paiement' required>
+                                        <option value="Hebdomendaire">Hebdomendaire</option>
+                                        <option value="Mensuel">Mensuel</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="mb-3" style="text-align: center">
 

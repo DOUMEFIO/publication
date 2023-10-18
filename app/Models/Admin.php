@@ -24,7 +24,7 @@ class Admin extends Model
         $finFormatee = $dateFin->isoFormat('dddd D MMMM YYYY', 'Do MMMM YYYY');
         if ($tachedo->description){
             $message = "Bonjour monsieur voici votre nouvelle tâche qui débute le $debutFormatee et prend fin le $finFormatee.
-    C'est un ".$tachedo->type->libelle.". Le contenue est *$tachedo->description*.";
+    C'est un ".$tachedo->type->libelle.". Le contenu est *$tachedo->description*.";
         } else {
             $message = "Bonjour monsieur voici votre nouvelle tâche qui débute le $debutFormatee et prend fin le $finFormatee.
     C'est un ".$tachedo->type->libelle.". Il y a pas de contenu." ;

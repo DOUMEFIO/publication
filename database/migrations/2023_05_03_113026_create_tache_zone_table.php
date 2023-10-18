@@ -16,12 +16,11 @@ return new class extends Migration
             $table->foreignId('idTache')->constrained('tache');
             $table->unsignedBigInteger('idPay')->nullable();
             $table->foreign('idPay')->references('id')->on('pays')->onDelete('cascade');
-
             $table->unsignedBigInteger('idDepartement')->nullable();
             $table->foreign('idDepartement')->references('id')->on('departements')->onDelete('cascade');
-
             $table->unsignedBigInteger('idVille')->nullable();
             $table->foreign('idVille')->references('id')->on('villes')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

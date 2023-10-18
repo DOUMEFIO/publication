@@ -23,7 +23,7 @@
                                 <div class="mb-3">
                                     <label for="firstNameinput" class="form-label">Prix Unitaire de tâche</label>
                                     <input type="float" class="form-control" id="firstNameinput"
-                                           name="prixclient" value="{{ old('prixtache') }}">
+                                           name="prixclient" value="{{$price->prixtache}}">
                                     <input type="hidden" value="{{$id}}" name="id">
                                 </div>
                             </div>
@@ -32,7 +32,7 @@
                                 <div class="mb-3">
                                     <label for="lastNameinput" class="form-label">Prix Unitaire par vues</label>
                                     <input type="float" class="form-control" id="lastNameinput"
-                                           name="prixinfluenceur" value="{{ old('prixinfluenceur') }}">
+                                           name="prixinfluenceur" value="{{$price->prixinfluenceur}}">
                                 </div>
                             </div>
                             <!--end col-->

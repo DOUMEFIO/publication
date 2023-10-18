@@ -19,6 +19,9 @@
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\DB;
 
+    use GuzzleHttp\Client;
+    use GuzzleHttp\Exception\GuzzleException;
+
 use function Pest\Laravel\get;
 
 class AdminController extends Controller
@@ -511,7 +514,8 @@ class AdminController extends Controller
 
     public function editprice($id){
         $taches = Tache::all();
-        return view('admin.editprice', compact('taches','id'));
+        $price = ViewPrice::where('id',$id)->first();
+        return view('admin.editprice', compact('taches','id','price'));
     }
 
     public function updateprice(Request $request){

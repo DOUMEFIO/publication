@@ -125,6 +125,19 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div class="col">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="last_name"><strong>Paiement</strong></label>
+                                                    <select name="paiement" class="form-control">
+                                                        @if($users[0]->paiement == 'Hebdomendaire')
+                                                            <option value="Hebdomendaire" selected>Hebdomendaire</option>
+                                                            <option value="Mensuel">Mensuel</option>
+                                                        @elseif($users[0]->paiement == 'Mensuel')
+                                                            <option value="Mensuel" selected>Mensuel</option>
+                                                            <option value="Hebdomendaire">Hebdomendaire</option>
+                                                        @endif
+                                                    </select>                                                </div>
+                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="col">
@@ -242,7 +255,7 @@
 
     // Réactive tous les éléments input
     function enableAllInputs() {
-        
+
         var inputs = document.getElementsByTagName('input');
         for (var i = 1; i < inputs.length; i++) {
             inputs[i].disabled = false;

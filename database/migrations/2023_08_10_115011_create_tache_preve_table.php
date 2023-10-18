@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('idTache')->constrained('tache');
             $table->integer('totalVues');
             $table->string('capture');
+            $table->string('tokenPaiementInfluenceur')->nullable();
             $table->timestamps();
         });
     }

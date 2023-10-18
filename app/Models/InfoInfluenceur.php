@@ -10,7 +10,7 @@ class InfoInfluenceur extends Model
     use HasFactory;
     protected $table="info_influenceur";
     protected $fillable=['id_User','tel','nbr_vue_moyen','sexe',
-                        'id_pay','id_departement','id_ville'];
+                        'id_pay','id_departement','id_ville','paiement'];
 
     public function type()
         {
@@ -37,6 +37,7 @@ class InfoInfluenceur extends Model
         if (is_null($data->departement) && is_null($data->ville)) {
             $info = ([
                 'sexe' => $data->sexe,
+                'paiement' => $data->paiement,
                 'tel' => $tel,
                 'nbr_vue_moyen' => $data->vuesmoyen,
                 'id_pay' => $data->pay
@@ -45,6 +46,7 @@ class InfoInfluenceur extends Model
         } elseif (is_null($data->ville)) {
             $info = ([
                 'sexe' => $data->sexe,
+                'paiement' => $data->paiement,
                 'tel' => $tel,
                 'nbr_vue_moyen' => $data->vuesmoyen,
                 'id_pay' => $data->pay,
@@ -55,6 +57,7 @@ class InfoInfluenceur extends Model
         else {
             $info = ([
                 'sexe' => $data->sexe,
+                'paiement' => $data->paiement,
                 'tel' => $tel,
                 'nbr_vue_moyen' => $data->vuesmoyen,
                 'id_pay' => $data->pay,
@@ -70,6 +73,7 @@ class InfoInfluenceur extends Model
         self::create([
             'id_User' => $user,
             'tel' => $tel,
+            'paiement' => $data->paiement,
             'nbr_vue_moyen' => $data->nbr_vue_moyen,
             'sexe' => $data->sexe,
             'id_pay' => $data->pay,

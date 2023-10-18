@@ -9,7 +9,7 @@ class TachePreuve extends Model
 {
     use HasFactory;
     protected $table="tache_preve";
-    protected $fillable=['idtravailleur','idTache','totalVues','capture'];
+    protected $fillable=['idtravailleur','idTache','totalVues','capture','tokenPaiementInfluenceur'];
 
     public function infotache()
         {

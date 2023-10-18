@@ -108,7 +108,7 @@
                     <div class="tab-content pt-4 text-muted">
                         <div class="tab-pane fade active show" id="overview-tab" role="tabpanel">
                             <div class="row">
-                                <div class="col-xxl-3">
+                                <div class="col-xxl-12">
                                     <div class="card">
                                     </div>
                                     <div class="card">

@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string("fin");
             $table->string("fichier");
             $table->string("description");
+            $table->decimal("prixtachedefault")->default(2);
+            $table->decimal("prixinfluenceurdefault")->default(0.9);
             $table->string("realisation")->default("Non Exécutée");
             $table->foreignId('typetache')->constrained('type_tache');
             $table->foreignId('idStatus')->constrained('status')->nullable();
