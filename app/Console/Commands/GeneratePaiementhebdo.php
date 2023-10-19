@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Models\InfoInfluenceur;
+use App\Models\Tache;
 use App\Models\TachePreuve;
+use App\Models\ViewPrice;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Client;
@@ -32,7 +34,7 @@ class GeneratePaiementhebdo extends Command
     public function handle()
     {
         $influhebdo = InfoInfluenceur::where('paiement','Hebdomendaire')
-            ->select('tel', 'id_User')
+            ->select('tel', 'id_User',)
             ->get()
             ->keyBy('id_User');
         $idUser = [];
@@ -40,9 +42,9 @@ class GeneratePaiementhebdo extends Command
             $idUser[] = $influenceur->id_User;
         }
         $preuves = TachePreuve::whereIn('idtravailleur', $idUser)
-            ->select('idtravailleur','id', \DB::raw('SUM(totalVues) as nbrvues'))
+            ->select('idtravailleur','id','idTache', \DB::raw('SUM(totalVues) as nbrvues'))
             ->whereNull('tokenPaiementInfluenceur')
-            ->groupBy('idtravailleur','id')
+            ->groupBy('idtravailleur','id','idTache')
             ->get();
             foreach ($preuves as $resultat) {
                 $idtravailleur = $resultat->idtravailleur;
@@ -51,13 +53,19 @@ class GeneratePaiementhebdo extends Command
                 }
             }
         //dd($preuves,$idUser);
-
         $url = "https://app.payplus.africa/pay/v01/straight/payout";
         foreach ($preuves as $preuve){
+            $price = ViewPrice::where('idTache',$preuve->idTache)->first('prixinfluenceur');
+            if(!blank($price)){
+                $priceinfluenceur = $price->prixinfluenceur;
+            } else{
+                $priceinfluenceur = Tache::where('id',$preuve->idTache)->first('prixinfluenceurdefault');
+                $priceinfluenceur = $priceinfluenceur->prixinfluenceurdefault;
+            }
             $client = new Client();
             $payload = [
                 "commande" => [
-                    "amount" => ($preuve->nbrvues)*2,
+                    "amount" => $preuve->nbrvues*$priceinfluenceur,
                     "customer" => $preuve->tel,
                     "custom_data" => [
                         "transaction_id"=> "202212091606",

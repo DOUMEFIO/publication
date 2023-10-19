@@ -89,7 +89,7 @@ class InfluenceurController extends Controller
     public function getStates(){
         $country_id = request("country");
         $departements = Departements::where("country_id", $country_id)->get();
-        $option = "<option value=''>Selectionner</option>";
+        $option = "<option value='' disabled selected>Selectionner des départements</option>";
         foreach ($departements as $departement) {
             $option .= '<option value=" ' . $departement->id . ' ">' . $departement->name . '</option>';
         }
@@ -99,7 +99,7 @@ class InfluenceurController extends Controller
     public function getCities(){
         $satates_id = request("states");
         $villes = Villes::where("state_id", $satates_id)->get();
-        $option = "<option value=''>Selectionner</option>";
+        $option = "<option value='' disabled selected>Selectionner des villes</option>";
         foreach ($villes as $ville) {
             $option .= '<option value=" ' . $ville->id . ' ">' . $ville->name . '</option>';
         }
@@ -108,7 +108,7 @@ class InfluenceurController extends Controller
 
     public function getListeStates(){
         $country_id = explode('_', request("country"));
-        $option = '<option value="">Selectionner</option>';
+        $option = '<option value="" disabled selected>Selectionner des départements</option>';
         $departments = DB::table('departements')
             ->whereIn('country_id', $country_id)
             ->get();
@@ -120,7 +120,7 @@ class InfluenceurController extends Controller
 
     public function getListeCity(){
         $states_id = explode('_', request("state"));
-        $option = '<option value="">Selectionner</option>';
+        $option = '<option value="" disabled selected>Selectionner des villes</option>';
         $villes = DB::table('villes')
             ->whereIn('state_id', $states_id)
             ->get();

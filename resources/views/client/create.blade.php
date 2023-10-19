@@ -1,7 +1,7 @@
 <x-app-layout>
     @section('contenue')
         <div class="container py-2 col-12" style="font-size:20px;">
-            <div class="card card-body ">
+            <div class="card-body ">
                   @if(session()->has('error'))
 			        <div class="alert alert-succes"> {!! session('error') !!}</div>
 		          @endif
@@ -47,8 +47,9 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="selection" ><strong>Type de fichier</strong></label>
+                                <label class="form-label" for="selection" ><strong>Type de tâche</strong></label>
                                 <select class="form-control" name="typetache" id="typetache" required>
+                                       <option value="" disabled selected>Choisissez un type de tâche</option>
                                         @foreach ($fichiers as $fichier)
                                             <option value="{{$fichier->id}}">{{$fichier->libelle}}</option>
                                         @endforeach

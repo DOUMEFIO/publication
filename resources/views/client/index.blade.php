@@ -7,7 +7,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modifier la photo de profil</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Modifier Tâche</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -64,7 +64,7 @@
                                             <tr>
                                                 <td class="status"><span class="badge badge-soft-primary text-uppercase">T{{$tache->idtache}}</span>
                                                 <td class="customer_name">{{ \Carbon\Carbon::parse($tache->debut)->locale('fr')->isoFormat('dddd D MMMM YYYY') }}  <br>
-                                                    {{ \Carbon\Carbon::parse($tache->fin)->locale('fr')->isoFormat('dddd D MMMM YYYY') }}td>
+                                                    {{ \Carbon\Carbon::parse($tache->fin)->locale('fr')->isoFormat('dddd D MMMM YYYY') }}<td>
                                                 <td class="product_name">{{$tache->vueRecherche}}</td>
                                                 <td class="amount">{{$tache->centre}}</td>
                                                 </td>

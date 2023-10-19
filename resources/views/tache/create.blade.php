@@ -62,9 +62,9 @@
                                 </div>
                             </div>
                             <div class="mb-2">
-                                <label class="fw-bolder text-black" for="selection">Type de fichier</label>
+                                <label class="fw-bolder text-black" for="selection">Type de tâche</label>
                                 <select class="form-control" name="typetache" id="typetache" required>
-
+                                    <option value="" disabled selected>Choisissez un type de tâche</option>
                                     @foreach ($fichiers as $fichier)
                                         <option value="{{$fichier->id}}">{{$fichier->libelle}}</option>
                                     @endforeach
@@ -92,11 +92,13 @@
                             <div class="mb-2" id="listdep" style="display:none;">
                                 <label class="fw-bolder text-black">Département:</label>
                                 <select id="stateliste" class="form-control" multiple name="departements[]" >
+
                                 </select>
                             </div>
                             <div class="mb-2"  id="listvil" style="display:none;">
                                 <label class="fw-bolder text-black">Ville:</label>
                                 <select class="form-control" multiple name="villes[]" id="citielist" >
+
                                 </select>
                             </div>
                             <div class="form-group ">

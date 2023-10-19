@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use App\Mail\OrderShipped;
 use App\Models\TacheCentre;
 use App\Models\User;
+use App\Models\ViewPrice;
 use App\Models\Zone;
 use Illuminate\Support\Facades\Mail;
 use StephaneAss\Payplus\Pay\PayPlus;
@@ -138,7 +139,7 @@ class ClientController extends Controller
             $payslist = implode(",", $allPays);
             //dd($villelist, $departementlist, $payslist);
         }
-        dd($villelist, $departementlist, $payslist);
+        //dd($villelist, $departementlist, $payslist);
         $centres=[];
         foreach ($request->centre as $value) {
             $centres[] = [
@@ -185,16 +186,16 @@ class ClientController extends Controller
             DB::table('tache_zone')->insert($datavil);
         }
 
-        Paiement::create([
-            'idUer' => $user_id,
-            'idTache' => $idtache,
-            'montant' => 1000
-        ]);
-
         $co = (new PayPlus())->init();
                     $co->addItem("$user_email", 3, 150, 450, "Je suis un client");
-
-                    $total_amount=$request->vueRecherche*2; // for test
+                    $price = ViewPrice::where('idTache',$idtache)->first('prixtache');
+                    if(!blank($price)){
+                        $pricetache = $price->prixinfluenceur;
+                    } else{
+                        $pricetache = Tache::where('id',$idtache)->first('prixtachedefault');
+                        $pricetache = $pricetache->prixtachedefault;
+                    }
+                    $total_amount=$request->vueRecherche*$pricetache; // for test
                     $co->setTotalAmount($total_amount);
                     $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
                     $mail=$user_email;
@@ -202,6 +203,7 @@ class ClientController extends Controller
                     $co->addCustomData('email', $mail);
                     $co->addCustomData('task_id', $idtache);
                     $co->addCustomData('user_id', $user_id);
+                    $co->addCustomData('montant', $total_amount);
 
                     // démarrage du processus de paiement
                     // envoi de la requete

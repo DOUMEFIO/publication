@@ -99,7 +99,7 @@
                 $('#fileGroup').attr('style','')
                 break;
                 default:
-                $('#descriptionGroup').attr('style','display:none')
+                $('#descriptionGroup').attr('style','')
                 $('#fileGroup').attr('style','display:none')
                 break;
             }

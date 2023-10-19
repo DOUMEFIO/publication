@@ -20,7 +20,14 @@ class Paiement extends Model
     public static function paiementdo($vues,$data, $id_tache, $user_id){
         $co = (new PayPlus())->init();
         $co->addItem("$data->email", 3, 150, 450, "Je suis un client");
-        $total_amount = $vues*2; // for test
+        $price = ViewPrice::where('idTache',$id_tache)->first('prixtache');
+            if(!blank($price)){
+                $pricetache = $price->prixinfluenceur;
+            } else{
+                $pricetache = Tache::where('id',$id_tache)->first('prixtachedefault');
+                $pricetache = $pricetache->prixtachedefault;
+            }
+        $total_amount = $vues*$pricetache; // for test
         $co->setTotalAmount($total_amount);
         $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
         $mail = $data->email;
