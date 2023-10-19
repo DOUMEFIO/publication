@@ -473,12 +473,12 @@ class AdminController extends Controller
     }
 
     public function statistique(){
-        $tachevalide = Tache::where('idStatus', 2)->get();
-        $tachenonvalide = Tache::where('idStatus', 1)->get();
-        $tacheall = Tache::all();
-        $tachevueatteint = Tache::where('realisation', 'Vues Atteint')->get();
-        $tachevuenonatteint = Tache::where('realisation', 'Vues Non Atteint')->get();
-        $tachenonexecute = Tache::where('realisation', 'Non Exécutée')
+        $tachevalide = Tache::where('idStatus', 2)->where('payement','paye')->get();
+        $tachenonvalide = Tache::where('idStatus', 1)->where('payement','paye')->get();
+        $tacheall = Tache::where('payement','paye')->get();
+        $tachevueatteint = Tache::where('realisation', 'Vues Atteint')->where('payement','paye')->get();
+        $tachevuenonatteint = Tache::where('realisation', 'Vues Non Atteint')->where('payement','paye')->get();
+        $tachenonexecute = Tache::where('realisation', 'Non Exécutée')->where('payement','paye')
         ->where ('idStatus', 2) ->get();
         $client = User::where('idProfil', 3)->get();
         $influenceur = User::where('idProfil', 2)->get();

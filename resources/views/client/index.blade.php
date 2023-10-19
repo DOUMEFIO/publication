@@ -14,15 +14,12 @@
                     <div class="modal-body">
                         <form class="user" method="POST" action="{{route('updatevues')}}" enctype="multipart/form-data">
                             @csrf
-                            <input type="text" name="id" id="tacheIdInput">
+                            <input type="hidden" name="id" id="tacheIdInput">
                             <div class="mb-3">
-                                <label class="form-label"><strong>Nombres vues Realisée</strong></label>
+                                <label class="form-label"><strong>Ajouter des centres</strong></label>
                                 <input type="number" value="" name="nbr_vue_moyen" class="form-control" required>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label"><strong>Capture</strong></label>
-                                <input type="file" class="form-control" id="avatar" name="avatar" value="">
-                            </div>
+
                             <button type="submit" id="submitModal" class="btn btn-primary" style="float: right">Enregistrer</button>
                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
                         </form>
@@ -56,7 +53,7 @@
                                             <th data-sort="amount">Centres</th>
                                             <th data-sort="status">Status</th>
                                             <th data-sort="status">Réalisation</th>
-                                            <th data-sort="city">Action</th>
+                                            <th data-sort="city" style="float: center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody class="list form-check-all">
@@ -64,10 +61,9 @@
                                             <tr>
                                                 <td class="status"><span class="badge badge-soft-primary text-uppercase">T{{$tache->idtache}}</span>
                                                 <td class="customer_name">{{ \Carbon\Carbon::parse($tache->debut)->locale('fr')->isoFormat('dddd D MMMM YYYY') }}  <br>
-                                                    {{ \Carbon\Carbon::parse($tache->fin)->locale('fr')->isoFormat('dddd D MMMM YYYY') }}<td>
+                                                    {{ \Carbon\Carbon::parse($tache->fin)->locale('fr')->isoFormat('dddd D MMMM YYYY') }}</td>
                                                 <td class="product_name">{{$tache->vueRecherche}}</td>
                                                 <td class="amount">{{$tache->centre}}</td>
-                                                </td>
                                                 @if ($tache->status_libelle == "Valide")
                                                     <td class="status"><span class="badge badge-soft-success text-uppercase">{{$tache->status_libelle}}</span>
                                                     </td>
@@ -213,26 +209,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Modal -->
-                        <div class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-body p-5 text-center">
-                                        <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#405189,secondary:#f06548" style="width:90px;height:90px"></lord-icon>
-                                        <div class="mt-4 text-center">
-                                            <h4>You are about to delete a order ?</h4>
-                                            <p class="text-muted fs-15 mb-4">Deleting your order will remove all of your information from our database.</p>
-                                            <div class="hstack gap-2 justify-content-center remove">
-                                                <button class="btn btn-link link-success fw-medium text-decoration-none" id="deleteRecord-close" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
-                                                <button class="btn btn-danger" id="delete-record">Yes, Delete It</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--end modal -->
                     </div>
                 </div>
 
