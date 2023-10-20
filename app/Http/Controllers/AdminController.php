@@ -474,37 +474,16 @@ class AdminController extends Controller
     }
 
     public function viewprice(){
-        $prices = ViewPrice::all();
+        $prices = ViewPrice::first();
         return view('admin.parametre', compact('prices'));
-    }
-
-    public function createparametre(){
-        $taches = Tache::all();
-        return view('admin.createparametre', compact('taches'));
-    }
-
-    public function createprice(Request $request){
-        ViewPrice::create([
-            'idTache' => $request->idtache,
-            'prixtache' => $request->prixclient,
-            'prixinfluenceur' => $request->prixinfluenceur,
-        ]);
-        return view('admin.parametre');
-    }
-
-    public function editprice($id){
-        $taches = Tache::all();
-        $price = ViewPrice::where('id',$id)->first();
-        return view('admin.editprice', compact('taches','id','price'));
     }
 
     public function updateprice(Request $request){
         $info = ([
-            'idTache' => $request->idtache,
-            'prixtache' => $request->prixclient,
+            'prixtache' => $request->prixtache,
             'prixinfluenceur' => $request->prixinfluenceur
         ]);
-        ViewPrice::where("id", $request->id)->update($info);
-        return redirect()->route('viewprice');
+        ViewPrice::where("id", 1)->update($info);
+        return back();
     }
 }

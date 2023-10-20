@@ -41,15 +41,6 @@ Route::middleware('auth')->group(function (){
     Route::get('viewprice', [AdminController::class, 'viewprice'])
         ->name('viewprice');
 
-    Route::get('createparametre', [AdminController::class, 'createparametre'])
-        ->name('createparametre');
-
-    Route::post('createprice', [AdminController::class, 'createprice'])
-        ->name('createprice');
-
-    Route::get('editprice/{id}', [AdminController::class, 'editprice'])
-        ->name('editprice');
-
     Route::post('updateprice', [AdminController::class, 'updateprice'])
         ->name('updateprice');
 });

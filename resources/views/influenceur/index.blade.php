@@ -136,7 +136,8 @@
                                                             <option value="Mensuel" selected>Mensuel</option>
                                                             <option value="Hebdomendaire">Hebdomendaire</option>
                                                         @endif
-                                                    </select>                                                </div>
+                                                    </select>
+                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
