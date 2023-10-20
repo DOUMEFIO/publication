@@ -9,5 +9,5 @@ class ViewPrice extends Model
 {
     use HasFactory;
     protected $table="view_price";
-    protected $fillable=['idTache','prixtache','prixinfluenceur'];
+    protected $fillable=['prixtache','prixinfluenceur'];
 }

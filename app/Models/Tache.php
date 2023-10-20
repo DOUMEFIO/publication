@@ -15,12 +15,15 @@ class Tache extends Model
 
     public static function createTache($data, $user_id,$img)
     {
+        $price = ViewPrice::first();
         return self::create([
             'idClient' => $user_id,
             'vueRecherche' => $data["vueRecherche"],
             'debut' => $data["debut"],
             'fin' => $data["fin"],
             'fichier' => $img,
+            'prixtachedefault' => $price->prixtache,
+            'prixinfluenceurdefault' => $price->prixinfluenceur,
             'description' => $data["description"],
             'typetache' => $data["typetache"],
             'idStatus' => 1

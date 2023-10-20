@@ -55,13 +55,8 @@ class GeneratePaiementhebdo extends Command
         //dd($preuves,$idUser);
         $url = "https://app.payplus.africa/pay/v01/straight/payout";
         foreach ($preuves as $preuve){
-            $price = ViewPrice::where('idTache',$preuve->idTache)->first('prixinfluenceur');
-            if(!blank($price)){
-                $priceinfluenceur = $price->prixinfluenceur;
-            } else{
-                $priceinfluenceur = Tache::where('id',$preuve->idTache)->first('prixinfluenceurdefault');
-                $priceinfluenceur = $priceinfluenceur->prixinfluenceurdefault;
-            }
+            $priceinfluenceur = Tache::where('id',$preuve->idTache)->first('prixinfluenceurdefault');
+            $priceinfluenceur = $priceinfluenceur->prixinfluenceurdefault;
             $client = new Client();
             $payload = [
                 "commande" => [

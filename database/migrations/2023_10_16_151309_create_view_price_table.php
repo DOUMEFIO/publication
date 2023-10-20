@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('view_price', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('idTache')->constrained('tache');
-            $table->decimal('prixtache');
-            $table->decimal('prixinfluenceur');
+            $table->decimal('prixtache')->default(2);
+            $table->decimal('prixinfluenceur')->default(0.9);
             $table->timestamps();
         });
     }

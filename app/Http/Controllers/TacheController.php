@@ -78,7 +78,9 @@ class TacheController extends Controller
             $users = User::where('email',$request->email)->get()->first();
             $datas = $this->getFormDatas($request);
             $img = substr($datas["url"], 9);
+
             $tache = Tache::createTache($datas, $users->id, $img);
+            
             $pay = !blank($datas["pay"]) ? explode("," , $datas["pay"]) : null;
             $arraydep = !blank($datas["dep"]) ? explode("," ,$datas["dep"]) : null;
             $arrayvil = !blank($datas["vil"] ) ? explode("," ,$datas["vil"] ) : null;

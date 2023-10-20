@@ -22,23 +22,9 @@ use Illuminate\Support\Facades\DB;
 class InfluenceurController extends Controller
 {
     public function show(){
-        $users = DB::table('users')
-                ->leftJoin('info_influenceur', 'users.id', '=', 'info_influenceur.id_user')
-                ->leftJoin('travailleur_centre_interet', 'users.id', '=', 'travailleur_centre_interet.id_User')
-                ->leftJoin('centre_interet', 'travailleur_centre_interet.id_Centre', '=', 'centre_interet.id')
-                ->leftJoin('pays', 'info_influenceur.id_pay', '=', 'pays.id')
-                ->leftJoin('departements', 'info_influenceur.id_departement', '=', 'departements.id')
-                ->leftJoin('villes', 'info_influenceur.id_ville', '=', 'villes.id')
-                ->select('users.photpProfil','users.id','users.idProfil' ,'users.nom', 'users.prenom', 'info_influenceur.tel', 'pays.name as pays', 'departements.name as departement',
-                 'villes.name as ville','info_influenceur.nbr_vue_moyen', DB::raw('GROUP_CONCAT(centre_interet.libelle SEPARATOR \', \') as interests'))
-                ->groupBy('users.photpProfil','users.id','info_influenceur.nbr_vue_moyen','users.idProfil' ,'users.nom', 'users.prenom', 'info_influenceur.tel', 'pays', 'departement', 'ville')
-                ->where('users.idProfil',2)
-                ->get();
-
-        $user = InfoInfluenceur::has('type')
-            ->with('type','residencepay','residencedep','residencevil')
-            ->get();
-        //dd($users,$user);
+        $users = InfoInfluenceur::has('type.centres')
+            ->with('type.centres','residencepay','residencedep','residencevil')
+            ->paginate(10);
         return view('influenceur.show', compact('users'));
     }
 

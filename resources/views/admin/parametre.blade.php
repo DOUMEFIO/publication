@@ -26,7 +26,7 @@
                             <table class="table align-middle table-nowrap mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                        <th scope="col">Tâche</th>
+                                        <th scope="col">#</th>
                                         <th scope="col">Prix Unitaire</th>
                                         <th scope="col">Prix Influenceur</th>
                                         <th scope="col" style="width: 150px;">Action</th>
@@ -35,12 +35,11 @@
                                 <tbody>
                                     @foreach ($prices as $price)
                                         <tr>
-                                            <td>T{{$price->idTache}}</td>
+                                            <td>1</td>
                                             <td>{{$price->prixtache}}</td>
                                             <td>{{$price->prixinfluenceur}}</td>
                                             <td>
                                                 <button type="button" class="btn btn-sm btn-light"><a href="{{route('editprice',['id' => $price->id])}}">Modifier</a></button>
-                                                <button type="button" class="btn btn-sm btn-danger">Supprimer</button>
                                             </td>
                                         </tr>
                                     @endforeach

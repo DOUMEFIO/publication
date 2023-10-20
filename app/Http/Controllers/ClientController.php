@@ -173,13 +173,8 @@ class ClientController extends Controller
 
         $co = (new PayPlus())->init();
                     $co->addItem("$user_email", 3, 150, 450, "Je suis un client");
-                    $price = ViewPrice::where('idTache',$idtache)->first('prixtache');
-                    if(!blank($price)){
-                        $pricetache = $price->prixinfluenceur;
-                    } else{
-                        $pricetache = Tache::where('id',$idtache)->first('prixtachedefault');
-                        $pricetache = $pricetache->prixtachedefault;
-                    }
+                    $pricetache = Tache::where('id',$idtache)->first('prixtachedefault');
+                    $pricetache = $pricetache->prixtachedefault;
                     $total_amount=$request->vueRecherche*$pricetache; // for test
                     $co->setTotalAmount($total_amount);
                     $co->setDescription("Achat de deux articles sur le site Jeans Missebo");
