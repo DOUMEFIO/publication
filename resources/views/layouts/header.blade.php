@@ -9,6 +9,7 @@
 
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{asset('dashbord/images/images/logo.png')}}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.min.css">
 
     <!-- jsvectormap css -->
     <link href="{{asset('velson/libs/jsvectormap/css/jsvectormap.min.css')}}" rel="stylesheet" type="text/css" />

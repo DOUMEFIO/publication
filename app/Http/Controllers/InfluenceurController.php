@@ -22,7 +22,6 @@ use Illuminate\Support\Facades\DB;
 class InfluenceurController extends Controller
 {
     public function show(){
-        $alls=User::where('idProfil', 2)->get();
         $users = DB::table('users')
                 ->leftJoin('info_influenceur', 'users.id', '=', 'info_influenceur.id_user')
                 ->leftJoin('travailleur_centre_interet', 'users.id', '=', 'travailleur_centre_interet.id_User')
@@ -35,7 +34,12 @@ class InfluenceurController extends Controller
                 ->groupBy('users.photpProfil','users.id','info_influenceur.nbr_vue_moyen','users.idProfil' ,'users.nom', 'users.prenom', 'info_influenceur.tel', 'pays', 'departement', 'ville')
                 ->where('users.idProfil',2)
                 ->get();
-        return view('influenceur.show', compact('users','alls'));
+
+        $user = InfoInfluenceur::has('type')
+            ->with('type','residencepay','residencedep','residencevil')
+            ->get();
+        //dd($users,$user);
+        return view('influenceur.show', compact('users'));
     }
 
     public function influenceurconnect(Request $data){

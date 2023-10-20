@@ -18,16 +18,14 @@ class Admin extends Model
         $tachedo = Tache::with('type')->where('id',$id)->first();
         $tacheUser = TravailleurTache::where('idTache',$id)->pluck('idtravailleur')->toArray();
         $tacheinflu = InfoInfluenceur::whereIn('id_User',$tacheUser)->pluck("tel")->toArray();
-        $dateDebut = Carbon::parse($tachedo->debut);
-        $debutFormatee = $dateDebut->isoFormat('dddd D MMMM YYYY', 'Do MMMM YYYY');
-        $dateFin = Carbon::parse($tachedo->debut);
-        $finFormatee = $dateFin->isoFormat('dddd D MMMM YYYY', 'Do MMMM YYYY');
+        $debutFormatee = Carbon::parse($tachedo->debut)->locale('fr')->isoFormat('dddd D MMMM YYYY');
+        $finFormatee = Carbon::parse($tachedo->fin)->locale('fr')->isoFormat('dddd D MMMM YYYY');
         if ($tachedo->description){
-            $message = "Bonjour monsieur voici votre nouvelle tâche qui débute le $debutFormatee et prend fin le $finFormatee.
-    C'est un ".$tachedo->type->libelle.". Le contenu est *$tachedo->description*.";
+            $message = "Bonjour monsieur, voici votre nouvelle tâche qui débute le *$debutFormatee* et prend fin le *$finFormatee*.
+            C'est un ".$tachedo->type->libelle.". Le contenu est: *$tachedo->description*.";
         } else {
-            $message = "Bonjour monsieur voici votre nouvelle tâche qui débute le $debutFormatee et prend fin le $finFormatee.
-    C'est un ".$tachedo->type->libelle.". Il y a pas de contenu." ;
+            $message = "Bonjour monsieur, voici votre nouvelle tâche qui débute le *$debutFormatee* et prend fin le *$finFormatee*.
+            C'est un ".$tachedo->type->libelle.". Il y a pas de contenu." ;
         }
         $fichier = "http://publication.lapieuvretechnologique.info/storage".$tachedo->fichier;
 

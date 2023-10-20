@@ -27,37 +27,17 @@ use function Pest\Laravel\get;
 class AdminController extends Controller
 {
     public function index(){
-        $centreInterets=CentreInteret::all();
+        $centreInterets=CentreInteret::paginate(10);
         return view('admin.index', compact("centreInterets"));
     }
 
     public function tache(){
-        $taches = DB::table('tache')
-                ->leftJoin('users', 'tache.idClient', '=', 'users.id')
-                ->leftJoin('tache_zone', 'tache.id', '=', 'tache_zone.idTache')
-                ->leftJoin('tache_centre', 'tache.id', '=', 'tache_centre.idTache')
-                ->leftJoin('villes', 'tache_zone.idVille', '=', 'villes.id')
-                ->leftJoin('pays', 'tache_zone.idPay', '=', 'pays.id')
-                ->leftJoin('departements', 'tache_zone.idDepartement', '=', 'departements.id')
-                ->leftJoin('status', 'tache.idStatus', '=', 'status.id')
-                ->leftJoin('centre_interet', 'tache_centre.idCentre', '=', 'centre_interet.id')
-                ->leftJoin('type_tache', 'tache.typetache', '=', 'type_tache.id')
-                ->select('tache.realisation','tache.idStatus','type_tache.libelle as tache_libelle','users.nom','tache.debut','tache.fin','tache.fichier','tache.description',
-                        'tache.typetache','tache.vueRecherche','status.libelle as status_libelle','tache.id as nbr','users.prenom','users.id','users.idProfil',
-                    DB::raw('GROUP_CONCAT(DISTINCT centre_interet.libelle) as centre'),
-                    DB::raw('GROUP_CONCAT(DISTINCT centre_interet.id) as idcentre'),
-                    DB::raw('GROUP_CONCAT(DISTINCT pays.id) as idpays'),
-                    DB::raw('GROUP_CONCAT(DISTINCT pays.name) as pays'),
-                    DB::raw('GROUP_CONCAT(DISTINCT departements.id) as iddepartements'),
-                    DB::raw('GROUP_CONCAT(DISTINCT departements.name) as departements'),
-                    DB::raw('GROUP_CONCAT(DISTINCT villes.id) as idvilles'),
-                    DB::raw('GROUP_CONCAT(DISTINCT villes.name) as villes'))
-                ->groupBy('users.nom','tache.debut','tache.realisation','tache.fin','tache.fichier','tache.description',
-                'tache.typetache','tache_libelle','tache.idStatus','tache.vueRecherche','status_libelle','nbr','users.prenom','users.id','users.idProfil')
-                ->where('users.idProfil',3)
-                ->where('payement',"paye")
-                ->get();
-                //dd($taches);
+        $taches = Tache::has('travailleur')
+            ->has('status')
+            ->has('type')
+            ->with('travailleur', 'status', 'type', 'centres')
+            ->where('payement', 'paye')
+            ->paginate(10);
         return view('admin.taches', compact("taches"));
     }
 

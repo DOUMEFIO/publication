@@ -27,8 +27,6 @@ class Tache extends Model
         ]);
     }
 
-
-
     public static function associateCentre($idtache, $centre)
     {
         $centres = [];
@@ -65,4 +63,10 @@ class Tache extends Model
     {
         return $this->belongsToMany(User::class, "tache_preve", "idTache", "idtravailleur")->withPivot("capture","totalVues");
     }
+
+    public function centres()
+    {
+        return $this->belongsToMany(CentreInteret::class, "tache_centre", "idTache", "idCentre");
+    }
+
 }

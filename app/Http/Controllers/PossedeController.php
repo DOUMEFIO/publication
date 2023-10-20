@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class PossedeController extends Controller
 {
     public function index(){
-        $paiements = Paiement::with('client')->get();
+        $paiements = Paiement::with('client')->paginate(10);
         return view("possede.index", compact('paiements'));
     }
 }

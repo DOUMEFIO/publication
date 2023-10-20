@@ -140,6 +140,8 @@ return [
 
     'maintenance' => [
         'driver' => 'file',
+        'pagination' => 'default', // ou 'default'
+
         // 'store'  => 'redis',
     ],
 

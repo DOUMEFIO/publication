@@ -62,10 +62,24 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Profil::class,'idProfil');
     }
-    
+
     public function workers()
     {
         return $this->hasMany(TravailleurTache::class);
+    }
+
+    public function taches()
+    {
+        return $this->belongsToMany(Tache::class, "travailleur_tache", "idtravailleur", "idTache");
+    }
+
+    public function tachestravailleur()
+    {
+        return $this->belongsToMany(Tache::class, "tache_preve", "idtravailleur", "idTache")->withPivot("capture","totalVues");
+    }
+
+    public function centres(){
+        return $this->belongsToMany(CentreInteret::class, "travailleur_centre_interet", "id_User", "id_Centre");
     }
 
     public static function updateUser($data, $user){
@@ -85,15 +99,5 @@ class User extends Authenticatable
             'email'=>$data->email,
             'password' => Hash::make($data->password)
         ]);
-    }
-
-    public function taches()
-    {
-        return $this->belongsToMany(Tache::class, "travailleur_tache", "idtravailleur", "idTache");
-    }
-
-    public function tachestravailleur()
-    {
-        return $this->belongsToMany(Tache::class, "tache_preve", "idtravailleur", "idTache")->withPivot("capture","totalVues");
     }
 }

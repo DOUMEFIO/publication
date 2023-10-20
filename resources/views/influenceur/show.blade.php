@@ -26,6 +26,7 @@
                     <table class="table my-0" id="dataTable">
                         <thead>
                             <tr>
+                                <th>#</th>
                                 <th>Nom & Prénom</th>
                                 <th>Téléphone</th>
                                 <th>Résidence</th>
@@ -35,8 +36,12 @@
                             </tr>
                         </thead>
                         <tbody >
+                            @php
+                                $compteur = 1;
+                            @endphp
                             @foreach ($users as $user )
                                 <tr>
+                                    <td>{{ $compteur++ }}</td>
                                     @if ($user->photpProfil)
                                     <td>
                                         <img class="rounded-circle me-2" src="{{asset('storage'.$user->photpProfil)}}" width="30" height="30">{{$user->nom}} {{$user->prenom}}

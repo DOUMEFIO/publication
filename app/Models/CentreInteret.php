@@ -16,8 +16,11 @@ class CentreInteret extends Model
         return $this->hasMany(TravailleCentre::class);
     }
 
-    public function centres()
-    {
-        return $this->hasMany(TacheCentre::class);
+    public function taches(){
+        return $this->belongsToMany(Tache::class, "tache_centre", "idCentre", "idTache");
+    }
+
+    public function users(){
+        return $this->belongsToMany(User::class, "travailleur_centre_interet", "id_Centre", "id_User");
     }
 }

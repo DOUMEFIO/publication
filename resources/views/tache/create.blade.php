@@ -71,7 +71,7 @@
                                 </select>
                             </div>
                             <div class="mb-2" id="descriptionGroup" style="display:none;">
-                                <label class="fw-bolder text-black" for="date">Description</label>
+                                <label class="fw-bolder text-black" for="date">Déscription</label>
                                 <input type="text" class="form-control"  name="description" id="date" placeholder="Description">
                             </div>
                             <div class="mb-3" id="fileGroup" style="display:none;">
@@ -116,7 +116,6 @@
             </div>
         </div>
     </div>
-
     <!-- JAVASCRIPT -->
     @include("layouts.js")
     @include("layouts.jss")
