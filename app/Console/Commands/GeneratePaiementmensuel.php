@@ -86,9 +86,10 @@ class GeneratePaiementmensuel extends Command
                 $res = $client->request('POST', $url, $payload);
                 $responseData = json_decode($res->getBody().PHP_EOL, true);
                 $token = $responseData['token'];
-                //echo json_encode($payload).PHP_EOL;
+                $montant = $preuve->nbrvues*$priceinfluenceur;
                 //echo 'recipient => '.$preuve.' , status : '.$res->getStatusCode().PHP_EOL;
                 DB::table('tache_preve')->where('id', $preuve->id)->update(['tokenPaiementInfluenceur' => $token]);
+                DB::table('tache_preve')->where('id', $preuve->id)->update(['montant' => $montant]);
                 //echo $token;
                 //echo $res->getBody().PHP_EOL;
                 if($res->getStatusCode() == 201 || $res->getStatusCode() == 200){

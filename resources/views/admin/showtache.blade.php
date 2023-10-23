@@ -83,7 +83,7 @@
                                 </a>
                             </li>
                         </ul>
-                        @if ($clients[0]["profil"] == 3)
+                        @if ($clients[0]["profil"] == 1)
                             <div class="flex-shrink-0">
                                 @if ($clients[0]["status"] != "Valide")
                                     <a href="{{route('attribuer.tache', ['id' => $clients[0]["idTache"],
@@ -226,7 +226,8 @@
                                                                 <p class="text-muted text-truncate mb-0">Total Vues obtenues : {{$execute['totalVues']}}</p>
                                                             </div>
                                                             <div class="flex-shrink-0 ms-2">
-                                                                <a href="{{route('showtacheallinfluenceur', ['id'=>$execute['id']])}}"><div class="badge badge-soft-warning fs-10">Voir Plus</div></a>
+                                                                <a href="{{route('showtacheallinfluenceur', ['id' => $clients[0]["idTache"],
+                                                                    'idinfluenceur' =>$execute['id']])}}"><div class="badge badge-soft-warning fs-10">Voir Plus</div></a>
                                                             </div>
                                                         </div>
 

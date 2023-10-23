@@ -1,9 +1,9 @@
 <x-app-layout>
     @section('name')
-        Tout les paiements
+        Paiements
     @endsection
     @section('title')
-        Paiement
+        Tâches Paiements
     @endsection
 
     @section('contenue')
@@ -26,6 +26,8 @@
                                 <th>Tâche</th>
                                 <th>Nom & Prénom</th>
                                 <th>Email</th>
+                                <th>Vues Rechercher</th>
+                                <th>Montant Payer</th>
                                 <th>Date de Paiement</th>
                                 <th>Action</th>
                             </tr>
@@ -41,6 +43,10 @@
                                     </span></td>
                                     <td>{{$paiement->client->nom}} {{$paiement->client->prenom}}</td>
                                     <td><span class="badge text-bg-success">{{$paiement->client->email}}
+                                    </span></td>
+                                    <td><span class="badge text-bg-info">{{$paiement->tache->vueRecherche}}
+                                    </span></td>
+                                    <td><span class="badge text-bg-primary">{{$paiement->montant}}
                                     </span></td>
                                     <td><span class="badge text-bg-success">
                                         {{ \Carbon\Carbon::parse($paiement->created_at)->locale('fr')->isoFormat('dddd D MMMM YYYY') }}

@@ -193,5 +193,10 @@
             }
         }
 
+        const today = new Date().toISOString().split('T')[0];
+        const dateValidationInput = document.getElementById('dateValidation');
+        const dateValidationInputFin = document.getElementById('dateValidationInputFin');
+        dateValidationInput.min = today;
+        dateValidationInputFin.min = today;
   </script>
 @stack('scripts')

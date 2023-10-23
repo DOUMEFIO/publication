@@ -260,6 +260,13 @@ class InfluenceurController extends Controller
         return view('influenceur.tacheattribuer', compact('taches','currentDate'));
     }
 
+    public function influtacheall(){
+        $taches = TravailleurTache::with('tacheall.type','tacheall.travailleur')
+            ->where('idtravailleur', Auth::user()->id)
+            ->get();
+        return view('influenceur.tacheall', compact('taches'));
+    }
+
     public function vuesrealisee($id){
         return view('influenceur.update', compact('id'));
     }
@@ -297,10 +304,8 @@ class InfluenceurController extends Controller
 
     public function tachedo(){
         $taches = Tache::has('travailleurtaches')
-        ->with('travailleurtaches')
-        ->with('type')
-        ->with('travailleur')
-        ->get();
+            ->with('travailleurtaches','type','travailleur')
+            ->get();
         $clientes = $taches->map(function ($tache) {
             $travailleurs = $tache->travailleurtaches->where('id', Auth::user()->id)->groupBy('taches.id')->map(function ($travailleursGroup) {
                 $totalVues = 0;
@@ -437,16 +442,45 @@ class InfluenceurController extends Controller
                                                 "idpays","iddepartements","idvilles","idcentre"));
     }
 
-    public function influenceurtache($id){
+    public function influenceurtache($id, $idinfluenceur){
         $influenceurs = InfoInfluenceur::with("type","residencepay","residencedep","residencevil")
-        ->where("id_User", $id)->get();
-        $centres = TravailleCentre::with("centre")->where("id_User", $id)->get();
-        $taches = TravailleurTache::with("tacheall.status","tacheall.travailleur")->where("idtravailleur", $id)->get();
+            ->where("id_User", $idinfluenceur)->get();
+        $centres = TravailleCentre::with("centre")->where("id_User", $idinfluenceur)->get();
+        $tachesall = TachePreuve::with("infotache.status","infotache.travailleur")
+            ->where("idtravailleur", $idinfluenceur)
+            ->get();
+        $tachesGrouped = $tachesall->groupBy('idTache');
+        $taches = $tachesGrouped->map(function ($group) {
+            $totalVues = $group->sum('totalVues');
+            $firstRecord = $group->first();
+            $firstRecord->totalVues = $totalVues;
+            return $firstRecord;
+        });
         return view('influenceur.showtacheclient', compact("influenceurs","centres","taches"));
     }
 
     public function whatsapcofirm($id){
         $url =  "https://wa.me/22893837180?text=Bonjour WasPay";
         return redirect()->away($url);
+    }
+
+    public function statistique(){
+        $tacheall = TravailleurTache::where('idtravailleur', Auth::user()->id)
+            ->get();
+
+        $currentDate = now()->toDateString();
+        $tachesencours = TravailleurTache::with('tacheall.type','tacheall.travailleur')
+            ->where('idtravailleur', Auth::user()->id)
+            ->get();
+        $taches = [];
+        foreach ($tachesencours as $tache) {
+            if ($currentDate >= $tache->tacheall->debut && $currentDate <= $tache->tacheall->fin) {
+                $taches[] = $tache; // Ajouter la tâche au tableau si elle est en cours
+            }
+        }
+
+        $tacheexecute = Tache::has('travailleurtaches')
+            ->get();
+        return view("influenceur.statistique", compact('tacheall','taches','tacheexecute'));
     }
 }

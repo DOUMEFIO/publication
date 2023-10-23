@@ -5,8 +5,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function (){
 
-    Route::get('paiement.index', [PossedeController::class, 'index'])
-        ->name('paiement.index');
+    Route::get('paiementtache', [PossedeController::class, 'paiementtache'])
+        ->name('paiementtache');
+
+    Route::get('paiementinfluenceur', [PossedeController::class, 'paiementinfluenceur'])
+        ->name('paiementinfluenceur');
 
 });
 

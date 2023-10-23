@@ -5,15 +5,11 @@
     @section('contenue')
         <div class="container-fluid">
             <div class="row mb-3">
-                @if($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                @if (session('info'))
+                <div class="alert alert-success">
+                    {{ session('info') }}
+                </div>
+            @endif
                 <div class="col-lg-4">
                     <div class="card mb-3">
                         <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="{{asset('storage'.$clients[0]->travailleur->photpProfil)}}" width="160" height="160">
@@ -54,7 +50,7 @@
                                     <span class="text-primary m-0 fw-bold fs-5 text-center">Informations d'Utilisateur</span><a class="btn btn-primary float-end text-light" id="modify">Modifier</a>
                                 </div>
                                 <div class="card-body">
-                                    <form class="user" method="POST" action="{{route('info.influupdate')}}">
+                                    <form class="user" method="POST" action="{{route('info.clientupdate')}}">
                                         @csrf
                                         <div class="row">
                                             <div class="col">
@@ -75,7 +71,7 @@
                                                     <input class="form-control" type="text" id="last_name" placeholder="Doe" name="last_name" value="{{Auth::user()->prenom}}"></div>
                                             </div>
                                         </div>
-                                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Enregistrer</button></div>
+                                        <div class="mb-3"><button class="btn btn-primary btn-sm" id="saved" type="submit" disabled>Enregistrer</button></div>
                                     </form>
                                 </div>
                             </div>
@@ -89,6 +85,8 @@
 </x-app-layout>
 <script>
     // Désactive tous les éléments input
+    var saveButton = document.getElementById('saved');
+    saveButton.disabled = true;
     var inputs = document.getElementsByTagName('input');
     for (var i = 6; i < inputs.length; i++) {
         inputs[i].disabled = true;
@@ -129,6 +127,7 @@
     enableButton.addEventListener('click', function() {
         enableAllInputs();
         enableAllOptions();
+        saveButton.disabled = false;
         $('#input').attr('style','')
         $('#noninput').attr('style','display:none')
         $('#noninputs').attr('style','display:none')

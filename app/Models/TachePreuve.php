@@ -15,4 +15,9 @@ class TachePreuve extends Model
         {
             return $this->belongsTo(Tache::class,'idTache');
         }
+
+    public function client()
+        {
+            return $this->belongsTo(User::class, 'idtravailleur');
+        }
 }

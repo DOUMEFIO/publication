@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('totalVues');
             $table->string('capture');
             $table->string('tokenPaiementInfluenceur')->nullable();
+            $table->string('montant')->nullable();
             $table->timestamps();
         });
     }

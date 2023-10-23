@@ -50,6 +50,9 @@ Route::middleware('auth')->group(function (){
     Route::get('infl.tachencour', [InfluenceurController::class, 'influtachencour'])
         ->name('infl.tachencour');
 
+    Route::get('infl.tacheall', [InfluenceurController::class, 'influtacheall'])
+        ->name('infl.tacheall');
+
     Route::get('vuesrealise/{id}', [InfluenceurController::class, 'vuesrealisee'])
         ->name('vuesrealise');
 
@@ -65,7 +68,7 @@ Route::middleware('auth')->group(function (){
     Route::get('showtache.influenceur/{id}', [InfluenceurController::class, 'clienttache'])
         ->name('showtache.influenceur');
 
-    Route::get('showtacheallinfluenceur/{id}', [InfluenceurController::class, 'influenceurtache'])
+    Route::get('showtacheallinfluenceur/{id}/{idinfluenceur}', [InfluenceurController::class, 'influenceurtache'])
         ->name('showtacheallinfluenceur');
 
     Route::get('whatsapcofirm/{id}', [InfluenceurController::class, 'whatsapcofirm'])
@@ -73,4 +76,6 @@ Route::middleware('auth')->group(function (){
 
     Route::any('verified/{tel}', [CallbackController::class, 'checkPhone'])->name('verified.tel');
 
+    Route::get('statistiqueinfluenceur', [InfluenceurController::class, 'statistique'])
+        ->name('statistiqueinfluenceur');
 });

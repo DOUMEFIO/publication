@@ -54,11 +54,11 @@
                             <div class="row mb-3">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                     <label class="fw-bold text-black" for="date">Date de début</label>
-                                        <input type="date" class="form-control" id="date" name="debut"  placeholder="234" required>
+                                        <input type="date" class="form-control" id="dateValidation" name="debut" min="YYYY-MM-DD" placeholder="234" required>
                                 </div>
                                 <div class="col-sm-6">
                                     <label class="fw-bolder text-black" for="date">Date de fin</label>
-                                    <input type="date" class="form-control" name="fin"  id="date" placeholder="234" required>
+                                    <input type="date" class="form-control" name="fin"  id="dateValidationInputFin" min="YYYY-MM-DD" placeholder="234" required>
                                 </div>
                             </div>
                             <div class="mb-2">

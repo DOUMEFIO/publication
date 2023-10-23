@@ -45,4 +45,9 @@ Route::middleware('auth')->group(function (){
     Route::get('showtache.all/{id}', [ClientController::class, 'clienttacheall'])
        ->name('showtache.all');
 
+    Route::get('statistiqueclient', [ClientController::class, 'statistique'])
+       ->name('statistiqueclient');
+
+    Route::post('info.clientupdate', [ClientController::class, 'clientupdate'])
+        ->name('info.clientupdate');
 });

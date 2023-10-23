@@ -17,6 +17,11 @@ class Paiement extends Model
         return $this->belongsTo(User::class, 'idUer');
     }
 
+    public function tache()
+    {
+        return $this->belongsTo(Tache::class, 'idTache');
+    }
+
     public static function paiementdo($vues,$data, $id_tache, $user_id){
         $co = (new PayPlus())->init();
         $co->addItem("$data->email", 3, 150, 450, "Je suis un client");

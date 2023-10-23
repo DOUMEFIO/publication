@@ -36,7 +36,7 @@
                                 <div class="col">
                                     <div class="mb-3">
                                         <label class="form-label" for="date"><strong>Date de début</strong></label>
-                                         <input type="date" class="form-control" id="date" name="debut"  placeholder="234" required>
+                                         <input type="date" class="form-control" id="dateValidation" name="debut"  placeholder="234" required>
                                     </div>
                                 </div>
                                 <div class="col">

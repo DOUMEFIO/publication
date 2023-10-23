@@ -256,7 +256,7 @@ class ClientController extends Controller
                     'sexe' => $infoinfluenceur[0]-> sexe,
                 ];
             })->toArray();
-            $infouser = User::where('id', $tache->idClient)->get(['nom', 'prenom','idProfil','email'])->first();
+            $infouser = User::where('id', Auth::user()->id)->get(['nom', 'prenom','idProfil','email'])->first();
             return [
                 "idClient" => $tache->idClient,
                 "idTache" => $tache->id,
@@ -379,5 +379,44 @@ class ClientController extends Controller
 
     public function edittache(Request $request){
         return redirect()->back()->with('info', 'Votre modification a été prise en compte');
+    }
+
+    public function statistique(){
+        $tachevalide = Tache::where('idStatus', 2)
+            ->where('payement','paye')
+            ->where('idClient',Auth::user()->id)
+            ->get();
+        $tachenonvalide = Tache::where('idStatus', 1)
+            ->where('payement','paye')
+            ->where('idClient',Auth::user()->id)
+            ->get();
+        $tacheall = Tache::where('payement','paye')
+            ->where('idClient',Auth::user()->id)
+            ->get();
+        $tachevueatteint = Tache::where('realisation', 'Vues Atteint')
+            ->where('payement','paye')
+            ->where('idClient',Auth::user()->id)
+            ->get();
+        $tachevuenonatteint = Tache::where('realisation', 'Vues Non Atteint')
+            ->where('payement','paye')
+            ->where('idClient',Auth::user()->id)
+            ->get();
+        $tachenonexecute = Tache::where('realisation', 'Non Exécutée')
+            ->where('payement','paye')
+            ->where('idClient',Auth::user()->id)
+            ->where ('idStatus', 2)
+            ->get();
+        return view("client.statistique", compact('tachevalide','tachevueatteint','tacheall','tachenonvalide',
+                                                'tachevuenonatteint','tachenonexecute'));
+    }
+
+    public function clientupdate(Request $resquest){
+        $info = ([
+            'email' => $resquest->email,
+            'nom' => $resquest->first_name,
+            'prenom' => $resquest->last_name
+        ]);
+        User::where("id", Auth::user()->id)->update($info);
+        return back()->with('info','Vos modification ont été prise en compte');
     }
 }

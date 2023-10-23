@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('idTache')->constrained('tache');
             $table->foreignId('idUer')->constrained('users');
-            $table->string('token');
+            $table->string('token')->nullable();
             $table->string('montant')->nullable();
             $table->timestamps();
         });

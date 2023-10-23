@@ -18,11 +18,9 @@
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\DB;
-
     use GuzzleHttp\Client;
     use GuzzleHttp\Exception\GuzzleException;
-
-use function Pest\Laravel\get;
+    use function Pest\Laravel\get;
 
 class AdminController extends Controller
 {
@@ -304,7 +302,7 @@ class AdminController extends Controller
                     $userValues[] = $item["users"];
                 }
                 //dd($vuesnew , $totaux,$uniqueUsersnews,$value,$values,5);
-                foreach ($uniqueUsersnews  as $userId) {
+                foreach ($uniqueUsersnews as $userId) {
                     DB::table('travailleur_tache')->insert([
                         'idtravailleur'=>$userId,
                         'idTache'=>$id,
@@ -312,7 +310,7 @@ class AdminController extends Controller
                     ]);
                 }
 
-                foreach ($value  as $userId) {
+                foreach ($value as $userId) {
                     DB::table('travailleur_tache')->insert([
                         'idtravailleur'=>$userId,
                         'idTache'=>$id,

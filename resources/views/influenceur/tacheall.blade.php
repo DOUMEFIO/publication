@@ -1,9 +1,9 @@
 <x-app-layout>
     @section('name')
-        Les Tâches En cours
+        Tâches 
     @endsection
     @section('title')
-        Tâche
+        Toutes Tâche
     @endsection
     @section('contenue')
         <div class="row">

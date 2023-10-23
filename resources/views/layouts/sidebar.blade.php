@@ -30,9 +30,25 @@
             <div id="two-column-menu">
             </div>
             <ul class="navbar-nav" id="navbar-nav">
-                @if (Auth::User()->idProfil == 1 || Auth::User()->idProfil == 3)
+                @if (Auth::User()->idProfil == 1)
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="{{route('statistique')}}">
+                            <i class="ri-home-gear-line"></i> <span data-key="t-widgets">Tableau de bord</span>
+                        </a>
+                    </li>
+                @endif
+
+                @if (Auth::User()->idProfil == 2)
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('statistiqueinfluenceur')}}">
+                            <i class="ri-home-gear-line"></i> <span data-key="t-widgets">Tableau de bord</span>
+                        </a>
+                    </li>
+                @endif
+
+                @if (Auth::User()->idProfil == 3)
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{route('statistiqueclient')}}">
                             <i class="ri-home-gear-line"></i> <span data-key="t-widgets">Tableau de bord</span>
                         </a>
                     </li>
@@ -45,9 +61,20 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{route('paiement.index')}}">
-                            <i class="ri-honour-line"></i> <span data-key="t-widgets">Paiement</span>
+                        <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
+                            <i class="ri-apps-2-line"></i> <span data-key="t-apps">Paiement</span>
                         </a>
+                        <div class="collapse menu-dropdown" id="sidebarApps">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a href="{{route('paiementtache')}}" class="nav-link" data-key="t-chat">Paiement Tâche</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="{{route('paiementinfluenceur')}}" class="nav-link" data-key="t-chat">Paiement Influenceurs</a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                     <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                     <li class="nav-item">
@@ -90,6 +117,9 @@
                             @endif
 
                             @if (Auth::User()->idProfil == 2)
+                                <li class="nav-item">
+                                    <a href="{{route('infl.tacheall')}}" class="nav-link" data-key="t-select2">Toutes les Tâches</a>
+                                </li>
                                 <li class="nav-item">
                                     <a href="{{route('infl.tachencour')}}" class="nav-link" data-key="t-select2">Tâche En cours</a>
                                 </li>
