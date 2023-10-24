@@ -250,20 +250,19 @@ class InfluenceurController extends Controller
             ->where('idtravailleur', Auth::user()->id)
             ->get();
         $taches = [];
-
         foreach ($tachesall as $tache) {
             if ($currentDate >= $tache->tacheall->debut && $currentDate <= $tache->tacheall->fin) {
                 $taches[] = $tache; // Ajouter la tâche au tableau si elle est en cours
             }
         }
 
-        return view('influenceur.tacheattribuer', compact('taches','currentDate'));
+        return view('influenceur.tacheattribuer', compact('tachesall','taches','currentDate'));
     }
 
     public function influtacheall(){
         $taches = TravailleurTache::with('tacheall.type','tacheall.travailleur')
             ->where('idtravailleur', Auth::user()->id)
-            ->get();
+            ->paginate(10);
         return view('influenceur.tacheall', compact('taches'));
     }
 
@@ -305,7 +304,7 @@ class InfluenceurController extends Controller
     public function tachedo(){
         $taches = Tache::has('travailleurtaches')
             ->with('travailleurtaches','type','travailleur')
-            ->get();
+            ->paginate(10);
         $clientes = $taches->map(function ($tache) {
             $travailleurs = $tache->travailleurtaches->where('id', Auth::user()->id)->groupBy('taches.id')->map(function ($travailleursGroup) {
                 $totalVues = 0;
@@ -320,7 +319,6 @@ class InfluenceurController extends Controller
                     'totalVues' => $totalVues
                 ];
             })->toArray();
-      //dd( $travailleurs);
             return [
                 'idTache' => $tache->id,
                 'debut' => $tache->debut,
@@ -332,7 +330,7 @@ class InfluenceurController extends Controller
             ];
         });
         //dd($clientes);
-        return view('influenceur.tacheexecute', compact('clientes'));
+        return view('influenceur.tacheexecute', compact('clientes','taches'));
     }
 
     public function infludistribuer($id){

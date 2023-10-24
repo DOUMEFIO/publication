@@ -110,7 +110,8 @@
                 </div>
             </div>
             <div class="d-flex justify-content-end">
-                {{ $centreInterets->onEachSide(1)->links('pagination::bootstrap-4') }}            </div>
+                {{ $centreInterets->onEachSide(1)->links('pagination::bootstrap-4') }}
+            </div>
         </div>
         <button style="display: none" id="triggerModal" class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2"></button>
     @endsection

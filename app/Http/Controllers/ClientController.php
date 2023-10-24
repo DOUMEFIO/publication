@@ -327,7 +327,7 @@ class ClientController extends Controller
         ->with('travailleurtaches')
         ->with('type')
         ->with('travailleur')
-        ->get();
+        ->paginate(10);
         //dd($taches);
         //dd($taches[0]->travailleurs[0]->pivot->capture);
         $clientes = $taches->where('idClient',Auth::user()->id)->map(function ($tache) {
@@ -357,7 +357,7 @@ class ClientController extends Controller
                 'travailleurs' => $travailleurs,
             ];
         });
-        return view("client.executez", compact('clientes'));
+        return view("client.executez", compact('clientes','taches'));
     }
 
     public function show(){
@@ -366,7 +366,9 @@ class ClientController extends Controller
     }
 
     public function clienttacheall($id){
-        $taches = Tache::with("travailleur")->where('idClient',$id)->get();
+        $taches = Tache::with("travailleur")
+            ->where('idClient',$id)
+            ->paginate(1);
         return view("client.tachesall", compact("taches"));
     }
 

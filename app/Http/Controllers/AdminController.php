@@ -61,7 +61,7 @@ class AdminController extends Controller
                 ->where('users.idProfil',3)
                 ->where('tache.idStatus',2)
                 ->where('payement',"paye")
-                ->get();
+                ->paginate(10);
         return view('admin.tachevalide', compact("taches"));
     }
 
@@ -378,29 +378,7 @@ class AdminController extends Controller
                 ->where('users.idProfil',3)
                 ->where('tache.idStatus',1)
                 ->where('payement',"paye")
-                ->get();
-        /* $taches = Tache::has('travailleurs')
-        ->with('travailleurs')
-        ->get();
-        $clients = $taches->map(function ($tache) {
-        $travailleurs = $tache->travailleurs->map(function ($travailleur) {
-            return [
-                'nom' => $travailleur->nom,
-                'prenom' => $travailleur->prenom,
-            ];
-        })->toArray();
-        $infouser = User::where('id', $tache->idClient)->get(['nom', 'prenom'])->first();
-        $libelle = TypeTache::where('id', $tache->typetache)->get('libelle')->first();
-        return [
-            'idTache' => $tache->id,
-            'nomClient' => $infouser->nom,
-            'prenomClient' => $infouser->prenom,
-            'travailleurs' => $travailleurs,
-            'debut' => $tache->dedut,
-            'fin' => $tache->fin,
-            'libelle' => $libelle->libelle
-        ];
-       })->toArray(); */
+                ->paginate(10);
         return view("admin.attribuerTache", compact("taches"));
     }
 
@@ -409,9 +387,7 @@ class AdminController extends Controller
         ->with('travailleurtaches')
         ->with('type')
         ->with('travailleur')
-        ->get();
-        //dd($taches);
-        //dd($taches[0]->travailleurs[0]->pivot->capture);
+        ->paginate(10);
         $clientes = $taches->map(function ($tache) {
             $travailleurs = $tache->travailleurtaches->groupBy('id')->map(function ($travailleursGroup) {
                 $totalVues = 0;
@@ -438,7 +414,7 @@ class AdminController extends Controller
             ];
         });
         //dd($clientes);
-        return view('admin.tacheexecute', compact('clientes'));
+        return view('admin.tacheexecute', compact('clientes','taches'));
     }
 
     public function showPreuve($id, $idinfluenceur){

@@ -1,20 +1,27 @@
 <x-app-layout>
     @section('name')
-        Tâches 
+        Tâches
     @endsection
     @section('title')
         Toutes Tâche
     @endsection
     @section('contenue')
         <div class="row">
+            <div class="col-md-3 text-nowrap py-3">
+                <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable">
+                    <input type="search" class="form-control form-control-sm" aria-controls="dataTable"
+                        id="myInput" onkeyup="myFunction()" placeholder="Rechercher Paiement...">
+                </div>
+            </div>
             <div class="col-lg-12">
                 <div class="card" id="orderList">
                     <div class="card-body pt-0">
                         <div>
                             <div class="table-responsive table-card mb-1">
-                                <table class="table table-nowrap align-middle" id="orderTable">
+                                <table class="table table-nowrap align-middle" id="table_id">
                                     <thead class="text-muted table-light">
                                         <tr class="text-uppercase">
+                                            <th>#</th>
                                             <th data-sort="status">N° Tâche</th>
                                             <th data-sort="id">Client</th>
                                             <th data-sort="customer_name">Période</th>
@@ -24,8 +31,12 @@
                                         </tr>
                                     </thead>
                                     <tbody class="list form-check-all">
+                                        @php
+                                            $compteur = 1;
+                                        @endphp
                                         @foreach ($taches as $tache)
                                             <tr>
+                                                <td>{{ $compteur++ }}</td>
                                                 <td class="status"><span class="badge badge-soft-primary text-uppercase">T{{$tache->idTache}}</span>
                                                 </td>
                                                 <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">{{$tache->tacheall->travailleur->nom}} {{$tache->tacheall->travailleur->prenom}}</td>
@@ -48,24 +59,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <div class="noresult" style="display: none">
-                                    <div class="text-center">
-                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#405189,secondary:#0ab39c" style="width:75px;height:75px"></lord-icon>
-                                        <h5 class="mt-2">Sorry! No Result Found</h5>
-                                        <p class="text-muted">We've searched more than 150+ Orders We did not find any orders for you search.</p>
-                                    </div>
-                                </div>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <div class="pagination-wrap hstack gap-2">
-                                    <a class="page-item pagination-prev disabled" href="#">
-                                        Previous
-                                    </a>
-                                    <ul class="pagination listjs-pagination mb-0"></ul>
-                                    <a class="page-item pagination-next" href="#">
-                                        Next
-                                    </a>
-                                </div>
+                                {{ $taches->onEachSide(1)->links('pagination::bootstrap-4') }}
                             </div>
                         </div>
                     </div>

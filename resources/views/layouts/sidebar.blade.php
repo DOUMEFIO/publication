@@ -61,10 +61,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
+                        <a class="nav-link menu-link" href="#sidebarApp" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
                             <i class="ri-apps-2-line"></i> <span data-key="t-apps">Paiement</span>
                         </a>
-                        <div class="collapse menu-dropdown" id="sidebarApps">
+                        <div class="collapse menu-dropdown" id="sidebarApp">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
                                     <a href="{{route('paiementtache')}}" class="nav-link" data-key="t-chat">Paiement Tâche</a>
