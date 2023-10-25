@@ -23,12 +23,6 @@
                             <div class="mb-3">
                                 <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Modifier la photo</button>
                             </div>
-                            @if ($users[0]->validation == 0)
-                                <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1">Confirmer votre numéro</button>
-                            @endif
-                            @if (session()->has('info'))
-                                <div class="alert alert-success px-4"> {!! session('info') !!}</div>
-                            @endif
                         </div>
 
                         <!-- Modal -->
@@ -70,12 +64,19 @@
                                             </div>
                                             <div class="modal-header">
                                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
-                                                <button type="submit" class="btn btn-primary" style="float:right">Vérifier</button>
+                                                {{-- <button type="submit" class="btn btn-primary" style="float:right">Vérifier</button> --}}
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="py-3 px-5">
+                            <label class="form-label" for="last_name"><strong>Votre solde actuel est: 
+                                <span class="badge badge-soft-success text-2xl">{{$sommesoldeprincipale}} Fcfa</span></strong></label>
                         </div>
                     </div>
                 </div>
@@ -144,7 +145,16 @@
                                             <div class="col">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="first_name"><strong>Téléphone</strong></label>
-                                                    <input class="form-control" type="text" id="first_name" placeholder="John" name="tel" value="{{$users[0]->tel}}"></div>
+                                                    <input class="form-control" type="text" id="first_name" placeholder="John" name="tel" value="{{$users[0]->tel}}">
+                                                    <div class="py-1">
+                                                        @if ($users[0]->validation == 0)
+                                                            <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1" id="bouton-verifier">Confirmer votre numéro</button>
+                                                        @endif
+                                                        @if (session()->has('info'))
+                                                            <div class="alert alert-success"> {!! session('info') !!}</div>
+                                                        @endif
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="col">
                                                 <div class="mb-3">
@@ -281,4 +291,17 @@
         $('#noninput').attr('style','display:none')
         $('#noninputs').attr('style','display:none')
     });
+
+    function actualiserLaPage() {
+    location.reload(); // Actualise la page
+    }
+
+    // Vérifie si le bouton "Vérifier" existe
+    var boutonVerifier = document.getElementById("bouton-verifier");
+
+    if (boutonVerifier) {
+        // Si le bouton existe, planifie l'actualisation de la page toutes les minutes
+        setInterval(actualiserLaPage, 60000); // 60000 millisecondes équivalent à 1 minute
+    }
+
 </script>

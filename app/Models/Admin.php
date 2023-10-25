@@ -28,7 +28,6 @@ class Admin extends Model
             C'est un ".$tachedo->type->libelle.". Il y a pas de contenu." ;
         }
         $fichier = "http://publication.lapieuvretechnologique.info/storage".$tachedo->fichier;
-
         $message = $message;
 
         if(!blank($tachedo->fichier) && !blank($tachedo->description)){
@@ -36,7 +35,7 @@ class Admin extends Model
             SendMessage::media($tacheinflu,$fichier);
         } elseif(!blank($tachedo->fichier) && blank($tachedo->description)) {
             SendMessage::media($tacheinflu,$fichier);
-        } else{
+        } else {
             SendMessage::message($tacheinflu,$message);
         }
     }

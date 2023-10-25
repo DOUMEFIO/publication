@@ -103,7 +103,7 @@ class AdminController extends Controller
             ->get();
         //dd($items);
         if(!blank($items)){
-            DB::table('tache')->where('id', $id)->update(['idStatus' => 2]);
+            DB::table('tache')->where('id', $id)->update(['idStatus' => 1]);
             $uniqueIds = [];
             $total = 0;
             foreach ($items as $item) {
@@ -349,7 +349,7 @@ class AdminController extends Controller
             }
             }
             Admin::sendtachewhatsap($id);
-            return back()->with('info', 'La tâche a été distribiée');
+            //return back()->with('info', 'La tâche a été distribiée');
         } else{
             return redirect()->route("admin.tache")->with("info","Il y a pas d'influenceur dans ce de pays");
         }

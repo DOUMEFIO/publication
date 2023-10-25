@@ -49,8 +49,18 @@ class InfluenceurController extends Controller
             }
             $libelles = CentreInteret::whereIn('id', $result)->pluck('libelle');
             $idlibelles = CentreInteret::whereIn('id', $result)->pluck('id');
+            $soldes = TachePreuve::with('infotache')
+                ->where('idtravailleur',Auth::user()->id)
+                ->whereNull('tokenPaiementInfluenceur')
+                ->get();
+            $soldeprincipale = [];
+            $sommesoldeprincipale = 0;
+            foreach($soldes as $solde){
+                $soldeprincipale[] = $solde->totalVues*$solde->infotache->prixinfluenceurdefault;
+            }
+            $sommesoldeprincipale = array_sum($soldeprincipale);
 
-            return view('influenceur.index', compact("pays","users","centreInteret","idlibelles","libelles","centres","profil"));
+            return view('influenceur.index', compact("sommesoldeprincipale","pays","users","centreInteret","idlibelles","libelles","centres","profil"));
         }else{
             $url = url("confirm/" . Auth::user()->id);
             return redirect($url);
