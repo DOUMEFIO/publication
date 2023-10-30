@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 
     Route::get('confirm/{id}', [RegisteredUserController::class, 'confirm'])
         ->name('confirm');
+        
+    Route::any('verified/{tel}', [CallbackController::class, 'checkPhone'])
+        ->name('verified.tel');
 
 Route::middleware('auth')->group(function (){
     Route::get('show.influenceur', [InfluenceurController::class, 'show'])
@@ -73,8 +76,6 @@ Route::middleware('auth')->group(function (){
 
     Route::get('whatsapcofirm/{id}', [InfluenceurController::class, 'whatsapcofirm'])
         ->name('whatsapcofirm');
-
-    Route::any('verified/{tel}', [CallbackController::class, 'checkPhone'])->name('verified.tel');
 
     Route::get('statistiqueinfluenceur', [InfluenceurController::class, 'statistique'])
         ->name('statistiqueinfluenceur');

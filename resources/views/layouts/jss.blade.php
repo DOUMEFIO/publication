@@ -1,4 +1,4 @@
-    <script src="../../../../code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    {{-- <script src="../../../../code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <!--datatable js-->
     <script src="../../../../cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
@@ -9,14 +9,14 @@
     <script src="../../../../cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
     <script src="../../../../cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="../../../../cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="../../../../cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> --}}
     <!-- particles js -->
     <script src="{{asset('velson/libs/particles.js/particles.js')}}"></script>
     <!-- particles app js -->
     <script src="{{asset('velson/js/pages/particles.app.js')}}"></script>
     <!-- validation init -->
     <script src="{{asset('velson/js/pages/form-validation.init.js')}}"></script>
-    <script src="assets/js/pages/password-addon.init.js"></script>
+    <script src="{{asset('velson/js/pages/password-addon.init.js')}}"></script>
     <!-- password create init -->
     <script src="{{asset('velson/js/pages/passowrd-create.init.js')}}"></script>
     <script src="{{asset('velson/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
@@ -26,12 +26,11 @@
     <script src="{{asset('velson/js/pages/plugins/lord-icon-2.1.0.js')}}"></script>
     <script src="{{asset('velson/js/plugins.js')}}"></script>
     <!-- add for template -->
-    <script src="{{asset("template/assets/js/jquery.min.js")}}"></script>
-    <script src="{{asset("template/assets/js/intlTelInput.js")}}"></script>
-    <script src="path/to/intl-tel-input/js/intlTelInput.min.js"></script>
-    <script src="assets/libs/multi.js/multi.min.js"></script>
-    <!-- autocomplete js -->
-    <script src="assets/libs/%40tarekraafat/autocomplete.js/autoComplete.min.js"></script>
+    <script src="{{asset('template/assets/js/jquery.min.js')}}"></script>
+    <script src="{{asset('template/assets/js/intlTelInput.js')}}"></script>
+    {{-- <script src="path/to/intl-tel-input/js/intlTelInput.min.js"></script> --}}
+    <script src="{{asset('velson/libs/multi.js/multi.min.js')}}"></script>
+    <script src="{{asset('velson/libs/%40tarekraafat/autocomplete.js/autoComplete.min.js')}}"></script>
 
     <!-- apexcharts -->
     <script src="{{asset('velson/libs/apexcharts/apexcharts.min.js')}}"></script>

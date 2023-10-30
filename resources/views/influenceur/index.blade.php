@@ -59,12 +59,11 @@
                                             </div>
                                             <div class="modal-header">
                                                 <h6 class="modal-title" id="exampleModalLabel"> Veuillez confimer votre numéro en
-                                                    cliquant sur ce lien <a href="{{route('whatsapcofirm', [ 'id' => Auth::user()->id])}}" target="_blank">https://wa.me/{{$users[0]->tel}}</a>
+                                                    cliquant sur ce lien <a href="{{route('whatsapcofirm', [ 'id' => Auth::user()->id])}}" target="_blank" onclick="compteRebours()">https://wa.me/{{$users[0]->tel}}</a>
                                                 </h6>
                                             </div>
                                             <div class="modal-header">
-                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annuler</button>
-                                                {{-- <button type="submit" class="btn btn-primary" style="float:right">Vérifier</button> --}}
+                                                <button type="button" class="btn btn-danger" id="annuler" data-bs-dismiss="modal">Annuler</button>
                                             </div>
                                         </form>
                                     </div>
@@ -75,7 +74,7 @@
 
                     <div class="card mb-3">
                         <div class="py-3 px-5">
-                            <label class="form-label" for="last_name"><strong>Votre solde actuel est: 
+                            <label class="form-label" for="last_name"><strong>Votre solde actuel est:
                                 <span class="badge badge-soft-success text-2xl">{{$sommesoldeprincipale}} Fcfa</span></strong></label>
                         </div>
                     </div>
@@ -145,13 +144,11 @@
                                             <div class="col">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="first_name"><strong>Téléphone</strong></label>
-                                                    <input class="form-control" type="text" id="first_name" placeholder="John" name="tel" value="{{$users[0]->tel}}">
+                                                    <input class="form-control" type="text" id="telephone" placeholder="John" name="tel" value="{{$users[0]->tel}}">
                                                     <div class="py-1">
                                                         @if ($users[0]->validation == 0)
-                                                            <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1" id="bouton-verifier">Confirmer votre numéro</button>
-                                                        @endif
-                                                        @if (session()->has('info'))
-                                                            <div class="alert alert-success"> {!! session('info') !!}</div>
+                                                            <button class="btn btn-primary btn-sm" type="button" id="button" data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModal1" onclick="appelRoute()">Confirmer votre numéro</button>
                                                         @endif
                                                     </div>
                                                 </div>
@@ -238,6 +235,44 @@
                 </div>
             </div>
         </div>
+        <script>
+            let intervalId;
+            function appelRoute() {
+                let telephone = document.getElementById("telephone");
+                var button = document.getElementById("button");
+                telephone = telephone.value;
+                console.log(telephone);
+                var url = '{{ config("app.url") }}/verified/'+telephone;
+                /*console.log(appUrl);
+                 const url = 'http://127.0.0.1:8000/verified/'+telephone; */
+                $.get(url, (res, data) => {
+                    console.log(res);
+                    if(res?.success == true){
+                        button.style.display = 'none';
+                        annulerModal();
+                        clearInterval(intervalId);
+                    }
+                    else{
+                        setTimeout(function () {
+                            location.reload();
+                        }, 120000);
+                    }
+                });
+            }
+
+            function annulerModal() {
+                let boutonAnnuler = document.getElementById("annuler"); // Sélectionnez le bouton "Annuler" du modal par son ID
+                if (boutonAnnuler) {
+                    boutonAnnuler.click(); // Déclenchez un clic sur le bouton "Annuler"
+                }
+            }
+
+            document.getElementById("button").addEventListener("click", () => {
+                appelRoute();
+                intervalId = setInterval(appelRoute, 15000);
+            });
+        </script>
+        @include('layouts.jss')
         @include('layouts.js')
     @endsection
 </x-app-layout>
@@ -291,17 +326,4 @@
         $('#noninput').attr('style','display:none')
         $('#noninputs').attr('style','display:none')
     });
-
-    function actualiserLaPage() {
-    location.reload(); // Actualise la page
-    }
-
-    // Vérifie si le bouton "Vérifier" existe
-    var boutonVerifier = document.getElementById("bouton-verifier");
-
-    if (boutonVerifier) {
-        // Si le bouton existe, planifie l'actualisation de la page toutes les minutes
-        setInterval(actualiserLaPage, 60000); // 60000 millisecondes équivalent à 1 minute
-    }
-
 </script>

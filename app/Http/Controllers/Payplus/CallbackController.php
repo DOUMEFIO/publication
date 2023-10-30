@@ -25,8 +25,7 @@ class CallbackController extends Controller
 
     function checkPhone($tel) {
         $url = "http://51.161.128.10:3366/api/check/$tel";
-        $client = new \GuzzleHttp\Client();
-    
+        $client = new Client();
         $payload = [
             'headers' => [
                 'Authorization' => '01da56df-8699-483d-96a1-d4f3675b1ede',
@@ -37,22 +36,38 @@ class CallbackController extends Controller
             'exceptions' => false,
             'timeout' => 30
         ];
-    
+
         try {
             $res = $client->request('GET', $url, $payload);
-    
             if ($res->getStatusCode() == 200) {
                 $response = json_decode($res->getBody());
                 if($response->linked){
                     DB::update('update info_influenceur set validation = 1 where tel = ?', [$tel]);
-                    return back()->with('info','Vote numéro a été lié.');
+                    $responseData = [
+                        'message' => 'Données reçues avec succès depuis JavaScript.',
+                        'success' => true,
+                    ];
+                    return response()->json($responseData);
+                } else {
+                    $responseData = [
+                        'message' => 'oui',
+                        'success' => false,
+                    ];
+                    return response()->json($responseData);
                 }
-                echo json_encode($response).PHP_EOL;
             } else {
-                return back()->with('info',"Vote numéro n'ai pas été lié.");
+                $responseData = [
+                    'message' => 'non',
+                    'success' => false,
+                ];
+                return response()->json($responseData);
             }
         } catch (\GuzzleHttp\Exception\GuzzleException $e) {
-            return back()->with('info',"Vote numéro n'ai pas été lié.");
+            $responseData = [
+                'message' => 'non',
+                'success' => false,
+            ];
+            return response()->json($responseData);
         }
     }
 }
