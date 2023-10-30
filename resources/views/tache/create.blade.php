@@ -1,7 +1,5 @@
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
-
-
 <!-- Mirrored from themesbrand.com/velzon/html/default/apps-projects-create.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 23 Nov 2022 16:41:06 GMT -->
 @include("layouts.header")
 
@@ -120,8 +118,6 @@
     @include("layouts.js")
     @include("layouts.jss")
 </body>
-
-
 <!-- Mirrored from themesbrand.com/velzon/html/default/apps-projects-create.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 23 Nov 2022 16:41:07 GMT -->
 </html>
 

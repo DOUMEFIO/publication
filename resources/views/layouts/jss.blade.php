@@ -28,7 +28,6 @@
     <!-- add for template -->
     <script src="{{asset('template/assets/js/jquery.min.js')}}"></script>
     <script src="{{asset('template/assets/js/intlTelInput.js')}}"></script>
-    {{-- <script src="path/to/intl-tel-input/js/intlTelInput.min.js"></script> --}}
     <script src="{{asset('velson/libs/multi.js/multi.min.js')}}"></script>
     <script src="{{asset('velson/libs/%40tarekraafat/autocomplete.js/autoComplete.min.js')}}"></script>
 

@@ -103,7 +103,7 @@ class AdminController extends Controller
             ->get();
         //dd($items);
         if(!blank($items)){
-            DB::table('tache')->where('id', $id)->update(['idStatus' => 1]);
+            DB::table('tache')->where('id', $id)->update(['idStatus' => 2]);
             $uniqueIds = [];
             $total = 0;
             foreach ($items as $item) {

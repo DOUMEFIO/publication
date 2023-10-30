@@ -27,7 +27,7 @@ class Admin extends Model
             $message = "Bonjour monsieur, voici votre nouvelle tâche qui débute le *$debutFormatee* et prend fin le *$finFormatee*.
             C'est un ".$tachedo->type->libelle.". Il y a pas de contenu." ;
         }
-        $fichier = "http://publication.lapieuvretechnologique.info/storage".$tachedo->fichier;
+        $fichier = '{{ config("app.url") }}/storage'.$tachedo->fichier;
         $message = $message;
 
         if(!blank($tachedo->fichier) && !blank($tachedo->description)){

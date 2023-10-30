@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
-{{--     <link rel="stylesheet" href="path/to/intl-tel-input/css/intlTelInput.min.css">
- --}}
+
+    <!-- Dernier CSS compilé et minifié -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{asset('dashbord/images/images/logo.png')}}">
-{{--     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.min.css">
- --}}
     <!-- jsvectormap css -->
     <link href="{{asset('velson/libs/jsvectormap/css/jsvectormap.min.css')}}" rel="stylesheet" type="text/css" />
 
@@ -31,6 +31,5 @@
     <!-- custom Css-->
     <link href="{{asset('velson/css/custom.min.css')}}" rel="stylesheet" type="text/css" />
     <!-- select multiple-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
 
 </head>

@@ -244,7 +244,7 @@
                 console.log(telephone);
                 var url = '{{ config("app.url") }}/verified/'+telephone;
                 /*console.log(appUrl);
-                 const url = 'http://127.0.0.1:8000/verified/'+telephone; */
+                 const url = 'http://127.0.0.1:8000/verified/'+telephone; en local utilise ceci */
                 $.get(url, (res, data) => {
                     console.log(res);
                     if(res?.success == true){
