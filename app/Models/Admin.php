@@ -25,9 +25,9 @@ class Admin extends Model
             C'est un ".$tachedo->type->libelle.". Le contenu est: *$tachedo->description*.";
         } else {
             $message = "Bonjour monsieur, voici votre nouvelle tâche qui débute le *$debutFormatee* et prend fin le *$finFormatee*.
-            C'est un ".$tachedo->type->libelle.". Il y a pas de contenu." ;
+            C'est une ".$tachedo->type->libelle.". Il y a pas de contenu." ;
         }
-        $fichier = '{{ config("app.url") }}/storage'.$tachedo->fichier;
+        $fichier = config('app.url').'/storage'.$tachedo->fichier;
         $message = $message;
 
         if(!blank($tachedo->fichier) && !blank($tachedo->description)){
