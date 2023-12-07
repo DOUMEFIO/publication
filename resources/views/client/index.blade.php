@@ -178,8 +178,6 @@
             <!--end col-->
         </div>
         <button style="display: none" id="triggerModal" class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
-        @include("layouts.js")
-        @include("layouts.jss")
     @endsection
     @push('scripts')
         <script>

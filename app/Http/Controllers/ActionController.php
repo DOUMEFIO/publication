@@ -61,7 +61,7 @@ class ActionController extends Controller
             if ($request->file('avatar')) {
                 $fichier = $request->file('avatar');
                 // Vérification de l'extension du fichier
-                if ($request->input('typetache') == '4' && !in_array($request->file('avatar')->getClientOriginalExtension(), ['jpg', 'jpeg', 'png', 'gif'])) {
+                if ($request->input('typetache') == '4' && !in_array($request->file('avatar')->getClientOriginalExtension(), ['jpg', 'jpeg', 'png', 'gif','PNG',"JPG","JPEG","GIF"])) {
                     return redirect()->back()->with('error', 'Le fichier doit être une image.');
                 } elseif ($request->input('typetache') == '3' && !in_array($request->file('avatar')->getClientOriginalExtension(), ['mp4', 'mov', 'avi', 'wmv'])) {
                     return redirect()->back()->with('error', 'Le fichier doit être une vidéo.');

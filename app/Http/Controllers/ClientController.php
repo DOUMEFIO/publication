@@ -74,7 +74,7 @@ class ClientController extends Controller
             ->where('idClient',Auth::user()->id)
             ->where('payement',"paye")
             ->paginate(10);
-        return view('client.index', compact('pays','taches','currentDate','fichiers','centres'));
+    return view('client.index', compact('pays','taches','currentDate','fichiers','centres'));
     }
 
     public function store(Request $request){
@@ -285,7 +285,7 @@ class ClientController extends Controller
         $currentDate = Carbon::now()->toDateString();
         $taches = Tache::has('travailleurs')
             ->with('travailleurs')
-            ->get();
+            ->paginate(10);
         $clientsall = $taches->where('idClient',Auth::user()->id)
             ->where('debut', '<=', $currentDate)
             ->where('fin', '>=', $currentDate)
@@ -319,6 +319,7 @@ class ClientController extends Controller
                 $clients[] = $client; // Ajouter la tâche au tableau si elle est en cours
             }
         }
+        
         return view("client.encours", compact('clients'));
     }
 
